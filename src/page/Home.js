@@ -5,6 +5,7 @@ import logo from '../image/FoodnGo_logo.png'
 import delivery_man from '../image/delivery_man.svg'
 import store from '../image/store.svg'
 import phone from '../image/iphone.svg'
+import order_now from '../image/pexels-nerfee-mirandilla-3186654.jpg'
 import { Link } from 'react-router-dom'
 
 function Home() {
@@ -84,6 +85,31 @@ function Home() {
                         Get the app
                         <i className="fa-solid fa-arrow-right"></i>
                     </Link>
+                </div>
+            </div>
+            <div className='introduce-section-2'>
+                <div className='left-section'>
+                    <h4>Get food delivery and more</h4>
+                    <p>Don't settle for mediocre meals. With our food ordering website, you can enjoy restaurant-quality
+                        food without ever leaving your house. Order now and taste the difference!
+                    </p>
+                    <button className='order-now-btn'>Order Now</button>
+                </div>
+                <div className='right-section'>
+                    <img src={order_now} alt='banner' />
+                </div>
+            </div>
+            <div className='introduce-section-3'>
+                <div className='left-section'>
+                    <img src={order_now} alt='banner' />
+                </div>
+                <div className='right-section'>
+                    <h4>Pickup or delivery from restaurants near you</h4>
+                    <p>Explore restaurants that deliver near you, or try yummy takeout fare. With a place for every taste,
+                        it’s easy to find food you crave, and order online or through the  app. Find great meals fast with lots of local menus.
+                        Enjoy eating the convenient way with places that deliver to your door.
+                    </p>
+                    <button className='find-restaurant-btn'>Find Restaurants</button>
                 </div>
             </div>
         </div>
