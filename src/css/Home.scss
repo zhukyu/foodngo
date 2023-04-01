@@ -1,4 +1,5 @@
 .Home {
+    overflow-y: hidden;
     .banner {
         display: flex;
         height: 100vh;
@@ -76,6 +77,7 @@
         display: flex;
         padding: 15px 20px;
         justify-content: space-between;
+        z-index: 999;
 
         &.scrolled {
             padding: 7px 20px;
@@ -115,7 +117,7 @@
             img {
                 width: 100px;
                 height: 100px;
-                object-fit: cover;
+                object-fit: contain;
             }
             h4, p {
                 text-align: center;
@@ -152,6 +154,13 @@
                 object-fit: cover;
                 box-sizing: border-box;
                 padding-left: 50px;
+                transform: translateX(100px);
+                transition: 1s ease-out;
+                opacity: 0.5;
+                &.visible {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
             }
         }
     }
@@ -168,11 +177,18 @@
                 object-fit: cover;
                 box-sizing: border-box;
                 padding-right: 50px;
+                transform: translateX(-50px);
+                transition: 1s ease-out;
+                opacity: 0.5;
+                &.visible {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
             }
         }
         .right-section {
             width: 40%;
-            padding-top: 100px;
+            padding-top: 50px;
         }
     }
 }

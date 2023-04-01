@@ -68,6 +68,10 @@ h5 {
 	margin: 1rem 0;
 }
 
+img {
+	image-rendering: crisp-edges;
+}
+
 @font-face {
 	font-family: 'TT Norms-Bold';
 	src: url('../font/TTNorms/TTNorms-Bold.otf') format('opentype');

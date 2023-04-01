@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import '../css/Home.scss'
 import banner from '../image/jennifer-schmidt-MRHyv-hHxgk-unsplash.jpg'
 import logo from '../image/FoodnGo_logo.png'
@@ -6,9 +6,41 @@ import delivery_man from '../image/delivery_man.svg'
 import store from '../image/store.svg'
 import phone from '../image/iphone.svg'
 import order_now from '../image/pexels-nerfee-mirandilla-3186654.jpg'
+import find_restaurants from '../image/pexels-jonathan-borba-2878739.jpg'
 import { Link } from 'react-router-dom'
 
 function Home() {
+
+    const [orderNowVisible, setOrderNowVisible] = useState(false);
+    const orderNowRef = useRef(null);
+
+    const [findResVisible, setFindResVisible] = useState(false);
+    const findRestaurantRef = useRef(null);
+
+    useEffect(() => {
+        window.addEventListener('scroll', scrollHandler);
+        return () => window.removeEventListener('scroll', scrollHandler);
+    }, []);
+
+    const scrollHandler = () => {
+
+        if (orderNowRef.current) {
+            if (window.pageYOffset + window.innerHeight >= orderNowRef.current.offsetTop) {
+                setOrderNowVisible(true);
+            }
+            else {
+                setOrderNowVisible(false);
+            }
+        }
+        if (findRestaurantRef.current) {
+            if (window.pageYOffset + window.innerHeight >= findRestaurantRef.current.offsetTop) {
+                setFindResVisible(true);
+            }
+            else {
+                setFindResVisible(false);
+            }
+        }
+    }
 
     useEffect(() => {
         document.querySelector('.home-navbar').classList.add('scrolled');
@@ -95,13 +127,13 @@ function Home() {
                     </p>
                     <button className='order-now-btn'>Order Now</button>
                 </div>
-                <div className='right-section'>
-                    <img src={order_now} alt='banner' />
+                <div className='right-section' ref={orderNowRef}>
+                    <img src={order_now} alt='order_now' className={orderNowVisible ? 'order-now visible' : 'order-now'} />
                 </div>
             </div>
             <div className='introduce-section-3'>
-                <div className='left-section'>
-                    <img src={order_now} alt='banner' />
+                <div className='left-section' ref={findRestaurantRef}>
+                    <img src={find_restaurants} alt='find_restaurants' className={findResVisible ? 'find-restaurants visible' : 'find-restaurants'} />
                 </div>
                 <div className='right-section'>
                     <h4>Pickup or delivery from restaurants near you</h4>
