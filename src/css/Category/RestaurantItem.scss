@@ -1,0 +1,62 @@
+.restaurant-item {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% / 3 - 20px);
+    margin: 15px 0;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 15px;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    .restaurant-item-info {
+        display: flex;
+        flex-direction: column;
+
+        .restaurant-name {
+            color: var(--black-color);
+
+            &:hover {
+                color: var(--main-color);
+                cursor: pointer;
+            }
+        }
+
+        .description {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+
+            p {
+                margin: 0
+            }
+        }
+
+        .other-info {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            gap: 10px;
+
+            * {
+                color: var(--gray-color);
+            }
+
+            .fa-star {
+                color: #FFCA12;
+            }
+
+            span {
+                margin: 0 5px;
+            }
+        }
+    }
+}
