@@ -1,13 +1,53 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import '../css/Home.scss'
 import banner from '../image/jennifer-schmidt-MRHyv-hHxgk-unsplash.jpg'
 import logo from '../image/FoodnGo_logo.png'
 import delivery_man from '../image/delivery_man.svg'
 import store from '../image/store.svg'
 import phone from '../image/iphone.svg'
+import order_now from '../image/pexels-nerfee-mirandilla-3186654.jpg'
+import find_restaurants from '../image/pexels-jonathan-borba-2878739.jpg'
 import { Link } from 'react-router-dom'
 
 function Home() {
+
+    const [orderNowVisible, setOrderNowVisible] = useState(false);
+    const orderNowRef = useRef(null);
+
+    const [findResVisible, setFindResVisible] = useState(false);
+    const findRestaurantRef = useRef(null);
+
+    const inputRef = React.createRef();
+
+    const centerInput = () => {
+        inputRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        inputRef.current.focus();
+    }
+
+    useEffect(() => {
+        window.addEventListener('scroll', scrollHandler);
+        return () => window.removeEventListener('scroll', scrollHandler);
+    }, []);
+
+    const scrollHandler = () => {
+
+        if (orderNowRef.current) {
+            if (window.pageYOffset + window.innerHeight >= orderNowRef.current.offsetTop) {
+                setOrderNowVisible(true);
+            }
+            else {
+                setOrderNowVisible(false);
+            }
+        }
+        if (findRestaurantRef.current) {
+            if (window.pageYOffset + window.innerHeight >= findRestaurantRef.current.offsetTop) {
+                setFindResVisible(true);
+            }
+            else {
+                setFindResVisible(false);
+            }
+        }
+    }
 
     useEffect(() => {
         document.querySelector('.home-navbar').classList.add('scrolled');
@@ -32,9 +72,11 @@ function Home() {
     return (
         <div className='Home'>
             <div className='home-navbar'>
-                <div className='logo'>
-                    <img src={logo} alt='logo' className='logo' />
-                </div>
+                <Link to='/'>
+                    <div className='logo'>
+                        <img src={logo} alt='logo' className='logo' />
+                    </div>
+                </Link>
                 <div className='nav-links'>
                     <Link to='#'>Sign In</Link>
                     <button className='login-btn'>Sign Up</button>
@@ -48,7 +90,7 @@ function Home() {
                     <h1>Get food delivery and more</h1>
                     <div className='search-bar'>
                         <i className="fa-solid fa-location-dot "></i>
-                        <input type='text' placeholder='Enter delivery address' className='search-input' />
+                        <input ref={inputRef} type='text' placeholder='Enter delivery address' className='search-input' id='search-input' />
                         <Link to='#'>
                             <div className='search-btn' >
                                 <i className="fa-solid fa-arrow-right"></i>
@@ -86,6 +128,32 @@ function Home() {
                     </Link>
                 </div>
             </div>
+            <div className='introduce-section-2'>
+                <div className='left-section'>
+                    <h4>Get food delivery and more</h4>
+                    <p>Don't settle for mediocre meals. With our food ordering website, you can enjoy restaurant-quality
+                        food without ever leaving your house. Order now and taste the difference!
+                    </p>
+                    <button className='order-now-btn' onClick={centerInput}>Order Now</button>
+                </div>
+                <div className='right-section' ref={orderNowRef}>
+                    <img src={order_now} alt='order_now' className={orderNowVisible ? 'order-now visible' : 'order-now'} />
+                </div>
+            </div>
+            <div className='introduce-section-3'>
+                <div className='left-section' ref={findRestaurantRef}>
+                    <img src={find_restaurants} alt='find_restaurants' className={findResVisible ? 'find-restaurants visible' : 'find-restaurants'} />
+                </div>
+                <div className='right-section'>
+                    <h4>Pickup or delivery from restaurants near you</h4>
+                    <p>Explore restaurants that deliver near you, or try yummy takeout fare. With a place for every taste,
+                        it’s easy to find food you crave, and order online or through the  app. Find great meals fast with lots of local menus.
+                        Enjoy eating the convenient way with places that deliver to your door.
+                    </p>
+                    <button className='find-restaurant-btn' onClick={centerInput}>Find Restaurants</button>
+                </div>
+            </div>
+            
         </div>
     )
 }
