@@ -9,7 +9,120 @@ import order_now from '../image/pexels-nerfee-mirandilla-3186654.jpg'
 import find_restaurants from '../image/pexels-jonathan-borba-2878739.jpg'
 import { Link } from 'react-router-dom'
 
+const apiKey = 'AIzaSyDqhnz_r_cysHggOWg9RzmFrHwhO9BOfCg';
+const mapApiJs = 'https://maps.googleapis.com/maps/api/js';
+const geocodeJson = 'https://maps.googleapis.com/maps/api/geocode/json';
+
+// load google map api js
+
+function loadAsyncScript(src) {
+    return new Promise(resolve => {
+        const script = document.createElement("script");
+        Object.assign(script, {
+            type: "text/javascript",
+            async: true,
+            src
+        })
+        script.addEventListener("load", () => resolve(script));
+        document.head.appendChild(script);
+    })
+}
+
+const extractAddress = (place) => {
+    const address = {
+        city: "",
+        state: "",
+        zip: "",
+        country: "",
+        plain() {
+            const city = this.city ? this.city + ", " : "";
+            const zip = this.zip ? this.zip + ", " : "";
+            const state = this.state ? this.state + ", " : "";
+            return city + zip + state + this.country;
+        }
+    }
+
+    if (!Array.isArray(place?.address_components)) {
+        return address;
+    }
+
+    place.address_components.forEach(component => {
+        const types = component.types;
+        const value = component.long_name;
+
+        if (types.includes("locality")) {
+            address.city = value;
+        }
+
+        if (types.includes("administrative_area_level_2")) {
+            address.state = value;
+        }
+
+        if (types.includes("postal_code")) {
+            address.zip = value;
+        }
+
+        if (types.includes("country")) {
+            address.country = value;
+        }
+
+    });
+    return address;
+}
+
 function Home() {
+    const inputRef = useRef(null);
+    const [address, setAddress] = useState({});
+    const initMapScript = () => {
+        // if script already loaded
+        if (window.google) {
+            return Promise.resolve();
+        }
+        const src = `${mapApiJs}?key=${apiKey}&libraries=places&v=weekly`;
+        return loadAsyncScript(src);
+    }
+
+    // do something on address change
+    const onChangeAddress = (autocomplete) => {
+        const place = autocomplete.getPlace();
+        setAddress(extractAddress(place));
+    }
+
+    // init autocomplete
+    const initAutocomplete = () => {
+        if (!inputRef.current) return;
+
+        const autocomplete = new window.google.maps.places.Autocomplete(inputRef.current);
+        autocomplete.setFields(["address_component", "geometry"]);
+        autocomplete.addListener("place_changed", () => onChangeAddress(autocomplete));
+
+    }
+    const reverseGeocode = ({ latitude: lat, longitude: lng }) => {
+        const url = `${geocodeJson}?key=${apiKey}&latlng=${lat},${lng}`;
+        inputRef.current.value = "Getting your location...";
+        fetch(url)
+            .then(response => response.json())
+            .then(location => {
+                const place = location.results[0];
+                const _address = extractAddress(place);
+                setAddress(_address);
+                console.log(_address);
+                inputRef.current.value = _address.plain();
+            })
+    }
+
+    const findMyLocation = () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(position => {
+                reverseGeocode(position.coords)
+            })
+        }
+    }
+
+    // load map script after mounted
+    useEffect(() => {
+        initMapScript().then(() => initAutocomplete())
+    }, []);
 
     const [orderNowVisible, setOrderNowVisible] = useState(false);
     const orderNowRef = useRef(null);
@@ -17,7 +130,6 @@ function Home() {
     const [findResVisible, setFindResVisible] = useState(false);
     const findRestaurantRef = useRef(null);
 
-    const inputRef = React.createRef();
 
     const centerInput = () => {
         inputRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -92,7 +204,7 @@ function Home() {
                         <i className="fa-solid fa-location-dot "></i>
                         <input ref={inputRef} type='text' placeholder='Enter delivery address' className='search-input' id='search-input' />
                         <Link to='#'>
-                            <div className='search-btn' >
+                            <div className='search-btn' onClick={findMyLocation}>
                                 <i className="fa-solid fa-arrow-right"></i>
                             </div>
                         </Link>
@@ -153,7 +265,7 @@ function Home() {
                     <button className='find-restaurant-btn' onClick={centerInput}>Find Restaurants</button>
                 </div>
             </div>
-            
+
         </div>
     )
 }
