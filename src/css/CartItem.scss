@@ -1,0 +1,81 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
+.cart_item{
+    width: 25%;
+    height: 150px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border: 1px solid red;
+    .item_info{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: flex-start;
+        .item_name{
+            font-size: 22px;
+        }
+        .item_price{
+            font-size: 19px;
+        }
+    }
+    .item_quantity{
+        height: 40px;
+        width: 30%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        
+        border-radius: 30px;
+        .quantity{
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 40%;
+            border: 1px solid #1d1d1f;
+            
+            .quantity_content{
+                font-size: 20px;
+            }
+        }
+        .minus{
+            height: 100%;
+            width: 30%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            background-color: #1d1d1f;
+            border-radius: 30px 0px 0px 30px;
+            i{
+                color: #f5f5f7;
+            }
+        }
+        .minus:active{
+            background-color: #FF003D;
+        }
+        .plus{
+            height: 100%;
+            width: 30%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #1d1d1f;
+            border-radius: 0px 30px 30px 0px;
+            cursor: pointer;
+            i{
+                color: #f5f5f7;
+            }
+        }
+        .plus:active{
+            background-color: #FF003D;
+        }
+        
+        
+    }
+
+    i{  cursor: pointer;
+        font-size: 21px;
+        color: #FF003D;
+    }
+}
