@@ -2,6 +2,7 @@ import React from 'react'
 import '../css/Category/RestaurantItem.scss'
 import { Link } from 'react-router-dom'
 
+
 function RestaurantItem() {
     return (
         <div className='restaurant-item'>

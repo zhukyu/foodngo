@@ -25,6 +25,7 @@ function Category() {
                 return <CategoryItem key={index} />
             })}
         </div>
+        
     )
 }
 
