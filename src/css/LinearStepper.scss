@@ -1,0 +1,99 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+.form_main{
+    width: 100%;
+    height: 75vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    .form_title{
+        font-family: "Poppins", sans-serif;
+        font-size: 33px;
+        font-weight: 700;
+        margin-top: 20px;
+        margin-bottom: 50px;
+    }
+
+    .lets_order_button{
+        margin-top: 75px;
+        background-color: #FF003D;
+        color: #f5f5f7;
+        font-family: "Poppins", sans-serif;
+        font-size: 20px;
+        font-weight: 600;
+        border: none;
+        border-radius: 25px;
+        width: 180px;
+        height: 50px;
+        cursor: pointer;
+
+    }
+    .lets_order_button:hover{
+        filter: brightness(95%);
+        
+
+    }
+    .lets_order_button:active{
+        filter: brightness(85%);
+        scale: 0.97;
+        
+
+    }
+
+    .back_button{
+        width: 100px;
+        height: 40px;
+        font-family: "Poppins", sans-serif;
+        font-size: 15px;
+        font-weight: 600;
+        border: none;
+        border-radius: 20px;
+        background-color: #444444;
+        color:#f5f5f7;
+        cursor: pointer;
+    }
+    .next_button{
+        width: 100px;
+        height: 40px;
+        font-family: "Poppins", sans-serif;
+        font-size: 15px;
+        font-weight: 600;
+        border: none;
+        border-radius: 20px;
+        color:#f5f5f7;
+        cursor: pointer;
+    }
+    .back_button:hover{
+        filter: brightness(95%);
+        
+
+    }
+    .back_button:active{
+        filter: brightness(85%);
+        scale: 0.97;
+        
+
+    }
+    .next_button:hover{
+        filter: brightness(95%);
+        
+
+    }
+    .next_button:active{
+        filter: brightness(85%);
+        scale: 0.97;
+        
+
+    }
+
+    .MuiOutlinedInput-root{
+        border-radius: 15px;
+    }
+    
+
+    
+    
+}
