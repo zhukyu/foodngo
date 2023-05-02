@@ -1,20 +1,32 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import LinearStepper from "../components/LinearStepper";
 import { CssBaseline, Container, Paper, Box } from "@mui/material";
 import "../css/SignUp.scss";
-import logo from "../image/FoodnGo_logo.png"
-import signup_left from "../image/signup_left.jpg"
-import signup_right from "../image/signup_right.jpg"
+import logo from "../image/FoodnGo_logo.png";
+import signup_left from "../image/signup_left.jpg";
+import signup_right from "../image/signup_right.jpg";
 
 function SignUp() {
   return (
     <div className="signup">
       <CssBaseline />
       <div className="header_signup">
-      <a href="/login"><i class="fa-solid fa-arrow-left">&nbsp;</i>Back to login</a>
-        <img src={logo} alt="logo"/>
+        <Link to="/login">
+          <h4>
+            <i class="fa-solid fa-arrow-left">&nbsp;</i>Back to login
+          </h4>
+        </Link>
+        <Link to="/">
+          <img src={logo} className="logo_img" alt="logo" />
+        </Link>
       </div>
-      <img src = {signup_left} alt="signup_left" className="img_left" style={{width:"27.5%", height:"100vh"}}/>
+      <img
+        src={signup_left}
+        alt="signup_left"
+        className="img_left"
+        style={{ width: "27.5%", height: "100vh" }}
+      />
       <Paper
         style={{
           width: "45%",
@@ -27,7 +39,12 @@ function SignUp() {
       >
         <LinearStepper />
       </Paper>
-      <img src = {signup_right} alt="signup_right" className="img_right" style={{width:"27.5%", height:"100vh"}}/>
+      <img
+        src={signup_right}
+        alt="signup_right"
+        className="img_right"
+        style={{ width: "27.5%", height: "100vh" }}
+      />
     </div>
   );
 }

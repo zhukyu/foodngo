@@ -1,13 +1,37 @@
 import React from "react";
 import "../css/FoodItem.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Badge, Card, Space } from "antd";
 
-
-function FoodItem({img , popular}) {
+function FoodItem({ img, popular }) {
   return (
     <div className="item">
       <div className="item_info">
-        <h4 className="name">Pho</h4>
+        {popular && (
+          <Badge.Ribbon
+            text="#1 Most liked"
+            color="red"
+            placement="end"
+            style={{
+              position: "relative",
+              right: "-465%",
+              fontFamily: "Poppins, sans-serif",
+              zIndex: "4",
+              top: "25%",
+              height: "27px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              fontSize: "14px",
+            }}
+          ></Badge.Ribbon>
+        )}
+        <h4
+          className="name"
+          style={popular ? { marginTop: "-4.5%" } : { marginTop: "4%" }}
+        >
+          Pho
+        </h4>
         <h4 className="description">
           Our Pho is very delicious with high class beef
         </h4>
@@ -20,7 +44,6 @@ function FoodItem({img , popular}) {
             <i class="fa-solid fa-heart">&nbsp;</i>100%(10)
           </h4>
         </div>
-        {popular && <h4 className="popular">#1 Most Liked</h4>}
       </div>
       <img src={img} alt="alt"></img>
       <div className="add_button">

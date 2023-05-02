@@ -8,7 +8,8 @@ import CartItem from './components/CartItem';
 import NotFound404 from './page/NotFound404';
 import Login from './page/Login';
 import SignUp from './page/SignUp';
-
+import UserAccount from './page/UserAccount';
+import RestaurantAccount from './page/RestaurantAccount';
 function App() {
   return (
     <div className="App">
@@ -21,6 +22,8 @@ function App() {
             <Route path='/notfound404' element={<NotFound404 />} />
             <Route path='/login' element={<Login />} />
             <Route path='/signup' element={<SignUp />} />
+            <Route path='/account/user' element={<UserAccount />} />
+            <Route path='/account/restaurant' element={<RestaurantAccount />} />
 
           </Routes>
       </BrowserRouter>

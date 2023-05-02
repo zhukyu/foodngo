@@ -19,6 +19,7 @@ import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import FormControl from "@mui/material/FormControl";
 import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import PhoneIcon from "@mui/icons-material/Phone";
@@ -457,7 +458,8 @@ const LinaerStepper = () => {
             alignItems: "center",
           }}
         >
-        <Alert severity="success" style={{width:"400px",position:"absolute", top:"0", right:"0"}}>This is a success alert — check it out!</Alert>
+         <Alert severity="success" style={{width:"400px",position:"absolute", top:"0", right:"0"}}><strong>Success</strong> — check it out!</Alert>
+        
           <div
             style={{
               display: "flex",
