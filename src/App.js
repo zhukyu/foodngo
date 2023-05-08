@@ -10,6 +10,8 @@ import Login from './page/Login';
 import SignUp from './page/SignUp';
 import UserAccount from './page/UserAccount';
 import RestaurantAccount from './page/RestaurantAccount';
+import PlacesAutocomplete from 'react-places-autocomplete';
+
 function App() {
   return (
     <div className="App">
@@ -24,7 +26,7 @@ function App() {
             <Route path='/signup' element={<SignUp />} />
             <Route path='/account/user' element={<UserAccount />} />
             <Route path='/account/restaurant' element={<RestaurantAccount />} />
-
+            <Route path='/cartitem' element={<CartItem />} />
           </Routes>
       </BrowserRouter>
     </div>
