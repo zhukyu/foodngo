@@ -1,25 +1,28 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
 .item{
-    width: 35rem;
-    height: 165px;
+    width: calc(100% / 2 - 20px);
+    height: 15vh;
     background-color: #f5f5f7;
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    justify-content: space-between;
+    justify-content: flex-start;
     font-family: "Poppins", sans-serif;
     border-radius: 10px;
+    margin-bottom: 20px;
+    position: relative;
     .item_info{
-        width: 21rem;
+        width: 70%;
         height: 100%;
-        margin-top: 5px;
         padding-left: 15px;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
         align-items: flex-start;
+        position: relative;
         
         .name{
+            width: 100%;
             font-family: "Poppins", sans-serif;
             font-size: 23px;
             font-weight: 700;
@@ -29,6 +32,7 @@
 
         }
         .description{
+            width: 100%;
             font-family: "Poppins", sans-serif;
             font-size: 15px;
             font-weight: 600;
@@ -37,7 +41,7 @@
         }
 
         .price_rating{
-            width: 300px;
+            width: 100%;
             display: flex;
             flex-direction: row;
             justify-content: space-around;
@@ -86,20 +90,29 @@
             color: #FF003D;
         }
     }
-    img{
+    .food_image{
+        position: relative;
         background-color: #f5f5f7;
         position: relative;
-        margin-left: -10px;
-        margin-right: -8px;
-        width: 218px;
-        height: 165px;
+        width: 30%;
+        height: 100%;
         object-fit: cover;
         border-radius: 0px 10px 10px 0px;
+        img{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 0px 10px 10px 0px;
+        }
+        .add_button{
+            position: absolute;
+            top: 67%;
+            right: 10%;
+            z-index: 9;
+           
+        }
+        
     }
-    .add_button{
-        position: relative;
-        margin-top: 120px;
-        margin-left: -86px;
-        margin-right: 10px;
-    }
+    
+    
 }
