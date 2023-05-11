@@ -4,11 +4,25 @@ import '../css/Restaurants.scss'
 import RestaurantItem from '../components/RestaurantItem';
 import Navbar from '../components/Navbar';
 import axiosInstance from '../utility/AxiosInstance';
+import { useNavigate } from 'react-router-dom';
 
 
 function Restaurants() {
 
     const [activeButtonIndex, setActiveButtonIndex] = useState(-1);
+    const [restaurants, setRestaurants] = useState([]);
+    const [pagination, setPagination] = useState({})
+
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        const address = localStorage.getItem('address');
+        const coordinate = localStorage.getItem('coordinate');
+        if (!address || !coordinate) {
+            navigate('/');
+        }
+    }, [])
+
 
     useEffect(() => {
         const coordinateStr = localStorage.getItem('coordinate');
@@ -16,7 +30,13 @@ function Restaurants() {
         console.log(coordinate);
         const fetchData = async () => {
             await axiosInstance.get(`/restaurant?longitude=${coordinate.lng}&latitude=${coordinate.lat}`)
-                .then((res) => console.log(res.data))
+                .then((res) => {
+                    if (res.status === 200) {
+                        console.log(res.data.restaurants);
+                        setRestaurants(res.data.restaurants);
+                        setPagination(res.data.pagination);
+                    }
+                })
         }
 
         fetchData();
@@ -74,14 +94,21 @@ function Restaurants() {
                     </div>
                 </div>
                 <div className='restaurants-section'>
-                    <h5>1024 Results</h5>
+                    <h5>{pagination.totalResult} Results</h5>
                     <div className='restaurants-list'>
-                        <RestaurantItem />
-                        <RestaurantItem />
-                        <RestaurantItem />
-                        <RestaurantItem />
-                        <RestaurantItem />
-                        <RestaurantItem />
+                        {restaurants ? restaurants.map((restaurant, id) => (
+                            <RestaurantItem
+                                key={id}
+                                img={restaurant.media[0].url}
+                                id={restaurant.id}
+                                name={restaurant.name}
+                                description={restaurant.description}
+                                rate={restaurant.rate}
+                                distance={restaurant.dist.calculated}
+                                deliveryTime='30 min'
+                            />
+                        )) : null}
+                        {restaurants ? (restaurants.length === 2 ? <div style={{width: "calc(100% / 3 - 20px)"}}></div> : null) : null}
                     </div>
                 </div>
             </div>

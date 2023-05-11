@@ -7,12 +7,9 @@ import store from '../image/store.svg'
 import phone from '../image/iphone.svg'
 import order_now from '../image/pexels-nerfee-mirandilla-3186654.jpg'
 import find_restaurants from '../image/pexels-jonathan-borba-2878739.jpg'
-import { Link } from 'react-router-dom'
-import { GoogleApiWrapper } from "google-maps-react";
-import PlacesAutocomplete, { geocodeByAddress, getLatLng } from "react-places-autocomplete";
-
-// const apiKey = 'AIzaSyDO4ssvBJEK8isvzfMz0mC94Ekv0dT1orc';
-
+import { Link, useNavigate } from 'react-router-dom'
+import axiosInstance from '../utility/AxiosInstance'
+import { notification } from 'antd'
 
 function Home() {
 
@@ -25,23 +22,15 @@ function Home() {
   const [findResVisible, setFindResVisible] = useState(false);
   const findRestaurantRef = useRef(null);
 
-  const [address, setAddress] = useState('');
-  const [coordinates, setCoordinates] = useState({ lat: null, lng: null });
+  const [input, setInput] = useState('');
+  const [coordinates, setCoordinates] = useState(null);
 
-  const [hasSuggestions, setHasSuggestions] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
+  const [placeId, setPlaceId] = useState('');
+  const [address, setAddress] = useState(null);
 
-  const handleSelect = async (value) => {
-    const results = await geocodeByAddress(value);
-    const latLng = await getLatLng(results[0]);
-    setAddress(value);
-    setCoordinates(latLng);
-    console.log(latLng);
-    // props.onSelect(latLng);
-  };
-
-  const getSelectedCoordinates = () => {
-    return coordinates;
-  };
+  const navigate = useNavigate()
 
   const centerInput = () => {
     inputRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -55,18 +44,14 @@ function Home() {
 
   useEffect(() => {
     if (searchBarRef) {
-      if (hasSuggestions) {
+      if (suggestions && suggestions.length > 0) {
         searchBarRef.current.classList.add('active')
       }
       else {
         searchBarRef.current.classList.remove('active')
       }
     }
-  }, [hasSuggestions])
-
-  useEffect(() => {
-    // console.log(address);
-  }, [address])
+  }, [suggestions])
 
   const scrollHandler = () => {
 
@@ -88,6 +73,37 @@ function Home() {
     }
   }
 
+  useEffect(() => {
+
+    setCoordinates(null);
+    setPlaceId('');
+    setAddress(null);
+
+    if (input.length === 0) {
+      setSuggestions([]);
+    }
+
+    const fetchSuggestions = async () => {
+      await axiosInstance.get(`/map/search?address=${input}`)
+        .then((res) => {
+          if (res.status === 200) {
+            setSuggestions(res.data.predictions.predictions);
+            setLoading(false);
+          }
+        })
+    };
+
+    const timer = setTimeout(() => {
+      if (input.length > 0) {
+        setLoading(true);
+        searchBarRef.current.classList.add('active')
+        fetchSuggestions();
+      }
+    }, 500)
+
+    return () => clearTimeout(timer)
+  }, [input]);
+
 
   useEffect(() => {
     document.querySelector(".home-navbar").classList.add("scrolled");
@@ -106,7 +122,77 @@ function Home() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  });
+  }, []);
+
+  const handleAddress = (suggestion) => {
+    inputRef.current.value = suggestion.description;
+    setPlaceId(suggestion.place_id);
+    setAddress(suggestion);
+    setSuggestions([]);
+  }
+
+  useEffect(() => {
+    if(address) {
+      localStorage.setItem('address', JSON.stringify(address));
+    }
+    else {
+      localStorage.removeItem('address');
+    }
+  }, [address])
+
+  useEffect(() => {
+    if (coordinates) {
+      localStorage.setItem('coordinate', JSON.stringify(coordinates));
+    }
+    else {
+      localStorage.removeItem('coordinate');
+    }
+  }, [coordinates])
+
+  const fetchCoordinates = async () => {
+    await axiosInstance.get(`/map/geocode?placeId=${placeId}`)
+      .then((res) => {
+        if (res.status === 200) {
+          console.log(res.data.geoCode.results[0].geometry.location);
+          localStorage.setItem('coordinate', JSON.stringify(res.data.geoCode.results[0].geometry.location));
+          setCoordinates(res.data.geoCode.results[0].geometry.location);
+        }
+      })
+  }
+
+  useEffect(() => {
+    if (placeId != '') {
+      fetchCoordinates();
+    }
+  }, [placeId])
+
+  const handleSearch = () => {
+    // localStorage.setItem('coordinate', JSON.stringify(coordinates));
+    // localStorage.setItem('address', JSON.stringify(address));
+
+    // select a suggestion
+    if (coordinates && address) {
+      navigate('/restaurants')
+    }
+    // not select any suggestion
+    else if (suggestions.length > 0) {
+      handleAddress(suggestions[0])
+    }
+    // not select any suggestion and no suggestion
+    else {
+      console.log('no suggestion');
+      notification.open({
+        icon: <i className="fa-solid fa-exclamation-circle" style={{ color: "red" }}></i>,
+        message: 'Error',
+        description:
+          'No address found!',
+        onClick: () => {
+          console.log('Notification Clicked!');
+        },
+      });
+    }
+  }
+
   return (
     <div className='Home'>
       <div className='home-navbar'>
@@ -126,41 +212,33 @@ function Home() {
         </div>
         <div className='right-section'>
           <h1>Get food delivery and more</h1>
-          <PlacesAutocomplete value={address} onChange={setAddress} onSelect={handleSelect} >
-            {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-              <div className='search-bar-skeleton'>
-                <div className='search-bar-wrapper' ref={searchBarRef}>
-                  <div className='search-bar' >
-                    <i className="fa-solid fa-location-dot "></i>
-                    <input
-                      ref={inputRef}
-                      {...getInputProps({ placeholder: 'Enter delivery address', className: 'search-input', id: 'search-input' })}
-                    />
-                    <Link to='restaurants'>
-                      <div className='search-btn' onClick={() => localStorage.setItem('coordinate', JSON.stringify(coordinates))}>
-                        <i className="fa-solid fa-arrow-right"></i>
-                      </div>
-                    </Link>
-                  </div>
-                  <div className='search-autocomplete'>
-                    {loading ? <div className='autocomplete-item'>Loading...</div> : null}
-                    {suggestions.length > 0 ? setHasSuggestions(true) : setHasSuggestions(false)}
-                    {loading ? setHasSuggestions(true) : null}
-                    {suggestions.map((suggestion) => {
-                      const style = suggestion.active ? { backgroundColor: '#fafafa', cursor: 'pointer' } : { backgroundColor: '#ffffff', cursor: 'pointer' };
-                      return (
-                        <div className='autocomplete-item' key={suggestion.placeId} {...getSuggestionItemProps(suggestion, { style })}>
-                          {suggestion.description}
-                        </div>
-                      );
-                    })}
-                  </div>
+          <div className='search-bar-skeleton'>
+            <div className='search-bar-wrapper' ref={searchBarRef}>
+              <div className='search-bar' >
+                <i className="fa-solid fa-location-dot "></i>
+                <input
+                  ref={inputRef}
+                  placeholder='Enter delivery address'
+                  className='search-input'
+                  id='search-input'
+                  onChange={(e) => setInput(e.target.value)}
+                />
+                <div className='search-btn' onClick={() => handleSearch()}>
+                  <i className="fa-solid fa-arrow-right"></i>
                 </div>
               </div>
-            )}
-          </PlacesAutocomplete>
-          {/* <input ref={inputRef} type='text' placeholder='Enter delivery address' className='search-input' id='search-input' /> */}
-
+              <div className='search-autocomplete'>
+                {loading ? <div className='autocomplete-item'>Loading...</div> : null}
+                {suggestions.map((suggestion) => {
+                  return (
+                    <div className='autocomplete-item' key={suggestion.placeId} onClick={() => handleAddress(suggestion)}>
+                      {suggestion.description}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div className='introduce-section-1'>
@@ -221,8 +299,4 @@ function Home() {
   );
 }
 
-// export default Home;
-
-export default GoogleApiWrapper({
-  apiKey: '',
-})(Home);
+export default Home;
