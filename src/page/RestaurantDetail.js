@@ -74,7 +74,7 @@ function RestaurantDetail() {
           <div className="items">
             <FoodItem img = "https://znews-photo.zingcdn.me/w960/Uploaded/tmuitg/2023_02_07/5_1_1.jpg"/>
             <FoodItem img = "https://dulichviet.com.vn/images/bandidau/banh-cuon-thanh-tri-mon-an-hap-dan-moi-du-khach-du-lich-ha-noi.jpg"/>
-            <FoodItem img = "https://congthucnau.com/wp-content/uploads/2022/11/cach-lam-banh-bao-xa-xiu.jpeg"/>
+            <FoodItem img = ""/>
             <FoodItem img = "https://pholyquocsu.vn/wp-content/uploads/2019/09/MyXaoBo.jpg"/>
           </div>
         </div>
@@ -84,7 +84,7 @@ function RestaurantDetail() {
             <FoodItem img = "https://magfood-amazy.com/wp-content/uploads/2017/12/ice-lemon-tea.jpg"/>
             <FoodItem img = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMybhn5vmoAd9Awt9pBwg2QkHz5EC0Q-Xu5WYN_bb_4LWjDL_3"/>
             <FoodItem img = "https://img.freepik.com/premium-photo/iced-coffee-mixes-peach-juice-syrup-lemon-tea-isolated-white-background-healthy-menu-coffee-shop_536380-67.jpg?w=2000"/>
-            <FoodItem />
+            <FoodItem img = "https://img.freepik.com/premium-photo/iced-coffee-mixes-peach-juice-syrup-lemon-tea-isolated-white-background-healthy-menu-coffee-shop_536380-67.jpg?w=2000"/>
           </div>
         </div>
       </div>

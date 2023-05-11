@@ -7,28 +7,9 @@ function FoodItem({ img, popular }) {
   return (
     <div className="item">
       <div className="item_info">
-        {popular && (
-          <Badge.Ribbon
-            text="#1 Most liked"
-            color="red"
-            placement="end"
-            style={{
-              position: "relative",
-              right: "-465%",
-              fontFamily: "Poppins, sans-serif",
-              zIndex: "4",
-              top: "25%",
-              height: "27px",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              fontSize: "14px",
-            }}
-          ></Badge.Ribbon>
-        )}
         <h4
           className="name"
-          style={popular ? { marginTop: "-4.5%" } : { marginTop: "4%" }}
+          style={popular ? { marginTop: "4%" } : { marginTop: "4%" }}
         >
           Pho
         </h4>
@@ -45,10 +26,28 @@ function FoodItem({ img, popular }) {
           </h4>
         </div>
       </div>
-      <img src={img} alt="alt"></img>
-      <div className="add_button">
-        <button>Add</button>
+      <div className="food_image">
+      <img src={img} alt="alt"></img> 
+      <button className="add_button">Add</button>
       </div>
+      {popular && (
+          <Badge.Ribbon
+            text="#1 Most liked"
+            color="red"
+            placement="end"
+            style={{
+              position: "absolute",
+              right: "200%",
+              fontFamily: "Poppins, sans-serif",
+              zIndex: "4",
+              height: "27px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              fontSize: "14px",
+            }}
+          ></Badge.Ribbon>
+        )}
     </div>
   );
 }
