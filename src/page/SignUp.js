@@ -25,15 +25,18 @@ function SignUp() {
         src={signup_left}
         alt="signup_left"
         className="img_left"
-        style={{ width: "27.5%", height: "100vh" }}
+        style={{ width: "27.5%", height: "100vh", minHeight:"420px", minWidth:"300px" }}
       />
       <Paper
         style={{
           width: "45%",
           height: "75vh",
+          minHeight:"600px",
+          minWidth:"400px",
           boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
           backgroundColor: "#f5f5f7",
           borderRadius: "10px",
+          border:"1px dashed green"
         }}
         className="paper_form"
       >
@@ -43,7 +46,7 @@ function SignUp() {
         src={signup_right}
         alt="signup_right"
         className="img_right"
-        style={{ width: "27.5%", height: "100vh" }}
+        style={{ width: "27.5%", height: "100vh", minHeight:"420px",minWidth:"300px" }}
       />
     </div>
   );

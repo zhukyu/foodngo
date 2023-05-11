@@ -1,12 +1,21 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import "../css/Navbar.scss";
 import { Link } from 'react-router-dom';
 import logo from '../image/FoodnGo_logo.png'
+import ProfileMenu from './ProfileMenu';
 
 function Navbar() {
 
     const address = JSON.parse(localStorage.getItem('address'))
     const mainAddress = address.structured_formatting.main_text
+    const accessToken = localStorage.getItem('accessToken')
+
+    useEffect(() => {
+        const accessToken = localStorage.getItem('accessToken')
+        if (accessToken) {
+
+        }
+    }, [])
 
     return (
         <div className='navbar'>
@@ -24,7 +33,7 @@ function Navbar() {
                 <input
                     placeholder='Search stores, dishes...'
                     className='search-input'
-                    id='search-input'   
+                    id='search-input'
                 />
             </div>
             <div className='cart'>
@@ -32,10 +41,12 @@ function Navbar() {
                     <i className="fa-solid fa-shopping-cart"></i>
                 </button>
             </div>
-            <div className='nav-links'>
-                <Link to='/login'>Sign In</Link>
-                <Link to='/signup'><button className='login-btn'>Sign Up</button></Link>
-            </div>
+            {accessToken ? <ProfileMenu />
+                : <div className='nav-links'>
+                    <Link to='/login'>Sign In</Link>
+                    <Link to='/signup'><button className='login-btn'>Sign Up</button></Link>
+                </div>}
+
         </div>
     )
 }
