@@ -38,6 +38,51 @@
         }
     }
 
+    .search-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #F1F1F1;
+        border-radius: 30px;
+        padding: 0 10px;
+        margin: 10px 0;
+        width: 30%;
+
+        i {
+            font-size: 20px;
+            padding: 0 5px;
+        }
+
+        .search-input {
+            border: none;
+            outline: none;
+            margin: 0 10px;
+            width: 100%;
+            font-family: "Poppins", sans-serif;
+            padding: 10px 0;
+            background-color: #F1F1F1;
+            color: var(--black-color);
+        }
+    }
+
+    .cart {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .cart-btn {
+            background-color: #CBCBCB;
+
+            i {
+                padding: 0 10px;
+            }
+
+            &:hover {
+                background-color: #B3B3B3;
+            }
+        }
+    }
+
     .nav-links {
         display: flex;
         justify-content: space-between;
