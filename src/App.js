@@ -4,7 +4,7 @@ import Home from './page/Home';
 import Restaurants from './page/Restaurants';
 import RestaurantDetail from './page/RestaurantDetail';
 import CheckOut from './page/CheckOut';
-import CartItem from './components/CartItem';
+import ShoppingCart from './components/ShoppingCart';
 import NotFound404 from './page/NotFound404';
 import Login from './page/Login';
 import SignUp from './page/SignUp';
@@ -12,7 +12,7 @@ import UserAccount from './page/UserAccount';
 import RestaurantAccount from './page/RestaurantAccount';
 import PlacesAutocomplete from 'react-places-autocomplete';
 
-import FoodItem from './components/FoodItem';
+
 function App() {
   return (
     <div className="App">

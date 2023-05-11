@@ -81,7 +81,7 @@ const AccountForm = () => {
               style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
             }}
             InputLabelProps={{
-              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
+              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500"},
             }}
             {...field}
           />
@@ -100,7 +100,7 @@ const AccountForm = () => {
             <InputLabel
               htmlFor="password"
               color="error"
-              style={{ fontFamily: "Poppins, sans-serif", fontWeight: "500" }}
+              style={{ fontFamily: "Poppins, sans-serif", fontWeight: "500"}}
             >
               Password
             </InputLabel>
@@ -144,7 +144,7 @@ const AccountForm = () => {
             <InputLabel
               htmlFor="re_password"
               color="error"
-              style={{ fontFamily: "Poppins, sans-serif", fontWeight: "500" }}
+              style={{ fontFamily: "Poppins, sans-serif", fontWeight: "500"}}
             >
               Re-Password
             </InputLabel>
@@ -156,7 +156,7 @@ const AccountForm = () => {
               margin="normal"
               placeholder="Re-Enter Password"
               inputProps={{
-                style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
+                style: { fontFamily: "Poppins, sans-serif", fontWeight: "500"},
               }}
               {...field}
               endAdornment={
@@ -195,13 +195,13 @@ const ContactForm = () => {
             placeholder="Enter Your Phone Number"
             fullWidth
             margin="normal"
-            
-            style={{ width: "80%", marginLeft: "10%" }}
+            color="error"
+            style={{ width: "118%", marginLeft: "-9%"}}
             inputProps={{
-              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
+              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500"},
             }}
             InputLabelProps={{
-              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
+              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500"},
             }}
             {...field}
           />
@@ -219,12 +219,12 @@ const ContactForm = () => {
             fullWidth
             margin="normal"
             color="error"
-            style={{ width: "80%", marginLeft: "10%" }}
+            style={{ width: "118%", marginLeft: "-9%" }}
             inputProps={{
-              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
+              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500"},
             }}
             InputLabelProps={{
-              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
+              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500"},
             }}
             {...field}
           />
@@ -249,12 +249,12 @@ const PersonalForm = () => {
             fullWidth
             margin="normal"
             color="error"
-            style={{ width: "80%", marginLeft: "10%" }}
+            style={{ width: "118%", marginLeft: "-9%"}}
             inputProps={{
-              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
+              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500"},
             }}
             InputLabelProps={{
-              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
+              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500"},
             }}
             {...field}
           />
@@ -272,12 +272,12 @@ const PersonalForm = () => {
             fullWidth
             margin="normal"
             color="error"
-            style={{ width: "80%", marginLeft: "10%" }}
+            style={{ width: "118%", marginLeft: "-9%"}}
             inputProps={{
-              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
+              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500"},
             }}
             InputLabelProps={{
-              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
+              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500"},
             }}
             {...field}
           />
@@ -485,7 +485,7 @@ const LinaerStepper = () => {
       ) : (
         <>
           <FormProvider {...methods} style={{ marginTop: "30px" }}>
-            <form onSubmit={methods.handleSubmit(handleNext)}>
+            <form onSubmit={methods.handleSubmit(handleNext)} style={{ position:"relative"}}>
               {getStepContent(activeStep)}
 
               <input
@@ -495,10 +495,11 @@ const LinaerStepper = () => {
                 className="back_button"
                 disabled={activeStep === 0 ? true : false}
                 style={{
+                  position:"absolute",
                   boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
                   opacity: activeStep === 0 ? "0" : "1",
-                  marginLeft: activeStep === 0 ? "45%" : "32%",
-                  marginTop: activeStep === 0 ? "0" : "80px",
+                  left: activeStep === 0 ? "35%" : "25%",
+                  bottom: activeStep === 0 ? "0" : "-40%",
                   cursor: activeStep === 0 ? "default" : "pointer",
                 }}
               />
@@ -507,10 +508,11 @@ const LinaerStepper = () => {
                 value={activeStep === steps.length - 1 ? "Finish" : "Next"}
                 className="next_button"
                 style={{
+                  position:"absolute",
                   backgroundColor: "#FF003D",
                   color: "#f5f5f7",
-                  marginLeft: activeStep === 0 ? "45%" : "5%",
-                  marginTop: activeStep === 0 ? "-20px" : "80px",
+                  right: activeStep === 0 ? "43%" : "25%",
+                  bottom: activeStep === 0 ? "-30%" : "-40%",
                 }}
               />
             </form>

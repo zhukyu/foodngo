@@ -1,5 +1,5 @@
 import React from 'react'
-import '../css/Category/RestaurantItem.scss'
+import '../css/RestaurantItem.scss'
 import { Link } from 'react-router-dom'
 
 
