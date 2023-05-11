@@ -38,6 +38,7 @@ import {
 import "../css/LinearStepper.scss";
 import zIndex from "@mui/material/styles/zIndex";
 import congratulaion from "../image/congratulation.gif";
+import axiosInstance from "../utility/AxiosInstance";
 const useStyles = makeStyles((theme) => ({
   button: {},
 }));
@@ -112,7 +113,7 @@ const AccountForm = () => {
               margin="normal"
               placeholder="Enter Your Password"
               inputProps={{
-                style: { fontFamily: "Poppins, sans-serif", fontWeight: "500"},
+                style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
               }}
               {...field}
               endAdornment={
@@ -207,7 +208,7 @@ const ContactForm = () => {
           />
         )}
       />
-      <Controller
+      {/* <Controller
         control={control}
         name="alternatePhone"
         render={({ field }) => (
@@ -229,7 +230,7 @@ const ContactForm = () => {
             {...field}
           />
         )}
-      />
+      /> */}
     </>
   );
 };
@@ -239,13 +240,13 @@ const PersonalForm = () => {
     <>
       <Controller
         control={control}
-        name="address1"
+        name="address"
         render={({ field }) => (
           <TextField
-            id="address1"
-            label="Address 1"
+            id="address"
+            label="Address"
             variant="outlined"
-            placeholder="Enter Your Address 1"
+            placeholder="Enter Your Address"
             fullWidth
             margin="normal"
             color="error"
@@ -260,7 +261,7 @@ const PersonalForm = () => {
           />
         )}
       />
-      <Controller
+      {/* <Controller
         control={control}
         name="address2"
         render={({ field }) => (
@@ -282,7 +283,7 @@ const PersonalForm = () => {
             {...field}
           />
         )}
-      />
+      /> */}
     </>
   );
 };
@@ -310,11 +311,11 @@ const LinaerStepper = () => {
   const methods = useForm({
     defaultValues: {
       email: "",
-      passowrd: "",
+      password: "",
       phoneNumber: "",
-      alternatePhone: "",
-      address1: "",
-      address2: "",
+      // alternatePhone: "",
+      address: "",
+      // address2: "",
     },
   });
   const [activeStep, setActiveStep] = useState(0);
@@ -329,15 +330,26 @@ const LinaerStepper = () => {
     return skippedSteps.includes(step);
   };
 
+  const sendData = async (data) => {
+    await axiosInstance.post("/auth/register", data)
+    .then((res) => {
+      console.log(res);
+    })
+  }
+
   const handleNext = (data) => {
-    console.log(data);
+    let _data = {
+      email: data.email,
+      name: "user name",
+      password: data.password,
+      phone: data.phoneNumber,
+      address: data.address,
+      role: "user",
+      dob: "2000-01-01",
+    }
     if (activeStep == steps.length - 1) {
-      fetch("https://jsonplaceholder.typicode.com/comments")
-        .then((data) => data.json())
-        .then((res) => {
-          console.log(res);
-          setActiveStep(activeStep + 1);
-        });
+      sendData(_data);
+      setActiveStep(activeStep + 1);
     } else {
       setActiveStep(activeStep + 1);
       setSkippedSteps(
@@ -445,7 +457,7 @@ const LinaerStepper = () => {
       </Stepper>
 
       {activeStep === steps.length ? (
-        
+
         <Typography
           variant="h3"
           align="center"
@@ -458,8 +470,8 @@ const LinaerStepper = () => {
             alignItems: "center",
           }}
         >
-         <Alert severity="success" style={{width:"400px",position:"absolute", top:"0", right:"0"}}><strong>Success</strong> — check it out!</Alert>
-        
+          <Alert severity="success" style={{ width: "400px", position: "absolute", top: "0", right: "0" }}><strong>Success</strong> — check it out!</Alert>
+
           <div
             style={{
               display: "flex",
