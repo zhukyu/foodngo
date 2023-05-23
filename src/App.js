@@ -11,6 +11,7 @@ import SignUp from './page/SignUp';
 import UserAccount from './page/UserAccount';
 import RestaurantAccount from './page/RestaurantAccount';
 import PlacesAutocomplete from 'react-places-autocomplete';
+import RestaurantDashboard from './page/RestaurantDashboard';
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
             <Route path='/signup' element={<SignUp />} />
             <Route path='/account/user' element={<UserAccount />} />
             <Route path='/account/restaurant' element={<RestaurantAccount />} />
+            <Route path='/restaurant/dashboard' element={<RestaurantDashboard />} />
           </Routes>
       </BrowserRouter>
     </div>
