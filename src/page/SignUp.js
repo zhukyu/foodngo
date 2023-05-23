@@ -35,8 +35,7 @@ function SignUp() {
           minWidth:"400px",
           boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
           backgroundColor: "#f5f5f7",
-          borderRadius: "10px",
-          border:"1px dashed green"
+          borderRadius: "10px"
         }}
         className="paper_form"
       >

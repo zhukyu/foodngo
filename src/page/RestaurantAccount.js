@@ -172,7 +172,7 @@ const ProfileForm = () => {
     </>
   );
 };
-const CurrentForm = () => {
+const OrdersForm = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const onSelectChange = (newSelectedRowKeys) => {
     console.log('selectedRowKeys changed: ', newSelectedRowKeys);
@@ -254,7 +254,9 @@ const CurrentForm = () => {
             size="small"
             style={{
               width: 90,
+              backgroundColor:"#F61D58",
             }}
+            
           >
             Search
           </Button>
@@ -277,6 +279,7 @@ const CurrentForm = () => {
               setSearchText(selectedKeys[0]);
               setSearchedColumn(dataIndex);
             }}
+            style={{color:"#F61D58",}}
           >
             Filter
           </Button>
@@ -286,6 +289,7 @@ const CurrentForm = () => {
             onClick={() => {
               close();
             }}
+            style={{color:"#F61D58",}}
           >
             close
           </Button>
@@ -487,6 +491,7 @@ const HistoryForm = () => {
             size="small"
             style={{
               width: 90,
+              backgroundColor:"#F61D58",
             }}
           >
             Search
@@ -510,6 +515,7 @@ const HistoryForm = () => {
               setSearchText(selectedKeys[0]);
               setSearchedColumn(dataIndex);
             }}
+            style={{color:"#F61D58",}}
           >
             Filter
           </Button>
@@ -519,6 +525,7 @@ const HistoryForm = () => {
             onClick={() => {
               close();
             }}
+            style={{color:"#F61D58",}}
           >
             close
           </Button>
@@ -742,7 +749,7 @@ function getStepContent(item) {
       return <ProfileForm />;
 
     case 1:
-      return <CurrentForm />;
+      return <OrdersForm />;
     case 2:
       return <HistoryForm />;
     case 3:
@@ -785,7 +792,7 @@ function RestaurantAccount() {
               onClick={() => changeItem(1)}
             >
               <i class="fa-solid fa-receipt"></i>
-              <h4>Current Orders</h4>
+              <h4>Orders</h4>
             </div>
             <div
               className={activeItem === 2 ? "menu_item active" : "menu_item"}

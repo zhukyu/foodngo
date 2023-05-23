@@ -216,6 +216,7 @@ const CurrentForm = () => {
             size="small"
             style={{
               width: 90,
+              backgroundColor:"#F61D58",
             }}
           >
             Search
@@ -239,6 +240,7 @@ const CurrentForm = () => {
               setSearchText(selectedKeys[0]);
               setSearchedColumn(dataIndex);
             }}
+            style={{color:"#F61D58",}}
           >
             Filter
           </Button>
@@ -248,6 +250,7 @@ const CurrentForm = () => {
             onClick={() => {
               close();
             }}
+            style={{color:"#F61D58",}}
           >
             close
           </Button>
@@ -285,23 +288,23 @@ const CurrentForm = () => {
   });
   const columns = [
     {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
+      title: "ID",
+      dataIndex: "id",
+      key: "id",
       render: (text) => <a>{text}</a>,
-      ...getColumnSearchProps("name"),
+      ...getColumnSearchProps("id"),
     },
     {
-      title: "Age",
-      dataIndex: "age",
-      key: "age",
-      ...getColumnSearchProps("age"),
+      title: "Date",
+      dataIndex: "date",
+      key: "date",
+      ...getColumnSearchProps("date"),
     },
     {
-      title: "Address",
-      dataIndex: "address",
-      key: "address",
-      ...getColumnSearchProps("address"),
+      title: "Price",
+      dataIndex: "price",
+      key: "price",
+      ...getColumnSearchProps("price"),
       sorter: (a, b) => a.address.length - b.address.length,
       sortDirections: ["descend", "ascend"],
     },
@@ -474,20 +477,20 @@ const HistoryForm = () => {
   });
   const columns = [
     {
-      title: "Name",
+      title: "ID",
       dataIndex: "name",
       key: "name",
       render: (text) => <a>{text}</a>,
       ...getColumnSearchProps("name"),
     },
     {
-      title: "Age",
+      title: "Date",
       dataIndex: "age",
       key: "age",
       ...getColumnSearchProps("age"),
     },
     {
-      title: "Address",
+      title: "Price",
       dataIndex: "address",
       key: "address",
       ...getColumnSearchProps("address"),
@@ -522,23 +525,23 @@ const HistoryForm = () => {
   const data = [
     {
       key: "1",
-      name: "John Brown",
-      age: 32,
-      address: "New York No. 1 Lake Park",
+      name: "#" + parseInt(Math.random() * 99999999),
+      age: "22/4/2023",
+      address: parseInt(Math.floor(Math.random() * 999999 / 10000) * 10000),
       tags: ["done"],
     },
     {
       key: "2",
-      name: "Jim Green",
-      age: 42,
-      address: "London No. 1 Lake Park",
+      name: "#" + parseInt(Math.random() * 9999999),
+      age: "15/3/2023",
+      address: parseInt(Math.floor(Math.random() * 999999 / 10000) * 10000),
       tags: ["canceled"],
     },
     {
       key: "3",
-      name: "Joe Black",
-      age: 32,
-      address: "Sydney No. 1 Lake Park",
+      name: "#" + parseInt(Math.random() * 99999999),
+      age: "9/3/2023",
+      address: parseInt(Math.floor(Math.random() * 999999 / 10000) * 10000),
       tags: ["delivering"],
     },
   ];
