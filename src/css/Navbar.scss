@@ -89,7 +89,23 @@
         width: 180px;
         padding: 10px 0;
     }
+
+    
 }
+
+.ant-drawer {
+    font-family: 'Poppins', sans-serif;
+
+    .ant-drawer-body {
+        padding: 10px 20px;
+    }
+
+    .ant-drawer-close {
+        padding: 0;
+    }
+}
+
+
 
 .introduce-section-1 {
     display: flex;

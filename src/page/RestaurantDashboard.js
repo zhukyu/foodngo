@@ -554,7 +554,7 @@ const InfoForm = () => {
         disabled={editButton}
         onClick={handleEdit}
       >
-        Edit&ensp;<i class="fa-solid fa-pen-to-square"></i>
+        Edit&ensp;<i className="fa-solid fa-pen-to-square"></i>
       </button>
       <div className="field one">
         <h4>Name</h4>
@@ -659,14 +659,14 @@ const InfoForm = () => {
           disabled={saveButton}
           onClick={handleSave}
         >
-          Save&ensp;<i class="fa-solid fa-floppy-disk"></i>
+          Save&ensp;<i className="fa-solid fa-floppy-disk"></i>
         </button>
         <button
           className={saveButton ? "cancel_button disabled" : "cancel_button"}
           disabled={saveButton}
           onClick={handleCancel}
         >
-          Cancel&ensp;<i class="fa-solid fa-ban"></i>
+          Cancel&ensp;<i className="fa-solid fa-ban"></i>
         </button>
       </div>
     </>
@@ -933,7 +933,7 @@ const MenuForm = () => {
               handleEdit(record);
             }}
           >
-            <i class="fa-solid fa-pen-to-square"></i>
+            <i className="fa-solid fa-pen-to-square"></i>
           </button>
           <button
             className="delete_button_form"
@@ -941,7 +941,7 @@ const MenuForm = () => {
               handleDelete(record);
             }}
           >
-            <i class="fa-regular fa-trash-can"></i>
+            <i className="fa-regular fa-trash-can"></i>
           </button>
         </Space>
       ),
@@ -973,10 +973,10 @@ const MenuForm = () => {
   return (
     <div className="menu_table_container">
       <button className="delete_button" onClick={handleMultDelete}>
-        Delete&ensp;<i class="fa-solid fa-trash-can"></i>
+        Delete&ensp;<i className="fa-solid fa-trash-can"></i>
       </button>
       <button className="add_button" onClick={handleAdd}>
-      <i class="fa-solid fa-plus"></i>
+      <i className="fa-solid fa-plus"></i>
       </button>
       <Table
         className="menu_table"
@@ -1346,7 +1346,7 @@ const OrdersForm = () => {
               handleEdit(record);
             }}
           >
-            <i class="fa-solid fa-pen-to-square"></i>
+            <i className="fa-solid fa-pen-to-square"></i>
           </button>
           <button
             className="delete_button_form"
@@ -1354,7 +1354,7 @@ const OrdersForm = () => {
               handleDelete(record);
             }}
           >
-            <i class="fa-regular fa-trash-can"></i>
+            <i className="fa-regular fa-trash-can"></i>
           </button>
         </Space>
       ),
@@ -1526,7 +1526,7 @@ const SecurityForm = () => {
         disabled={editButton}
         onClick={handleEdit}
       >
-        Change Password&ensp;<i class="fa-solid fa-pen-to-square"></i>
+        Change Password&ensp;<i className="fa-solid fa-pen-to-square"></i>
       </button>
       <div className="field one">
         <h4>Name</h4>
@@ -1582,14 +1582,14 @@ const SecurityForm = () => {
           disabled={saveButton}
           onClick={handleSave}
         >
-          Save&ensp;<i class="fa-solid fa-floppy-disk"></i>
+          Save&ensp;<i className="fa-solid fa-floppy-disk"></i>
         </button>
         <button
           className={saveButton ? "cancel_button disabled" : "cancel_button"}
           disabled={saveButton}
           onClick={handleCancel}
         >
-          Cancel&ensp;<i class="fa-solid fa-ban"></i>
+          Cancel&ensp;<i className="fa-solid fa-ban"></i>
         </button>
       </div>
     </>
@@ -1628,35 +1628,35 @@ function RestaurantDashboard() {
               className={activeItem === 0 ? "menu_item active" : "menu_item"}
               onClick={() => changeItem(0)}
             >
-              <i class="fa-solid fa-chart-simple"></i>
+              <i className="fa-solid fa-chart-simple"></i>
               <h4>Statistics</h4>
             </div>
             <div
               className={activeItem === 1 ? "menu_item active" : "menu_item"}
               onClick={() => changeItem(1)}
             >
-              <i class="fa-solid fa-circle-info"></i>
+              <i className="fa-solid fa-circle-info"></i>
               <h4>Restaurant Info</h4>
             </div>
             <div
               className={activeItem === 2 ? "menu_item active" : "menu_item"}
               onClick={() => changeItem(2)}
             >
-              <i class="fa-solid fa-utensils"></i>
+              <i className="fa-solid fa-utensils"></i>
               <h4>Menu</h4>
             </div>
             <div
               className={activeItem === 3 ? "menu_item active" : "menu_item"}
               onClick={() => changeItem(3)}
             >
-              <i class="fa-solid fa-receipt"></i>
+              <i className="fa-solid fa-receipt"></i>
               <h4>Orders</h4>
             </div>
             <div
               className={activeItem === 4 ? "menu_item active" : "menu_item"}
               onClick={() => changeItem(4)}
             >
-              <i class="fa-solid fa-shield"></i>
+              <i className="fa-solid fa-shield"></i>
               <h4>Security</h4>
             </div>
           </div>

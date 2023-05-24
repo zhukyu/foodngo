@@ -48,7 +48,7 @@ const ProfileForm = () => {
         disabled={editButton}
         onClick={handleEdit}
       >
-        Edit&ensp;<i class="fa-solid fa-pen-to-square"></i>
+        Edit&ensp;<i className="fa-solid fa-pen-to-square"></i>
       </button>
       <div className="field one">
         <h4>Name</h4>
@@ -153,14 +153,14 @@ const ProfileForm = () => {
           disabled={saveButton}
           onClick={handleSave}
         >
-          Save&ensp;<i class="fa-solid fa-floppy-disk"></i>
+          Save&ensp;<i className="fa-solid fa-floppy-disk"></i>
         </button>
         <button
           className={saveButton ? "cancel_button disabled" : "cancel_button"}
           disabled={saveButton}
           onClick={handleCancel}
         >
-          Cancel&ensp;<i class="fa-solid fa-ban"></i>
+          Cancel&ensp;<i className="fa-solid fa-ban"></i>
         </button>
       </div>
     </>
@@ -584,7 +584,7 @@ const SecurityForm = () => {
         disabled={editButton}
         onClick={handleEdit}
       >
-        Change Password&ensp;<i class="fa-solid fa-pen-to-square"></i>
+        Change Password&ensp;<i className="fa-solid fa-pen-to-square"></i>
       </button>
       <div className="field one">
         <h4>Name</h4>
@@ -640,14 +640,14 @@ const SecurityForm = () => {
           disabled={saveButton}
           onClick={handleSave}
         >
-          Save&ensp;<i class="fa-solid fa-floppy-disk"></i>
+          Save&ensp;<i className="fa-solid fa-floppy-disk"></i>
         </button>
         <button
           className={saveButton ? "cancel_button disabled" : "cancel_button"}
           disabled={saveButton}
           onClick={handleCancel}
         >
-          Cancel&ensp;<i class="fa-solid fa-ban"></i>
+          Cancel&ensp;<i className="fa-solid fa-ban"></i>
         </button>
       </div>
     </>
@@ -699,28 +699,28 @@ function UserAccount() {
               className={activeItem === 0 ? "menu_item active" : "menu_item"}
               onClick={() => changeItem(0)}
             >
-              <i class="fa-solid fa-user"></i>
+              <i className="fa-solid fa-user"></i>
               <h4>Profile</h4>
             </div>
             <div
               className={activeItem === 1 ? "menu_item active" : "menu_item"}
               onClick={() => changeItem(1)}
             >
-              <i class="fa-solid fa-receipt"></i>
+              <i className="fa-solid fa-receipt"></i>
               <h4>Current Orders</h4>
             </div>
             <div
               className={activeItem === 2 ? "menu_item active" : "menu_item"}
               onClick={() => changeItem(2)}
             >
-              <i class="fa-solid fa-clock-rotate-left"></i>
+              <i className="fa-solid fa-clock-rotate-left"></i>
               <h4>History</h4>
             </div>
             <div
               className={activeItem === 3 ? "menu_item active" : "menu_item"}
               onClick={() => changeItem(3)}
             >
-              <i class="fa-solid fa-shield"></i>
+              <i className="fa-solid fa-shield"></i>
               <h4>Security</h4>
             </div>
           </div>

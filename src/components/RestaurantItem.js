@@ -4,14 +4,17 @@ import { Link } from 'react-router-dom'
 
 
 function RestaurantItem(props) {
+    console.log(props);
     return (
         <div className='restaurant-item'>
-            <Link to='#'>
-                <img src={props.img}
-                    alt='restaurant' />
-            </Link>
+            <div className='restaurant-item-img'>
+                <Link to={`/restaurant/${props.id}`}>
+                    <img src={props.img}
+                        alt='restaurant' />
+                </Link>
+            </div>
             <div className='restaurant-item-info'>
-                <Link to='#' className='restaurant-name'>
+                <Link to={`/restaurant/${props.id}`} className='restaurant-name'>
                     <h4>{props.name}</h4>
                 </Link>
                 <div className='description'>

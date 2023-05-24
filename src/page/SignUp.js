@@ -14,7 +14,7 @@ function SignUp() {
       <div className="header_signup">
         <Link to="/login">
           <h4>
-            <i class="fa-solid fa-arrow-left">&nbsp;</i>Back to login
+            <i className="fa-solid fa-arrow-left">&nbsp;</i>Back to login
           </h4>
         </Link>
         <Link to="/">
