@@ -1,14 +1,37 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import "../css/Navbar.scss";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../image/FoodnGo_logo.png'
 import ProfileMenu from './ProfileMenu';
+import { Drawer } from 'antd';
+import ShoppingCart from './ShoppingCart';
 
 function Navbar() {
 
-    const address = JSON.parse(localStorage.getItem('address'))
-    const mainAddress = address.structured_formatting.main_text
-    const accessToken = localStorage.getItem('accessToken')
+    const navigate = useNavigate();
+    const [address, setAddress] = useState({})
+    const [mainAddress, setMainAddress] = useState('')
+    const [accessToken, setAccessToken] = useState('')
+
+    const [open, setOpen] = useState(false);
+    const showDrawer = () => {
+        setOpen(true);
+    };
+    const onClose = () => {
+        setOpen(false);
+    };
+
+    useEffect(() => {
+        const address = JSON.parse(localStorage.getItem('address'));
+        if (!address) {
+            navigate('/');
+        }
+        else {
+            setAddress(address)
+            setMainAddress(address.structured_formatting.main_text)
+            setAccessToken(localStorage.getItem('accessToken'))
+        }
+    }, [])
 
     useEffect(() => {
         const accessToken = localStorage.getItem('accessToken')
@@ -19,6 +42,9 @@ function Navbar() {
 
     return (
         <div className='navbar'>
+            <Drawer title="Shopping Cart" placement="right" onClose={onClose} open={open} width={470}>
+                <ShoppingCart/>
+            </Drawer>
             <Link to='/restaurants'>
                 <div className='logo'>
                     <img src={logo} alt='logo' className='logo' />
@@ -37,7 +63,7 @@ function Navbar() {
                 />
             </div>
             <div className='cart'>
-                <button className='cart-btn'>
+                <button className='cart-btn' onClick={showDrawer}>
                     <i className="fa-solid fa-shopping-cart"></i>
                 </button>
             </div>

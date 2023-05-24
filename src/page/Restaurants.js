@@ -100,7 +100,7 @@ function Restaurants() {
                             <RestaurantItem
                                 key={id}
                                 img={restaurant.media[0].url}
-                                id={restaurant.id}
+                                id={restaurant._id}
                                 name={restaurant.name}
                                 description={restaurant.description}
                                 rate={restaurant.rate}

@@ -18,31 +18,31 @@ function CheckOut() {
 
           <div className="delivery_time">
             <div className="delivery_time_header">
-              <i class="fa-regular fa-clock">&emsp;</i>
+              <i className="fa-regular fa-clock">&emsp;</i>
               <h4>Delivery Time</h4>
             </div>
             <h4>25min (10km)</h4>
           </div>
           <div className="delivery_fee">
             <div className="delivery_fee_header">
-              <i class="fa-solid fa-truck">&emsp;</i>
+              <i className="fa-solid fa-truck">&emsp;</i>
               <h4>Delivery Fee</h4>
             </div>
             <h4>36.000 VND</h4>
           </div>
           <div className="delivery_address">
             <div className="delivery_address_header">
-              <i class="fa-solid fa-house-chimney">&emsp;</i>
+              <i className="fa-solid fa-house-chimney">&emsp;</i>
               <h4>22 Le Van Hien, Ngu Hanh Son, Da Nang</h4>
             </div>
-            <i class="fa-solid fa-right-long"></i>
+            <i className="fa-solid fa-right-long"></i>
           </div>
           <div className="delivery_phone">
             <div className="delivery_phone_header">
-              <i class="fa-solid fa-phone">&emsp;</i>
+              <i className="fa-solid fa-phone">&emsp;</i>
               <h4>0935126212</h4>
             </div>
-            <i class="fa-solid fa-right-long"></i>
+            <i className="fa-solid fa-right-long"></i>
           </div>
         </div>
         <div className="checkout_payment_method">
@@ -51,11 +51,11 @@ function CheckOut() {
           <div className="checkout_payment_method_content">
             <div className="payment_header">
               <div className="cash">
-                <i class="fa-solid fa-money-bill-wave">&emsp;</i>
+                <i className="fa-solid fa-money-bill-wave">&emsp;</i>
                 <h4>Cash on Delivery</h4>
               </div>
               <div className="credit_card">
-                <i class="fa-brands fa-cc-visa">&emsp;</i>
+                <i className="fa-brands fa-cc-visa">&emsp;</i>
                 <h4>Credit Card</h4>
               </div>
             </div>
@@ -79,7 +79,7 @@ function CheckOut() {
               <h3>Your cart from</h3>
               <h1>Little Vietnam</h1>
             </div>
-            <i class="fa-solid fa-cart-shopping"></i>
+            <i className="fa-solid fa-cart-shopping"></i>
           </div>
           <div className="cart_detail_summary">
             <h2>Order Summary (5 items)</h2>
