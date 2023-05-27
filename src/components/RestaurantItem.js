@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom'
 
 
 function RestaurantItem(props) {
-    console.log(props);
     return (
         <div className='restaurant-item'>
             <div className='restaurant-item-img'>

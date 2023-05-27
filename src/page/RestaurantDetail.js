@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../css/RestaurantDetail.scss";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import FoodItem from "../components/FoodItem";
 import Navbar from "../components/Navbar";
@@ -12,12 +12,19 @@ function RestaurantDetail() {
   const [restaurant, setRestaurant] = useState(null)
   const [menus, setMenus] = useState(null)
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchData = async () => {
       await axiosInstance.get(`/restaurant/${id}`)
         .then((res) => {
           console.log(res.data.restaurant);
           setRestaurant(res.data.restaurant);
+        })
+        .catch((err) => {
+          if(err.response.status === 404) {
+            navigate('/notfound404');
+          }
         })
       await axiosInstance.get(`/restaurant/${id}/products`)
         .then((res) => {
@@ -96,7 +103,7 @@ function RestaurantDetail() {
           </div>
         </div> */}
         {menus?.map((menu, index) => (
-          <div className="special_items" key={index}>
+          <div className="menu_section" key={index}>
             <h4 className="title">{menu.category.name}</h4>
             <div className="items">
               {menu.products.map((product, index) => (

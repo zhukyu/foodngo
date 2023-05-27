@@ -17,9 +17,10 @@ function Login() {
     .then((res) => {
       if (res.status === 200) {
         console.log(res.data);
-        localStorage.setItem('accessToken', res.data.accessToken);
-        localStorage.setItem('refreshToken', res.data.refreshToken);
+        localStorage.setItem('access_token', res.data.accessToken);
+        localStorage.setItem('refresh_token', res.data.refreshToken);
         localStorage.setItem('username', JSON.stringify(res.data.user.name));
+        axiosInstance.defaults.headers['Authorization'] = `Bearer ${res.data.accessToken}`;
         navigate('/restaurants')
       }
     })
@@ -55,8 +56,8 @@ function Login() {
               <Link to="/signup"><h4>Sign Up</h4></Link>
             </div>
           </div>
-          <div className="or_underline">OR</div>
-          <div className="login_with_google">
+          {/* <div className="or_underline">OR</div> */}
+          {/* <div className="login_with_google">
             <button className="login_with_google_button">
               Continue with Google&emsp;&emsp;&nbsp;
               <img src={google} className="google_logo"></img>
@@ -69,7 +70,7 @@ function Login() {
               <img src={facebook} className="facebook_logo"></img>
             </button>
 
-          </div>
+          </div> */}
         </div>
       </div>
     </form>

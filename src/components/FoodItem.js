@@ -1,9 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import "../css/FoodItem.scss";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Badge, Card, Space } from "antd";
+import { Badge, Modal } from "antd";
+import AddCart from "./AddCart";
 
 function FoodItem(props) {
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+  const showModal = () => {
+    setOpen(true);
+  };
+
+  const handleOk = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setOpen(false);
+    }, 3000);
+  };
+  const handleCancel = () => {
+    setOpen(false);
+  };
+
   return (
     <div className="item">
       <div className="item_info">
@@ -19,7 +36,7 @@ function FoodItem(props) {
         <div className="price_rating">
           <h4 className="price">
             <i className="fa-solid fa-tags">&nbsp;</i>
-            {props?.price.toLocaleString({style:"currency", currency:"VND"})} VND
+            {props?.price.toLocaleString({ style: "currency", currency: "VND" })} VND
           </h4>
 
           <h4 className="rating">
@@ -29,7 +46,7 @@ function FoodItem(props) {
       </div>
       <div className="food_image">
         <img src={props?.img} alt="alt"></img>
-        <button className="add_button">Add</button>
+        <button className="add_button" onClick={showModal}>Add</button>
       </div>
       {props?.popular && (
         <Badge.Ribbon
@@ -49,6 +66,18 @@ function FoodItem(props) {
           }}
         ></Badge.Ribbon>
       )}
+      <Modal
+        style={{
+          top: 60,
+        }}
+        open={open}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        title={"Add to Cart"}
+        footer={null}
+      >
+        <AddCart handleCancel={handleCancel} product={props} />
+      </Modal>
     </div>
   );
 }
