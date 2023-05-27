@@ -39,8 +39,9 @@ function ProfileMenu() {
 
     const onLogOut = (e) => {
         e.preventDefault();
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('userName');
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        localStorage.removeItem('username');
         navigate(0);
         // axiosInstance.post('/auth/logout').then(res =>{
         //     if(res.status === 200)

@@ -97,12 +97,17 @@
     font-family: 'Poppins', sans-serif;
 
     .ant-drawer-body {
-        padding: 10px 20px;
+        padding: 10px 24px;
     }
 
     .ant-drawer-close {
         padding: 0;
     }
+}
+.ant-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 

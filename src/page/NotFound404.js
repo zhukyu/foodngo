@@ -12,7 +12,7 @@ function NotFound404() {
         <div className="contant_box_404">
           <h3 className="content_text">Looks like you're lost</h3>
           <p>The page you are looking for is not avaible!</p>
-          <Link to="/"><h4 className="link_404">
+          <Link to="/restaurants"><h4 className="link_404">
             Go to Home
           </h4></Link>
         </div>

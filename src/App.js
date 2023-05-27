@@ -12,12 +12,15 @@ import UserAccount from './page/UserAccount';
 import RestaurantAccount from './page/RestaurantAccount';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import RestaurantDashboard from './page/RestaurantDashboard';
+import store from './utility/store';
+import { Provider } from 'react-redux';
 
 
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
+      <Provider store={store}>
+        <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path='/restaurants' element={<Restaurants />} />
@@ -30,7 +33,8 @@ function App() {
             <Route path='/account/restaurant' element={<RestaurantAccount />} />
             <Route path='/restaurant/dashboard' element={<RestaurantDashboard />} />
           </Routes>
-      </BrowserRouter>
+        </BrowserRouter>
+      </Provider>
     </div>
   );
 }

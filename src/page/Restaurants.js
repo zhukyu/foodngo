@@ -94,6 +94,7 @@ function Restaurants() {
                     </div>
                 </div>
                 <div className='restaurants-section'>
+                    {console.log(pagination)}
                     <h5>{pagination ? pagination.totalResult : 0} Results</h5>
                     <div className='restaurants-list'>
                         {restaurants ? restaurants.map((restaurant, id) => (
