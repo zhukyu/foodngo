@@ -27,12 +27,10 @@ function Restaurants() {
     useEffect(() => {
         const coordinateStr = localStorage.getItem('coordinate');
         const coordinate = JSON.parse(coordinateStr);
-        console.log(coordinate);
         const fetchData = async () => {
             await axiosInstance.get(`/restaurant?longitude=${coordinate.lng}&latitude=${coordinate.lat}`)
                 .then((res) => {
                     if (res.status === 200) {
-                        console.log(res.data.restaurants);
                         setRestaurants(res.data.restaurants);
                         setPagination(res.data.pagination);
                     }
@@ -94,7 +92,6 @@ function Restaurants() {
                     </div>
                 </div>
                 <div className='restaurants-section'>
-                    {console.log(pagination)}
                     <h5>{pagination ? pagination.totalResult : 0} Results</h5>
                     <div className='restaurants-list'>
                         {restaurants ? restaurants.map((restaurant, id) => (
@@ -106,7 +103,7 @@ function Restaurants() {
                                 description={restaurant.description}
                                 rate={restaurant.rate}
                                 distance={restaurant.dist.calculated}
-                                deliveryTime='30 min'
+                                deliveryTime={restaurant.deliveryTime}
                             />
                         )) : null}
                         {restaurants ? (restaurants.length === 2 ? <div style={{width: "calc(100% / 3 - 20px)"}}></div> : null) : null}

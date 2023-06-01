@@ -22,7 +22,7 @@ function RestaurantDetail() {
           setRestaurant(res.data.restaurant);
         })
         .catch((err) => {
-          if(err.response.status === 404) {
+          if (err.response.status === 404) {
             navigate('/notfound404');
           }
         })
@@ -69,25 +69,32 @@ function RestaurantDetail() {
                   <i className="bi bi-geo-alt-fill">&nbsp;</i>2km
                 </h4>
                 <h4 className="working_hours">
-                  <i className="bi bi-stopwatch-fill">&nbsp;</i>8:00 - 22:00
+                  <i className="bi bi-stopwatch-fill">&nbsp;</i>{`${restaurant?.openingHours.open} - ${restaurant?.openingHours.close}`}
                 </h4>
                 <h4 className="working_days">
                   <i className="bi bi-calendar3">&nbsp;</i>Mon - Sat
                 </h4>
               </div>
               <div className="phone_address">
-                <h4 className="phone_number">
+                <div className="phone_number">
                   <i className="bi bi-telephone-fill">&nbsp;</i>
-                  <p>Tel:&nbsp;</p>{restaurant?.phone}
-                </h4>
-                <h4 className="address">
+                  <h5>Phone:&nbsp;</h5>{restaurant?.phone}
+                </div>
+                <div className="address">
                   <i className="fa-solid fa-map-location-dot">&nbsp;</i>
-                  <p>Address:&nbsp;</p>210 Nguyen Tri Phuong, Thanh Khe, Da Nang
-                </h4>
+                  <h5>Address:&nbsp;</h5>
+                  {restaurant?.address}
+                </div>
               </div>
-              {restaurant?.status === "online" ? <div className="opening_certification">
-                <i className="fa-solid fa-bullhorn">&nbsp;</i>Opening
-              </div> : null}
+              {restaurant?.status === "open" ?
+                <div className="opening_certification">
+                  <i className="fa-solid fa-bullhorn">&nbsp;</i>Opening
+                </div>
+                :
+                <div className="closed_certification">
+                  <i className="fa-solid fa-shop-lock">&nbsp;</i>Closed
+                </div>
+              }
             </div>
           </div>
         </div>
