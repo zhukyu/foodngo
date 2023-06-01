@@ -229,9 +229,9 @@ function Home() {
               </div>
               <div className='search-autocomplete'>
                 {loading ? <div className='autocomplete-item'>Loading...</div> : null}
-                {suggestions.map((suggestion) => {
+                {suggestions.map((suggestion, index) => {
                   return (
-                    <div className='autocomplete-item' key={suggestion.placeId} onClick={() => handleAddress(suggestion)}>
+                    <div className='autocomplete-item' key={index} onClick={() => handleAddress(suggestion)}>
                       {suggestion.description}
                     </div>
                   );

@@ -5,10 +5,13 @@ import logo from '../image/FoodnGo_logo.png'
 import ProfileMenu from './ProfileMenu';
 import { Badge, Drawer } from 'antd';
 import ShoppingCart from './ShoppingCart';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCartItems } from '../utility/action';
+import axiosInstance from '../utility/AxiosInstance';
 
 function Navbar() {
 
+    const dispatch = useDispatch(); 
     const navigate = useNavigate();
     const [address, setAddress] = useState({})
     const [mainAddress, setMainAddress] = useState('')
@@ -18,6 +21,10 @@ function Navbar() {
 
     const [open, setOpen] = useState(false);
     const showDrawer = () => {
+        if(!localStorage.getItem('access_token')) {
+            navigate('/login');
+            return;
+        }
         setOpen(true);
     };
     const onClose = () => {
@@ -45,6 +52,24 @@ function Navbar() {
         if (accessToken) {
 
         }
+    }, [])
+
+    useEffect(() => {
+        dispatch(fetchCartItems());
+    }, [])
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            await axiosInstance.get('/user')
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        }
+
+        fetchUserData()
     }, [])
 
     return (

@@ -13,7 +13,13 @@ const axiosInstance = axios.create({
 const refreshAccessToken = async () => {
     const response = await axiosInstance.post('/auth/token', {
         token: localStorage.getItem('refresh_token')
-    });
+    }).catch(err => {
+        if(err.response.status === 400 && err.response.data.message === "Invalid refresh token") {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('refresh_token');
+            localStorage.removeItem('username');
+        }
+    })
     const newAccessToken = response.data.accessToken;
     
     axiosInstance.defaults.headers['Authorization'] = `Bearer ${newAccessToken}`;

@@ -26,11 +26,15 @@ function RestaurantItem(props) {
                     </div>
                     <div className='distance'>
                         <i className="fa-solid fa-map-marker-alt"></i>
-                        <span>{(props.distance / 1000).toFixed(2) + " km"}</span>
+                        <span>
+                            {props.distance >= 1000
+                                ? (props.distance / 1000).toFixed(2) + " km"
+                                : props.distance.toFixed(0) + " m"}
+                        </span>
                     </div>
                     <div className='delivery-time'>
                         <i className="fa-solid fa-clock"></i>
-                        <span>{props.deliveryTime}</span>
+                        <span>{props.deliveryTime.toFixed(0) + " min"}</span>
                     </div>
                 </div>
             </div>
