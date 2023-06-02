@@ -97,6 +97,10 @@
       background-color: #fff;
       border-radius: 10px;
       box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+      h3{
+        margin-top: 5%;
+        margin-bottom: 3%;
+      }
       input {
         width: 70%;
         height: 40px;
@@ -124,8 +128,8 @@
         position: relative;
         width: 200px;
         height: 20px;
-        top: -7%;
-        left: 33%;
+        top: 0;
+        left: 32%;
         h6 {
           cursor: pointer;
           font-family: "Poppins", sans-serif;
@@ -168,7 +172,7 @@
       height: 1px;
       background-color: #ccc;
       position: absolute;
-      margin-top: 1%;
+      margin-top: 1.5%;
       right: 12%;
     }
 
@@ -185,7 +189,7 @@
       height: 1px;
       background-color: #ccc;
       position: absolute;
-      margin-top: 1%;
+      margin-top: 1.5%;
       left: 12%;
     }
     .login_with_google {

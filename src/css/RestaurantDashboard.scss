@@ -1,295 +1,58 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import url("https://cdn.syncfusion.com/ej2/material.css");
 
-.account_container{
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    .account_left{
-        width: 25%;
-        min-width: 200px;
-        height: 90vh;
-        min-height: 500px;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: flex-start;
-        background-color: #fff;
-        border-right: 1px solid #d5d5d5;
-        //box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-        
-        .menu_box{
-            width: 100%;
-            height: 75vh;
-            //border: 1px dashed blue;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: flex-start;
-            
-            .menu_item{
-                width: 95%;
-                height: 8%;
-                min-height: 50px;
-                display: flex;
-                justify-content: flex-start;
-                align-items: center;
-                color: #1d1d1f;
-                border-radius: 10px;
-                margin-left: 2%;
-                margin-top: 1%;
-                cursor: pointer;
-                i{
-                    margin-left: 4%;
-                }
-                h4{
-                    font-family: "Poppins", sans-serif;
-                    font-size: 20px;
-                    font-weight: 600;
-                    margin-left: 3%;
-                }
-            }
+.sidebar {
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px !important;
+  z-index: 6 !important;
+}
 
-            .menu_item:nth-child(1){
-                margin-top: 8%;
-            
-            }
+.navbar_dash {
+  z-index: 5 !important ;
 
-            .menu_item:hover{
-            background-color: #E8E8E8;
-            }
-            .active{
-                background-color: #FF003D;
-                color:#f5f5f7;
-                
-                
-            }
-            .active:hover{
-                background-color: #FF003D;
-                color:#f5f5f7;
-                
-                
-            }
-            .active::before{
-                content: "";
-                width: 3px;
-                height: 3vh;
-                background-color: #f5f5f7;
-                border-radius: 10px;
-                position: absolute;
-                left: 0.8%;
-            }
+  
+}
+.nav-item{
+  z-index: 7 !important;
+ 
+  
+}
 
-        }
-    }
+.e-dlg-center-center,
+.e-quick-popup-wrapper.e-device {
+  z-index: 1000 !important;
+}
 
-    .account_right{
-        width: 75%;
-        height: 90vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: center;
-        .MuiOutlinedInput-root{
-            border-radius: 15px;
-        }
-        .field{
-            width: 100%;
-            height: 10vh;
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            //border: 1px solid #989898;
-            h4{
-                font-family: "Poppins", sans-serif;
-                font-size: 20px;
-                font-weight: 600;
-                margin-right: 3%;
-                color: #1d1d1f;
-                margin-left: 25%;
-            }
-            p{
-                font-family: "Poppins", sans-serif;
-                font-size: 17px;
-                font-weight: 400;
-                color: #989898;
-                margin-left: 3%;
-            }
-        }
-        .field:nth-child(1){
-            margin-top: 5%;
-        }
+::-webkit-scrollbar {
+  width: 6px !important;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgb(216, 216, 216) !important;
+  border-radius: 40px !important;
+}
+::-webkit-scrollbar-track {
+  background-color: transparent !important;
+}
 
-        .edit_button{
-            width: 7%;
-            height: 4vh;
-            position: relative;
-            top: 8%;
-            left: 34%;
-            background-color: #1d1d1f;
-            color: #f5f5f7;
-            border-radius: 10px;
-            font-family: "Poppins", sans-serif;
-            font-size: 15px;
-            font-weight: 500;
-        }
-        .change_password_button{
-            width: 15%;
-            height: 4vh;
-            position: relative;
-            top: 8%;
-            left: 28%;
-            background-color: #1d1d1f;
-            color: #f5f5f7;
-            border-radius: 10px;
-            font-family: "Poppins", sans-serif;
-            font-size: 15px;
-            font-weight: 500;
-        }
+/* color-picker style  */
 
-        .five{
-            width: 100%;
-            height: 10vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+#preview {
+  background: transparent
+    url("https://ej2.syncfusion.com/react/demos/src/color-picker/images/pen.png")
+    no-repeat !important;
+  display: inline-block !important;
+  height: 80px !important;
+  margin: 10px 0 !important;
+  min-width: 300px !important;
+  max-width: 600px !important;
+  background-color: #008000 !important;
+}
 
-        .save_button{
-            width: 7%;
-            height: 4vh;
-            background-color: #FF003D;
-            color: #f5f5f7;
-            border-radius: 10px;
-            font-family: "Poppins", sans-serif;
-            font-size: 15px;
-            font-weight: 500;
-            margin-left: 2%;
-            margin-right: 1%;
-
-        }
-
-        .cancel_button{
-            width: 9%;
-            height: 4vh;
-            background-color: #1d1d1f;
-            color: #f5f5f7;
-            border-radius: 10px;
-            font-family: "Poppins", sans-serif;
-            font-size: 15px;
-            font-weight: 500;
-            margin-left: 1%;
-        }
-
-        .disabled{
-            opacity: 0;
-        }
-
-        .edit_button_form{
-            width: 100%;
-            height: 4vh;
-            font-family: "Poppins", sans-serif;
-            font-size: 16px;
-            font-weight: 500;
-            border-radius: 5px;
-            background-color: #867CFF;
-        }
-        .edit_button_form:hover{
-            filter: brightness(85%);
-        }
-        .edit_button_form:active{
-            scale: (0.8);
-
-        }
-        .delete_button_form{
-            width: 100%;
-            height: 4vh;
-            font-family: "Poppins", sans-serif;
-            font-size: 16px;
-            font-weight: 500;
-            border-radius: 5px;
-            background-color: #ff5771;
-        }
-        .delete_button_form:hover{
-            filter: brightness(85%);
-        }
-        .delete_button_form:active{
-            scale: (0.8);
-        }
-
-        .menu_table_container{
-            position: relative;
-            width: 80%;
-            height: 75vh;
-            margin-top: 5%;
-            border: 1px dashed green;
-            .menu_table{
-                position: absolute;
-                width: 100%;
-                height: 500px;
-               
-            }
-            .delete_button{
-                width: 110px;
-                height: 40px;
-                position: absolute;
-                right: 10px;
-                top: 10px;
-                z-index: 9;
-                
-            }
-
-            .add_button{
-                width: 50px;
-                height: 50px;
-                position:absolute;
-                bottom: 0;
-                left: 0;
-                border-radius: 50%;
-                z-index: 9;
-            }
-
-        }
-        
-        .orders_table_container{
-            position: relative;
-            width: 80%;
-            height: 60vh;
-            margin-top: 5%;
-            .orders_table{
-                position: relative;
-                width: 100%;
-                height: 40vh;
-               
-                
-    
-            }
-            .add_button{
-                position: relative;
-                left: 90%;
-                top: 8%;
-                z-index: 9;
-                
-            }
-
-        }
-
-        .chart_container{
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            .chart_1{
-                width: 50%;
-                height: 50%;
-                margin-top: 6%;
-            }
-            .chart_2{
-                width: 50%;
-                height: 50%;
-                margin-top: 6%;
-            }
-        }
-       
-    }
+.e-input-group:not(.e-float-icon-left),
+.e-input-group.e-success:not(.e-float-icon-left),
+.e-input-group.e-warning:not(.e-float-icon-left),
+.e-input-group.e-error:not(.e-float-icon-left),
+.e-input-group.e-control-wrapper:not(.e-float-icon-left),
+.e-input-group.e-control-wrapper.e-success:not(.e-float-icon-left),
+.e-input-group.e-control-wrapper.e-warning:not(.e-float-icon-left),
+.e-input-group.e-control-wrapper.e-error:not(.e-float-icon-left) {
+  border: none !important;
 }

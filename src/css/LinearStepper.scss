@@ -20,7 +20,7 @@
 
     .lets_order_button{
         position: relative;
-        top: 20%;
+        top: 27%;
         background-color: #FF003D;
         color: #f5f5f7;
         font-family: "Poppins", sans-serif;
@@ -44,52 +44,138 @@
         
 
     }
-
-    .back_button{
-        width: 100px;
-        height: 40px;
+    .date_picker{
         font-family: "Poppins", sans-serif;
         font-size: 15px;
-        font-weight: 600;
-        border: none;
-        border-radius: 20px;
-        background-color: #444444;
-        color:#f5f5f7;
-        cursor: pointer;
+        font-weight: 800;
+        border: 1px solid #cacacc;
+        
     }
-    .next_button{
-        width: 100px;
-        height: 40px;
+    .email_error{
+        opacity: 1;
+        z-index: 9;
+        position: relative;
+        margin-top: -0.5%;
+        margin-bottom: 0;
+        right: -72%;
         font-family: "Poppins", sans-serif;
-        font-size: 15px;
-        font-weight: 600;
-        border: none;
-        border-radius: 20px;
-        color:#f5f5f7;
-        cursor: pointer;
+        font-size: 13px;
+        font-weight: 500;
+        color: #ff003d;
     }
-    .back_button:hover{
-        filter: brightness(95%);
-        
+    .email_valid{
+        opacity: 0;
+        z-index: -9;
+        margin-top: -0.5%;
+        margin-bottom: -0.5%;
+        right: -72%;
+        font-family: "Poppins", sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+    }
+    .password_valid{
+        position: relative;
+        margin-top: -0.5%;
+        margin-bottom: 0;
+        right: -60.5%;
+        font-family: "Poppins", sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+        color: #ff003d;
+        opacity: 0;
+        z-index: -9;
+    }
+    .password_error{
+        position: relative;
+        margin-top: -0.5%;
+        margin-bottom: 0;
+        right: -60.5%;
+        font-family: "Poppins", sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+        color: #ff003d;
+    }
+    .repassword_valid{
+        opacity: 0;
+        z-index: -10;
+    }
+    .repassword_error{
+        position: relative;
+        margin-top: -0.5%;
+        margin-bottom: 0;
+        right: -62%;
+        font-family: "Poppins", sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+        color: #ff003d;
+    }
 
-    }
-    .back_button:active{
-        filter: brightness(85%);
-        scale: 0.97;
-        
 
-    }
-    .next_button:hover{
-        filter: brightness(95%);
-        
 
-    }
-    .next_button:active{
-        filter: brightness(85%);
-        scale: 0.97;
-        
+    
 
+    .focused{
+        border: 1px solid #d43030;
+        outline: 1px solid #d43030 ;
     }
+
+    
+    
+    .button_container{
+        width: 100%;
+        height: 50px;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 3%;
+        .back_button{
+            width: 100px;
+            height: 40px;
+            font-family: "Poppins", sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            border: none;
+            border-radius: 20px;
+            background-color: #444444;
+            color:#f5f5f7;
+            cursor: pointer;
+        }
+        .next_button{
+            width: 100px;
+            height: 40px;
+            font-family: "Poppins", sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            border: none;
+            border-radius: 20px;
+            color:#f5f5f7;
+            cursor: pointer;
+        }
+        .back_button:hover{
+            filter: brightness(95%);
+            
+    
+        }
+        .back_button:active{
+            filter: brightness(85%);
+            scale: 0.97;
+            
+    
+        }
+        .next_button:hover{
+            filter: brightness(95%);
+            
+    
+        }
+        .next_button:active{
+            filter: brightness(85%);
+            scale: 0.97;
+            
+    
+        }
+    }
+    
 
     .MuiOutlinedInput-root{
         border-radius: 15px;
