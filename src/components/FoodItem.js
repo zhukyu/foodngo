@@ -2,11 +2,17 @@ import React, { useState } from "react";
 import "../css/FoodItem.scss";
 import { Badge, Modal } from "antd";
 import AddCart from "./AddCart";
+import { useNavigate } from "react-router";
 
 function FoodItem(props) {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate()
   const showModal = () => {
+    if(!localStorage.getItem('access_token')) {
+      navigate('/login');
+      return;
+    }
     setOpen(true);
   };
 
@@ -39,9 +45,9 @@ function FoodItem(props) {
             {props?.price.toLocaleString({ style: "currency", currency: "VND" })} VND
           </h4>
 
-          <h4 className="rating">
+          {/* <h4 className="rating">
             <i className="fa-solid fa-heart">&nbsp;</i>100%(10)
-          </h4>
+          </h4> */}
         </div>
       </div>
       <div className="food_image">

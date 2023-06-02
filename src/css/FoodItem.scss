@@ -38,9 +38,14 @@
             width: 100%;
             font-family: "Poppins", sans-serif;
             font-size: 15px;
+            line-height: 23px;
+            height: 46px;
+            overflow: hidden;
+            -webkit-line-clamp: 2;
+            text-overflow: ellipsis;
             font-weight: 600;
             color: rgba($color: #1d1d1f, $alpha: 0.7);
-            margin-top: 0;
+            margin-top: 7px;
         }
 
         .price_rating {

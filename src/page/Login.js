@@ -20,6 +20,12 @@ function Login() {
         localStorage.setItem('access_token', res.data.accessToken);
         localStorage.setItem('refresh_token', res.data.refreshToken);
         localStorage.setItem('username', JSON.stringify(res.data.user.name));
+        if(!localStorage.getItem('address')) {
+          localStorage.setItem('address', JSON.stringify(res.data.user.address));
+        }
+        if(!localStorage.getItem('coordinates')) {
+          localStorage.setItem('coordinate', JSON.stringify(res.data.user.location.coordinates));
+        }
         axiosInstance.defaults.headers['Authorization'] = `Bearer ${res.data.accessToken}`;
         navigate('/restaurants')
       }

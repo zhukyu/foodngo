@@ -7,7 +7,7 @@
 
   .hero_container {
     width: 100%;
-    padding: 20px 0;
+    padding: 20px 0 0;
     background-color: #fff;
     display: inline-block;
 
@@ -59,9 +59,10 @@
         display: flex;
         justify-content: flex-start;
         flex-direction: row;
-        
+
         .restaurant_avatar_wrapper {
           width: 80%;
+
           .restaurant_avatar {
             width: 100%;
             height: 100%;
@@ -203,7 +204,7 @@
             flex-direction: column;
             align-items: flex-start;
             color: #4d4d4d;
-            margin-top: 5px ;
+            margin-top: 5px;
             gap: 5px;
 
             h5 {
@@ -243,6 +244,23 @@
             }
           }
         }
+      }
+    }
+  }
+
+  .product_category_wrapper {
+    position: sticky;
+    top: 74px;
+    width: 100%;
+    background-color: white;
+    z-index: 998;
+    .product_category {
+      width: 70%;
+      margin: 0 auto;
+
+      * {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
       }
     }
   }

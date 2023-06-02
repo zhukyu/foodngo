@@ -3,25 +3,27 @@ import "../css/Navbar.scss";
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../image/FoodnGo_logo.png'
 import ProfileMenu from './ProfileMenu';
-import { Badge, Drawer } from 'antd';
+import { Badge, Drawer, Modal, Popconfirm } from 'antd';
 import ShoppingCart from './ShoppingCart';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCartItems } from '../utility/action';
 import axiosInstance from '../utility/AxiosInstance';
+import LocationUpdate from './LocationUpdate';
 
 function Navbar() {
 
-    const dispatch = useDispatch(); 
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const [address, setAddress] = useState({})
     const [mainAddress, setMainAddress] = useState('')
     const [accessToken, setAccessToken] = useState('')
+    const [user, setUser] = useState(null)
 
     const cartItems = useSelector((state) => state.cartItems);
 
     const [open, setOpen] = useState(false);
     const showDrawer = () => {
-        if(!localStorage.getItem('access_token')) {
+        if (!localStorage.getItem('access_token')) {
             navigate('/login');
             return;
         }
@@ -61,19 +63,43 @@ function Navbar() {
     useEffect(() => {
         const fetchUserData = async () => {
             await axiosInstance.get('/user')
-            .then(res => {
-                console.log(res);
-            })
-            .catch(err => {
-                console.log(err);
-            })
+                .then(res => {
+                    setUser(res.data.user)
+                })
+                .catch(err => {
+                    console.log(err);
+                    localStorage.removeItem('access_token')
+                    setUser(null)
+                })
         }
 
         fetchUserData()
     }, [])
 
+    const confirm = (e) => {
+
+    }
+
+    const cancel = (e) => {
+
+    }
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+    const handleOk = () => {
+        setIsModalOpen(false);
+    };
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
+
     return (
         <div className='navbar'>
+            <Modal title="Update Location" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null}>
+                <LocationUpdate />
+            </Modal>
             <Drawer title="Shopping Cart" placement="right" onClose={onClose} open={open} width={470}>
                 <ShoppingCart />
             </Drawer>
@@ -82,10 +108,11 @@ function Navbar() {
                     <img src={logo} alt='logo' className='logo' />
                 </div>
             </Link>
-            <div className='location'>
+            <div className='location' onClick={showModal}>
                 <span className='location-text'>{mainAddress}</span>
                 <i className="fa-solid fa-chevron-down"></i>
             </div>
+
             <div className='search-bar' >
                 <i className="fa-solid fa-search"></i>
                 <input
@@ -101,7 +128,7 @@ function Navbar() {
                     </button>
                 </div>
             </Badge>
-            {accessToken ? <ProfileMenu />
+            {accessToken ? <ProfileMenu user={user} />
                 : <div className='nav-links'>
                     <Link to='/login'>Sign In</Link>
                     <Link to='/signup'><button className='login-btn'>Sign Up</button></Link>

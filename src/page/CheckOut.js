@@ -3,6 +3,7 @@ import "../css/CheckOut.scss";
 import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CartItem from "../components/CartItem";
+import Footer from "../components/Footer";
 function CheckOut() {
   return (
     <div className="checkout_container">
@@ -13,8 +14,8 @@ function CheckOut() {
         </div>
         <div className="checkout_shipping_detail">
           <h3>2.Shipping Detail</h3>
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3833.4851032053593!2d108.14196761536107!3d16.092187443095504!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31421991a401ca65%3A0xae18cd4b35f842b5!2sMIKAZUKI%20WATER%20PARK%20365!5e0!3m2!1scs!2s!4v1664208754573!5m2!1scs!2s" 
-        ></iframe>
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3833.4851032053593!2d108.14196761536107!3d16.092187443095504!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31421991a401ca65%3A0xae18cd4b35f842b5!2sMIKAZUKI%20WATER%20PARK%20365!5e0!3m2!1scs!2s!4v1664208754573!5m2!1scs!2s"
+          ></iframe>
 
           <div className="delivery_time">
             <div className="delivery_time_header">
@@ -93,6 +94,7 @@ function CheckOut() {
           <CartItem img="https://navicdn.com/nakk/images_article//2017/09/06/bsJEBBaVAPgh9K9TOHqQiWEJgXmmoLAbSbV6mH6m.jpeg" />
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
