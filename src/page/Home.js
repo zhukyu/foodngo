@@ -7,31 +7,18 @@ import store from '../image/store.svg'
 import phone from '../image/iphone.svg'
 import order_now from '../image/pexels-nerfee-mirandilla-3186654.jpg'
 import find_restaurants from '../image/pexels-jonathan-borba-2878739.jpg'
-import { Link, useNavigate } from 'react-router-dom'
-import axiosInstance from '../utility/AxiosInstance'
-import { notification } from 'antd'
+import { Link } from 'react-router-dom'
+import Footer from '../components/Footer'
+import LocationSearch from '../components/LocationSearch'
 
 function Home() {
 
   const inputRef = useRef(null);
-  const searchBarRef = useRef(null);
-
   const [orderNowVisible, setOrderNowVisible] = useState(false);
   const orderNowRef = useRef(null);
 
   const [findResVisible, setFindResVisible] = useState(false);
   const findRestaurantRef = useRef(null);
-
-  const [input, setInput] = useState('');
-  const [coordinates, setCoordinates] = useState(null);
-
-  const [loading, setLoading] = useState(false);
-  const [suggestions, setSuggestions] = useState([]);
-  const [placeId, setPlaceId] = useState('');
-  const [address, setAddress] = useState(null);
-
-  const navigate = useNavigate()
-
   const centerInput = () => {
     inputRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
     inputRef.current.focus();
@@ -42,16 +29,6 @@ function Home() {
     return () => window.removeEventListener('scroll', scrollHandler);
   }, []);
 
-  useEffect(() => {
-    if (searchBarRef) {
-      if (suggestions && suggestions.length > 0) {
-        searchBarRef.current.classList.add('active')
-      }
-      else {
-        searchBarRef.current.classList.remove('active')
-      }
-    }
-  }, [suggestions])
 
   const scrollHandler = () => {
 
@@ -73,37 +50,6 @@ function Home() {
     }
   }
 
-  useEffect(() => {
-
-    setCoordinates(null);
-    setPlaceId('');
-    setAddress(null);
-
-    if (input.length === 0) {
-      setSuggestions([]);
-    }
-
-    const fetchSuggestions = async () => {
-      await axiosInstance.get(`/map/search?address=${input}`)
-        .then((res) => {
-          if (res.status === 200) {
-            setSuggestions(res.data.predictions.predictions);
-            setLoading(false);
-          }
-        })
-    };
-
-    const timer = setTimeout(() => {
-      if (input.length > 0) {
-        setLoading(true);
-        searchBarRef.current.classList.add('active')
-        fetchSuggestions();
-      }
-    }, 500)
-
-    return () => clearTimeout(timer)
-  }, [input]);
-
 
   useEffect(() => {
     document.querySelector(".home-navbar").classList.add("scrolled");
@@ -124,74 +70,6 @@ function Home() {
     };
   }, []);
 
-  const handleAddress = (suggestion) => {
-    inputRef.current.value = suggestion.description;
-    setPlaceId(suggestion.place_id);
-    setAddress(suggestion);
-    setSuggestions([]);
-  }
-
-  useEffect(() => {
-    if(address) {
-      localStorage.setItem('address', JSON.stringify(address));
-    }
-    else {
-      localStorage.removeItem('address');
-    }
-  }, [address])
-
-  useEffect(() => {
-    if (coordinates) {
-      localStorage.setItem('coordinate', JSON.stringify(coordinates));
-    }
-    else {
-      localStorage.removeItem('coordinate');
-    }
-  }, [coordinates])
-
-  const fetchCoordinates = async () => {
-    await axiosInstance.get(`/map/geocode?placeId=${placeId}`)
-      .then((res) => {
-        if (res.status === 200) {
-          console.log(res.data.geoCode.results[0].geometry.location);
-          localStorage.setItem('coordinate', JSON.stringify(res.data.geoCode.results[0].geometry.location));
-          setCoordinates(res.data.geoCode.results[0].geometry.location);
-        }
-      })
-  }
-
-  useEffect(() => {
-    if (placeId != '') {
-      fetchCoordinates();
-    }
-  }, [placeId])
-
-  const handleSearch = () => {
-    // localStorage.setItem('coordinate', JSON.stringify(coordinates));
-    // localStorage.setItem('address', JSON.stringify(address));
-
-    // select a suggestion
-    if (coordinates && address) {
-      navigate('/restaurants')
-    }
-    // not select any suggestion
-    else if (suggestions.length > 0) {
-      handleAddress(suggestions[0])
-    }
-    // not select any suggestion and no suggestion
-    else {
-      console.log('no suggestion');
-      notification.open({
-        icon: <i className="fa-solid fa-exclamation-circle" style={{ color: "red" }}></i>,
-        message: 'Error',
-        description:
-          'No address found!',
-        onClick: () => {
-          console.log('Notification Clicked!');
-        },
-      });
-    }
-  }
 
   return (
     <div className='Home'>
@@ -212,32 +90,8 @@ function Home() {
         </div>
         <div className='right-section'>
           <h1>Get food delivery and more</h1>
-          <div className='search-bar-skeleton'>
-            <div className='search-bar-wrapper' ref={searchBarRef}>
-              <div className='search-bar' >
-                <i className="fa-solid fa-location-dot "></i>
-                <input
-                  ref={inputRef}
-                  placeholder='Enter delivery address'
-                  className='search-input'
-                  id='search-input'
-                  onChange={(e) => setInput(e.target.value)}
-                />
-                <div className='search-btn' onClick={() => handleSearch()}>
-                  <i className="fa-solid fa-arrow-right"></i>
-                </div>
-              </div>
-              <div className='search-autocomplete'>
-                {loading ? <div className='autocomplete-item'>Loading...</div> : null}
-                {suggestions.map((suggestion, index) => {
-                  return (
-                    <div className='autocomplete-item' key={index} onClick={() => handleAddress(suggestion)}>
-                      {suggestion.description}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+          <div ref={inputRef} style={{"height" : "35%"}}>
+            <LocationSearch />
           </div>
         </div>
       </div>
@@ -295,6 +149,7 @@ function Home() {
           <button className='find-restaurant-btn' onClick={centerInput}>Find Restaurants</button>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

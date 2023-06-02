@@ -5,6 +5,7 @@ import RestaurantItem from '../components/RestaurantItem';
 import Navbar from '../components/Navbar';
 import axiosInstance from '../utility/AxiosInstance';
 import { useNavigate } from 'react-router-dom';
+import Footer from '../components/Footer';
 
 
 function Restaurants() {
@@ -28,7 +29,7 @@ function Restaurants() {
         const coordinateStr = localStorage.getItem('coordinate');
         const coordinate = JSON.parse(coordinateStr);
         const fetchData = async () => {
-            await axiosInstance.get(`/restaurant?longitude=${coordinate.lng}&latitude=${coordinate.lat}`)
+            await axiosInstance.get(`/restaurant?longitude=${coordinate[0]}&latitude=${coordinate[1]}`)
                 .then((res) => {
                     if (res.status === 200) {
                         setRestaurants(res.data.restaurants);
@@ -110,6 +111,7 @@ function Restaurants() {
                     </div>
                 </div>
             </div>
+            <Footer />
         </div>
     )
 }

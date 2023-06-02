@@ -1,22 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../css/RestaurantDetail.scss";
 import { useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import FoodItem from "../components/FoodItem";
 import Navbar from "../components/Navbar";
 import axiosInstance from "../utility/AxiosInstance";
+import { ConfigProvider, Tabs } from "antd";
+import Footer from "../components/Footer";
 
 function RestaurantDetail() {
 
   const { id } = useParams();
   const [restaurant, setRestaurant] = useState(null)
   const [menus, setMenus] = useState(null)
+  const [menuNames, setMenuNames] = useState(null)
+
+  const menuRef = useRef([])
 
   const navigate = useNavigate();
 
   useEffect(() => {
+    const address = localStorage.getItem('address');
+    const coordinate = localStorage.getItem('coordinate');
+    if (!address || !coordinate) {
+      navigate('/');
+    }
+  }, [])
+
+  useEffect(() => {
     const fetchData = async () => {
-      await axiosInstance.get(`/restaurant/${id}`)
+      const coordinate = JSON.parse(localStorage.getItem('coordinate'))
+      await axiosInstance.get(`/restaurant/${id}?longitude=${coordinate[0]}&latitude=${coordinate[1]}`)
         .then((res) => {
           console.log(res.data.restaurant);
           setRestaurant(res.data.restaurant);
@@ -28,13 +42,27 @@ function RestaurantDetail() {
         })
       await axiosInstance.get(`/restaurant/${id}/products`)
         .then((res) => {
-          console.log(res.data.result);
           setMenus(res.data.result);
         })
     }
 
     fetchData();
   }, [])
+
+  useEffect(() => {
+    if (!menus) return;
+    const menuNames = menus.map((menu, index) => {
+      return {
+        key: `${index}`,
+        label: menu.category.name,
+      }
+    })
+    setMenuNames(menuNames);
+  }, [menus])
+
+  const onChange = (key) => {
+    menuRef?.current[key]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
 
   return (
     <div className="restaurant_detail">
@@ -99,6 +127,22 @@ function RestaurantDetail() {
           </div>
         </div>
       </div>
+      <div className="product_category_wrapper">
+        <div className="product_category">
+          <ConfigProvider
+            theme={{
+              token: {
+                colorPrimary: '#ff003d',
+                fontSize: '18px',
+                colorText: '#A8A8A8',
+                margin: '0',
+              }
+            }}
+          >
+            <Tabs defaultActiveKey="1" items={menuNames} onChange={onChange} children={null} />
+          </ConfigProvider>
+        </div>
+      </div>
       <div className="menu_container">
         {/* <div className="best_seller">
           <h4 className="title">Best Sellers</h4>
@@ -110,7 +154,7 @@ function RestaurantDetail() {
           </div>
         </div> */}
         {menus?.map((menu, index) => (
-          <div className="menu_section" key={index}>
+          <div className="menu_section" key={index} ref={e => menuRef.current[index] = e}>
             <h4 className="title">{menu.category.name}</h4>
             <div className="items">
               {menu.products.map((product, index) => (
@@ -137,6 +181,7 @@ function RestaurantDetail() {
           </div>
         </div> */}
       </div>
+      <Footer />
     </div>
   );
 }
