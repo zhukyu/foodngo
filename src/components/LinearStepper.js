@@ -18,8 +18,9 @@ import InputLabel from "@mui/material/InputLabel";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import FormControl from "@mui/material/FormControl";
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
+import { DatePicker } from "antd";
 
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import PhoneIcon from "@mui/icons-material/Phone";
@@ -28,12 +29,12 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import DoneIcon from "@mui/icons-material/Done";
 
-
 import {
   useForm,
   Controller,
   FormProvider,
   useFormContext,
+  set,
 } from "react-hook-form";
 import "../css/LinearStepper.scss";
 import zIndex from "@mui/material/styles/zIndex";
@@ -41,16 +42,31 @@ import congratulaion from "../image/congratulation.gif";
 import axiosInstance from "../utility/AxiosInstance";
 const useStyles = makeStyles((theme) => ({
   button: {},
+  input: {
+    '& input[type=number]': {
+        '-moz-appearance': 'textfield'
+    },
+    '& input[type=number]::-webkit-outer-spin-button': {
+        '-webkit-appearance': 'none',
+        margin: 0
+    },
+    '& input[type=number]::-webkit-inner-spin-button': {
+        '-webkit-appearance': 'none',
+        margin: 0
+    }
+  },
 }));
+
+
 
 function getSteps() {
   return [
     "Account Registration",
-    "Contact Information",
     "Personal Information",
+    "Address Information",
   ];
 }
-const AccountForm = () => {
+const AccountForm = (isValidEmailState, isValidPasswordState, isValidRePasswordState) => {
   const { control } = useFormContext();
   const [showPassword, setShowPassword] = useState(false);
   const [showRePassword, setShowRePassword] = useState(false);
@@ -82,12 +98,13 @@ const AccountForm = () => {
               style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
             }}
             InputLabelProps={{
-              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500"},
+              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
             }}
             {...field}
           />
         )}
       />
+      <p className={isValidEmailState ?  "email_valid" : "email_error"}>Invalid email</p>
 
       <Controller
         control={control}
@@ -96,12 +113,12 @@ const AccountForm = () => {
           <FormControl
             sx={{ m: 1 }}
             variant="outlined"
-            style={{ width: "70%", marginLeft: "15%" }}
+            style={{ width: "70%", marginLeft: "15%"}}
           >
             <InputLabel
               htmlFor="password"
               color="error"
-              style={{ fontFamily: "Poppins, sans-serif", fontWeight: "500"}}
+              style={{ fontFamily: "Poppins, sans-serif", fontWeight: "500" }}
             >
               Password
             </InputLabel>
@@ -133,6 +150,7 @@ const AccountForm = () => {
           </FormControl>
         )}
       />
+      <p className={isValidPasswordState ?  "password_valid" : "passowrd_error"}>Password must be 6 char long</p>
       <Controller
         control={control}
         name="re_password"
@@ -140,12 +158,12 @@ const AccountForm = () => {
           <FormControl
             sx={{ m: 1 }}
             variant="outlined"
-            style={{ width: "70%", marginLeft: "15%" }}
+            style={{ width: "70%", marginLeft: "15%"}}
           >
             <InputLabel
               htmlFor="re_password"
               color="error"
-              style={{ fontFamily: "Poppins, sans-serif", fontWeight: "500"}}
+              style={{ fontFamily: "Poppins, sans-serif", fontWeight: "500" }}
             >
               Re-Password
             </InputLabel>
@@ -157,7 +175,7 @@ const AccountForm = () => {
               margin="normal"
               placeholder="Re-Enter Password"
               inputProps={{
-                style: { fontFamily: "Poppins, sans-serif", fontWeight: "500"},
+                style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
               }}
               {...field}
               endAdornment={
@@ -175,66 +193,14 @@ const AccountForm = () => {
               label="Re-Password"
             />
           </FormControl>
+          
         )}
       />
+      <p className={isValidRePasswordState ?  "repassword_valid" : "repassword_error"}>Doesn't match the password</p>
     </>
   );
 };
-const ContactForm = () => {
-  const { control } = useFormContext();
-  return (
-    <>
-      <Controller
-        control={control}
-        name="phoneNumber"
-        render={({ field }) => (
-          <TextField
-            id="phone-number"
-            className="phone_number"
-            label="Phone Number"
-            variant="outlined"
-            placeholder="Enter Your Phone Number"
-            fullWidth
-            margin="normal"
-            color="error"
-            style={{ width: "118%", marginLeft: "-9%"}}
-            inputProps={{
-              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500"},
-            }}
-            InputLabelProps={{
-              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500"},
-            }}
-            {...field}
-          />
-        )}
-      />
-      {/* <Controller
-        control={control}
-        name="alternatePhone"
-        render={({ field }) => (
-          <TextField
-            id="alternate-phone"
-            label="Alternate Phone"
-            variant="outlined"
-            placeholder="Enter Your Alternate Phone"
-            fullWidth
-            margin="normal"
-            color="error"
-            style={{ width: "118%", marginLeft: "-9%" }}
-            inputProps={{
-              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500"},
-            }}
-            InputLabelProps={{
-              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500"},
-            }}
-            {...field}
-          />
-        )}
-      /> */}
-    </>
-  );
-};
-const PersonalForm = () => {
+const AddressForm = () => {
   const { control } = useFormContext();
   return (
     <>
@@ -250,53 +216,113 @@ const PersonalForm = () => {
             fullWidth
             margin="normal"
             color="error"
-            style={{ width: "118%", marginLeft: "-9%"}}
+            style={{ width: "70%", marginLeft: "15%" }}
             inputProps={{
-              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500"},
+              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
             }}
             InputLabelProps={{
-              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500"},
+              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
             }}
             {...field}
           />
         )}
       />
-      {/* <Controller
+    </>
+  );
+};
+const PersonalForm = () => {
+  const { control } = useFormContext();
+  const [isFocused, setIsFocused] = useState(false);
+  const classes = useStyles();
+  return (
+    <>
+      <Controller
         control={control}
-        name="address2"
+        name="name"
         render={({ field }) => (
           <TextField
-            id="address2"
-            label="Address 2"
+            id="name"
+            label="Name"
             variant="outlined"
-            placeholder="Enter Your Address 2"
+            placeholder="Enter Your Name"
             fullWidth
             margin="normal"
             color="error"
-            style={{ width: "118%", marginLeft: "-9%"}}
+            style={{ width: "70%", marginLeft: "15%" }}
             inputProps={{
-              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500"},
+              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
             }}
             InputLabelProps={{
-              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500"},
+              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
             }}
             {...field}
           />
         )}
-      /> */}
+      />
+      <Controller
+        control={control}
+        name="dob"
+        render={({ field }) => (
+      <DatePicker
+        id="dob"
+        size="large"
+        className= {isFocused ? "date_picker focused" : "date_picker"}
+        style={{
+          width: "70%",
+          height: "56px",
+          marginLeft: "15%",
+          marginTop: "1%",
+          borderRadius: "15px",
+          backgroundColor: "#f5f5f7",
+          fontFamily: "Poppins,sans-serif",
+          fontWeight: "500",
+        }}
+        onFocus={() => {
+          setIsFocused(true);
+        }}
+        onBlur={() => {setIsFocused(false)}}
+        {...field}
+      />
+      )}
+      />
+      <Controller
+        control={control}
+        name="phoneNumber"
+        render={({ field }) => (
+          <TextField
+            id="phone-number"
+            className={classes.input}
+            label="Phone Number"
+            variant="outlined"
+            placeholder="Enter Your Phone Number"
+            fullWidth
+            margin="normal"
+            color="error"
+            type="number"
+            style={{ width: "70%", marginLeft: "15%" }}
+            inputProps={{
+              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
+            }}
+            InputLabelProps={{
+              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
+            }}
+            {...field}
+          />
+        )}
+      />
     </>
   );
 };
 
-function getStepContent(step) {
+function getStepContent(step, isValidEmailState, isValidPasswordState, isValidRePasswordState) {
   switch (step) {
     case 0:
-      return <AccountForm />;
+      return <AccountForm isValidEmailState={isValidEmailState} isValidPasswordState={isValidPasswordState} isValidRePasswordState={isValidRePasswordState}/>;
 
     case 1:
-      return <ContactForm />;
-    case 2:
       return <PersonalForm />;
+    case 2:
+      return <AddressForm />;
     default:
       return "unknown step";
   }
@@ -313,48 +339,57 @@ const LinaerStepper = () => {
       email: "",
       password: "",
       phoneNumber: "",
-      // alternatePhone: "",
+      name: "",
       address: "",
-      // address2: "",
+      dob: "",
     },
   });
   const [activeStep, setActiveStep] = useState(0);
   const [skippedSteps, setSkippedSteps] = useState([]);
+  const [isValidEmailState, setIsValidEmailState] = useState(null);
+  const [isValidPasswordState, setIsValidPasswordState] = useState(null);
+  const [isValidRePasswordState, setIsValidRePasswordState] = useState(null);
   const steps = getSteps();
-
-  const isStepOptional = (step) => {
-    return step === 1 || step === 2;
-  };
-
-  const isStepSkipped = (step) => {
-    return skippedSteps.includes(step);
-  };
-
-  const sendData = async (data) => {
-    await axiosInstance.post("/auth/register", data)
-    .then((res) => {
-      console.log(res);
-    })
+  function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   }
 
+
+  const sendData = async (data) => {
+    await axiosInstance.post("/auth/register", data).then((res) => {
+      console.log(res);
+    });
+  };
+
   const handleNext = (data) => {
+    
     let _data = {
       email: data.email,
-      name: "user name",
+      name: data.name,
       password: data.password,
       phone: data.phoneNumber,
       address: data.address,
       role: "user",
-      dob: "2000-01-01",
-    }
+      dob: data.dob,
+    };
     if (activeStep == steps.length - 1) {
-      sendData(_data);
+      //sendData(_data);
+      console.log(_data);
       setActiveStep(activeStep + 1);
     } else {
+      if(activeStep == 0){
+        if(isValidEmail(_data.email)===true){
+          setIsValidEmailState(true);
+          setActiveStep(activeStep + 1);
+        }
+        else{
+          setIsValidEmailState(false);
+          return;
+        }
+      }
       setActiveStep(activeStep + 1);
-      setSkippedSteps(
-        skippedSteps.filter((skipItem) => skipItem !== activeStep)
-      );
+      
     }
   };
 
@@ -362,12 +397,6 @@ const LinaerStepper = () => {
     setActiveStep(activeStep - 1);
   };
 
-  const handleSkip = () => {
-    if (!isStepSkipped(activeStep)) {
-      setSkippedSteps([...skippedSteps, activeStep]);
-    }
-    setActiveStep(activeStep + 1);
-  };
 
   // const onSubmit = (data) => {
   //   console.log(data);
@@ -457,7 +486,6 @@ const LinaerStepper = () => {
       </Stepper>
 
       {activeStep === steps.length ? (
-
         <Typography
           variant="h3"
           align="center"
@@ -470,20 +498,31 @@ const LinaerStepper = () => {
             alignItems: "center",
           }}
         >
-          <Alert severity="success" style={{ width: "400px", position: "absolute", top: "0", right: "0" }}><strong>Success</strong> — check it out!</Alert>
+          <Alert
+            severity="success"
+            style={{
+              width: "400px",
+              position: "absolute",
+              top: "0",
+              right: "0",
+            }}
+          >
+            <strong>Success</strong> — check it out!
+          </Alert>
 
           <div
             style={{
               display: "flex",
               justifyContent: "center",
               alignItems: "flex-start",
+              marginTop: "30px",
             }}
           >
             <h3 style={{ color: "#1d1d1f" }}>Enjoy Your Food</h3>{" "}
             <img
               src={congratulaion}
               alt="congratulaion"
-              style={{ width: "80px", height: "80px", marginTop: "15px" }}
+              style={{ width: "80px", height: "80px", marginTop: "-5%" }}
             />
           </div>
           <input
@@ -497,9 +536,12 @@ const LinaerStepper = () => {
       ) : (
         <>
           <FormProvider {...methods} style={{ marginTop: "30px" }}>
-            <form onSubmit={methods.handleSubmit(handleNext)} style={{ position:"relative"}}>
-              {getStepContent(activeStep)}
-
+            <form
+              onSubmit={methods.handleSubmit(handleNext)}
+              style={{ position: "relative", width: "100%" }}
+            >
+              {getStepContent(activeStep, isValidEmailState, isValidPasswordState, isValidRePasswordState)}
+              <div className="button_container">
               <input
                 type="button"
                 value="Back"
@@ -507,12 +549,11 @@ const LinaerStepper = () => {
                 className="back_button"
                 disabled={activeStep === 0 ? true : false}
                 style={{
-                  position:"absolute",
                   boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
                   opacity: activeStep === 0 ? "0" : "1",
-                  left: activeStep === 0 ? "35%" : "25%",
-                  bottom: activeStep === 0 ? "0" : "-40%",
+                  zIndex: activeStep === 0 ? "-1" : "1",
                   cursor: activeStep === 0 ? "default" : "pointer",
+                  marginRight: activeStep === 0 ? "0" : "3%",
                 }}
               />
               <input
@@ -520,13 +561,12 @@ const LinaerStepper = () => {
                 value={activeStep === steps.length - 1 ? "Finish" : "Next"}
                 className="next_button"
                 style={{
-                  position:"absolute",
                   backgroundColor: "#FF003D",
                   color: "#f5f5f7",
-                  right: activeStep === 0 ? "43%" : "25%",
-                  bottom: activeStep === 0 ? "-30%" : "-40%",
+                  marginLeft: activeStep === 0 ? "-13%" : "3%",
                 }}
               />
+              </div>
             </form>
           </FormProvider>
         </>
