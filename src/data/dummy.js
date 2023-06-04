@@ -1,14 +1,12 @@
 import React from 'react';
-import { AiOutlineCalendar, AiOutlineShoppingCart, AiOutlineAreaChart, AiOutlineBarChart, AiOutlineStock } from 'react-icons/ai';
-import { FiShoppingBag, FiEdit, FiPieChart, FiBarChart, FiCreditCard, FiStar, FiShoppingCart } from 'react-icons/fi';
-import { BsKanban, BsBarChart, BsBoxSeam, BsCurrencyDollar, BsShield, BsChatLeft } from 'react-icons/bs';
-import { BiColorFill } from 'react-icons/bi';
+import { AiOutlineShoppingCart} from 'react-icons/ai';
+import { FiShoppingBag, FiBarChart, FiCreditCard, FiStar, FiShoppingCart } from 'react-icons/fi';
+import { BsBoxSeam, BsCurrencyDollar, BsShield, BsChatLeft,BsShieldLock, BsPersonCircle } from 'react-icons/bs';
 import { IoMdContacts } from 'react-icons/io';
-import { RiContactsLine, RiStockLine } from 'react-icons/ri';
+import { RiContactsLine} from 'react-icons/ri';
 import { MdOutlineSupervisorAccount } from 'react-icons/md';
 import { HiOutlineRefresh } from 'react-icons/hi';
 import { TiTick } from 'react-icons/ti';
-import { GiLouvrePyramid } from 'react-icons/gi';
 import { GrLocation } from 'react-icons/gr';
 import avatar from './avatar.jpg';
 import avatar2 from './avatar2.jpg';
@@ -502,11 +500,11 @@ export const links = [
     links: [
       {
         name: 'profile',
-        icon: <AiOutlineShoppingCart />,
+        icon: <BsPersonCircle/>,
       },
       {
         name: 'security',
-        icon: <IoMdContacts />,
+        icon: <BsShieldLock />,
       },
     ],
   },
@@ -805,30 +803,212 @@ export const themeColors = [
   },
 ];
 
-export const userProfileData = [
+export const bar_data =[
   {
-    icon: <BsCurrencyDollar />,
-    title: 'My Profile',
-    desc: 'Account Settings',
-    iconColor: '#03C9D7',
-    iconBg: '#E5FAFB',
+    "country": "AD",
+    "hot dog": 546,
+    "hot dogColor": "hsl(78, 70%, 50%)",
   },
   {
-    icon: <BsShield />,
-    title: 'My Inbox',
-    desc: 'Messages & Emails',
-    iconColor: 'rgb(0, 194, 146)',
-    iconBg: 'rgb(235, 250, 242)',
+    "country": "AE",
+    "hot dog": 790,
+    "hot dogColor": "hsl(12, 70%, 50%)",
+    
   },
   {
-    icon: <FiCreditCard />,
-    title: 'My Tasks',
-    desc: 'To-do and Daily Tasks',
-    iconColor: 'rgb(255, 244, 229)',
-    iconBg: 'rgb(254, 201, 15)',
+    "country": "AF",
+    "hot dog": 414,
+    "hot dogColor": "hsl(77, 70%, 50%)",
+    
+  },
+  {
+    "country": "AG",
+    "hot dog": 595,
+    "hot dogColor": "hsl(108, 70%, 50%)",
+    
+  },
+  {
+    "country": "AI",
+    "hot dog": 317,
+    "hot dogColor": "hsl(3, 70%, 50%)",
+    
+  },
+  {
+    "country": "AL",
+    "hot dog": 653,
+    "hot dogColor": "hsl(136, 70%, 50%)",
+    
+  },
+  {
+    "country": "AM",
+    "hot dog": 609,
+    "hot dogColor": "hsl(10, 70%, 50%)",
+    
+  }
+]
+
+export const data = [
+  {
+    id: "japan",
+    color: "hsl(141, 70%, 50%)",
+    data: [
+      {
+        x: "plane",
+        y: 271,
+      },
+      {
+        x: "boat",
+        y: 46,
+      },
+      {
+        x: "train",
+        y: 66,
+      },
+      {
+        x: "subway",
+        y: 232,
+      },
+      {
+        x: "bus",
+        y: 10,
+      },
+      {
+        x: "car",
+        y: 160,
+      },
+      {
+        x: "moto",
+        y: 23,
+      },
+      {
+        x: "bicycle",
+        y: 170,
+      },
+      {
+        x: "others",
+        y: 244,
+      },
+    ],
+  },
+  {
+    id: "germany",
+    color: "hsl(256, 70%, 50%)",
+    data: [
+      {
+        x: "plane",
+        y: 63,
+      },
+      {
+        x: "boat",
+        y: 220,
+      },
+      {
+        x: "train",
+        y: 27,
+      },
+      {
+        x: "subway",
+        y: 43,
+      },
+      {
+        x: "bus",
+        y: 32,
+      },
+      {
+        x: "car",
+        y: 99,
+      },
+      {
+        x: "moto",
+        y: 261,
+      },
+      {
+        x: "bicycle",
+        y: 270,
+      },
+     
+      {
+        x: "others",
+        y: 240,
+      },
+    ],
+  },
+  {
+    id: "norway",
+    color: "hsl(32, 70%, 50%)",
+    data: [
+      {
+        x: "plane",
+        y: 121,
+      },
+      {
+        x: "boat",
+        y: 87,
+      },
+      {
+        x: "train",
+        y: 162,
+      },
+      {
+        x: "subway",
+        y: 188,
+      },
+      {
+        x: "bus",
+        y: 211,
+      },
+      {
+        x: "car",
+        y: 133,
+      },
+      {
+        x: "moto",
+        y: 119,
+      },
+      {
+        x: "bicycle",
+        y: 93,
+      },
+      {
+        x: "others",
+        y: 122,
+      },
+    ],
   },
 ];
 
+export const pie_data = [
+  {
+    id: "php",
+    label: "php",
+    value: 270,
+    color: "hsl(270, 70%, 50%)",
+  },
+  {
+    id: "javascript",
+    label: "javascript",
+    value: 380,
+    color: "hsl(191, 70%, 50%)",
+  },
+  {
+    id: "ruby",
+    label: "ruby",
+    value: 165,
+    color: "hsl(214, 70%, 50%)",
+  },
+  {
+    id: "css",
+    label: "css",
+    value: 448,
+    color: "hsl(34, 70%, 50%)",
+  },
+  {
+    id: "lisp",
+    label: "lisp",
+    value: 483,
+    color: "hsl(315, 70%, 50%)",
+  },
+];
 export const ordersGrid = [
   {
     headerText: 'Image',

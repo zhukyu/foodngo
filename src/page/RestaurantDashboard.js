@@ -7,6 +7,8 @@ import {
   Orders,
   Menu,
   Customers,
+  Profile,
+  Security
 
 } from "./RestaurantDashboardPages";
 import "../css/RestaurantDashboard.scss";
@@ -43,6 +45,10 @@ const RestaurantDashboard = () => {
         return <Menu />;
       case "customers":
         return <Customers />;
+      case "profile":
+        return <Profile />;
+      case "security":
+        return <Security />;
       default:
         return <Ecommerce />;
     }

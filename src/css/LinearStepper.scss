@@ -51,63 +51,12 @@
         border: 1px solid #cacacc;
         
     }
-    .email_error{
-        opacity: 1;
-        z-index: 9;
-        position: relative;
-        margin-top: -0.5%;
-        margin-bottom: 0;
-        right: -72%;
-        font-family: "Poppins", sans-serif;
-        font-size: 13px;
-        font-weight: 500;
-        color: #ff003d;
-    }
-    .email_valid{
-        opacity: 0;
-        z-index: -9;
-        margin-top: -0.5%;
-        margin-bottom: -0.5%;
-        right: -72%;
-        font-family: "Poppins", sans-serif;
-        font-size: 13px;
-        font-weight: 500;
-    }
-    .password_valid{
-        position: relative;
-        margin-top: -0.5%;
-        margin-bottom: 0;
-        right: -60.5%;
-        font-family: "Poppins", sans-serif;
-        font-size: 13px;
-        font-weight: 500;
-        color: #ff003d;
-        opacity: 0;
-        z-index: -9;
-    }
-    .password_error{
-        position: relative;
-        margin-top: -0.5%;
-        margin-bottom: 0;
-        right: -60.5%;
-        font-family: "Poppins", sans-serif;
-        font-size: 13px;
-        font-weight: 500;
-        color: #ff003d;
-    }
-    .repassword_valid{
-        opacity: 0;
-        z-index: -10;
-    }
-    .repassword_error{
-        position: relative;
-        margin-top: -0.5%;
-        margin-bottom: 0;
-        right: -62%;
-        font-family: "Poppins", sans-serif;
-        font-size: 13px;
-        font-weight: 500;
-        color: #ff003d;
+
+    .dob_msg{
+        font-family: 'Raleway',Arial;
+        margin-left: 16.7%;
+        font-weight: 400;
+        color: #d43030;
     }
 
 
@@ -117,6 +66,9 @@
     .focused{
         border: 1px solid #d43030;
         outline: 1px solid #d43030 ;
+        font-family: "Poppins", sans-serif;
+        font-size: 15px;
+        font-weight: 800;
     }
 
     

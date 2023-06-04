@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Typography,
@@ -7,6 +7,7 @@ import {
   Stepper,
   Step,
   StepLabel,
+  FormHelperText
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { styled } from "@mui/material/styles";
@@ -20,7 +21,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import FormControl from "@mui/material/FormControl";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
-import { DatePicker } from "antd";
+import { DatePicker, message } from "antd";
 
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import PhoneIcon from "@mui/icons-material/Phone";
@@ -40,7 +41,7 @@ import "../css/LinearStepper.scss";
 import zIndex from "@mui/material/styles/zIndex";
 import congratulaion from "../image/congratulation.gif";
 import axiosInstance from "../utility/AxiosInstance";
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   button: {},
   input: {
     '& input[type=number]': {
@@ -66,12 +67,13 @@ function getSteps() {
     "Address Information",
   ];
 }
-const AccountForm = (isValidEmailState, isValidPasswordState, isValidRePasswordState) => {
+const AccountForm = (props) => {
   const { control } = useFormContext();
   const [showPassword, setShowPassword] = useState(false);
   const [showRePassword, setShowRePassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleClickShowRePassword = () => setShowRePassword((show) => !show);
+  
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
@@ -89,6 +91,8 @@ const AccountForm = (isValidEmailState, isValidPasswordState, isValidRePasswordS
             id="email"
             label="Email"
             variant="outlined"
+            error={props.isValidEmailState === false ? true : false}
+            helperText={props.isValidEmailState === false ? "Invalid Email" : ""}
             placeholder="Enter Your Email"
             margin="normal"
             className="email_input"
@@ -104,8 +108,6 @@ const AccountForm = (isValidEmailState, isValidPasswordState, isValidRePasswordS
           />
         )}
       />
-      <p className={isValidEmailState ?  "email_valid" : "email_error"}>Invalid email</p>
-
       <Controller
         control={control}
         name="password"
@@ -118,6 +120,7 @@ const AccountForm = (isValidEmailState, isValidPasswordState, isValidRePasswordS
             <InputLabel
               htmlFor="password"
               color="error"
+              error={props.isValidPasswordState === false ? true : false}
               style={{ fontFamily: "Poppins, sans-serif", fontWeight: "500" }}
             >
               Password
@@ -129,6 +132,7 @@ const AccountForm = (isValidEmailState, isValidPasswordState, isValidRePasswordS
               width="70%"
               margin="normal"
               placeholder="Enter Your Password"
+              error={props.isValidPasswordState === false ? true : false}
               inputProps={{
                 style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
               }}
@@ -147,10 +151,15 @@ const AccountForm = (isValidEmailState, isValidPasswordState, isValidRePasswordS
               }
               label="Password"
             />
+            {props.isValidPasswordState === false ? (
+              <FormHelperText error id="accountId-error">
+                    Password must be at least 8 characters long
+                </FormHelperText>
+            ) : ""}
           </FormControl>
         )}
       />
-      <p className={isValidPasswordState ?  "password_valid" : "passowrd_error"}>Password must be 6 char long</p>
+
       <Controller
         control={control}
         name="re_password"
@@ -163,6 +172,7 @@ const AccountForm = (isValidEmailState, isValidPasswordState, isValidRePasswordS
             <InputLabel
               htmlFor="re_password"
               color="error"
+              error={props.isValidPasswordState === false ? true : false}
               style={{ fontFamily: "Poppins, sans-serif", fontWeight: "500" }}
             >
               Re-Password
@@ -174,6 +184,7 @@ const AccountForm = (isValidEmailState, isValidPasswordState, isValidRePasswordS
               width="70%"
               margin="normal"
               placeholder="Re-Enter Password"
+              error={props.isValidPasswordState === false ? true : false}
               inputProps={{
                 style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
               }}
@@ -192,11 +203,16 @@ const AccountForm = (isValidEmailState, isValidPasswordState, isValidRePasswordS
               }
               label="Re-Password"
             />
+            {props.isValidRePasswordState === false ? (
+              <FormHelperText error id="accountId-error">
+                    Re-Password doesn't match
+                </FormHelperText>
+            ) :""}
           </FormControl>
           
         )}
       />
-      <p className={isValidRePasswordState ?  "repassword_valid" : "repassword_error"}>Doesn't match the password</p>
+      
     </>
   );
 };
@@ -207,7 +223,8 @@ const AddressForm = () => {
       <Controller
         control={control}
         name="address"
-        render={({ field }) => (
+        rules={{ required: "Address is required" }}
+        render={({ field,fieldState }) => (
           <TextField
             id="address"
             label="Address"
@@ -216,6 +233,8 @@ const AddressForm = () => {
             fullWidth
             margin="normal"
             color="error"
+            error={fieldState.error ? true : false}
+            helperText={fieldState.error ? "Address is required" : ""}
             style={{ width: "70%", marginLeft: "15%" }}
             inputProps={{
               style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
@@ -239,7 +258,8 @@ const PersonalForm = () => {
       <Controller
         control={control}
         name="name"
-        render={({ field }) => (
+        rules={{ required: "Name is required" }}
+        render={({ field,fieldState }) => (
           <TextField
             id="name"
             label="Name"
@@ -248,6 +268,9 @@ const PersonalForm = () => {
             fullWidth
             margin="normal"
             color="error"
+            error={fieldState.error ? true : false}
+            helperText={fieldState.error ? "Name is required" : ""}
+            onClick={() => {setIsFocused(false)}}
             style={{ width: "70%", marginLeft: "15%" }}
             inputProps={{
               style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
@@ -262,11 +285,14 @@ const PersonalForm = () => {
       <Controller
         control={control}
         name="dob"
-        render={({ field }) => (
+        rules={{ required: "Date of birth is required" }}
+        render={({ field, fieldState}) => (
+          <>
       <DatePicker
         id="dob"
         size="large"
-        className= {isFocused ? "date_picker focused" : "date_picker"}
+        status={fieldState.error ? "error" : undefined}
+        className= {isFocused === true ? "focused" : "date_picker"}
         style={{
           width: "70%",
           height: "56px",
@@ -280,15 +306,19 @@ const PersonalForm = () => {
         onFocus={() => {
           setIsFocused(true);
         }}
-        onBlur={() => {setIsFocused(false)}}
         {...field}
       />
-      )}
+      <br/>
+      {fieldState.error ? (<span style={{fontSize:"12.25px"}} className="dob_msg">{fieldState.error?.message}</span>) : null}
+      </>
+      )
+      }
       />
       <Controller
         control={control}
         name="phoneNumber"
-        render={({ field }) => (
+        rules={{ required: "Phone number is required" }}
+        render={({ field,fieldState }) => (
           <TextField
             id="phone-number"
             className={classes.input}
@@ -299,7 +329,10 @@ const PersonalForm = () => {
             margin="normal"
             color="error"
             type="number"
+            error={fieldState.error ? true : false}
+            helperText={fieldState.error ? "Phone number is required" : ""}
             style={{ width: "70%", marginLeft: "15%" }}
+            onClick={() => {setIsFocused(false)}}
             inputProps={{
               style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
             }}
@@ -314,7 +347,7 @@ const PersonalForm = () => {
   );
 };
 
-function getStepContent(step, isValidEmailState, isValidPasswordState, isValidRePasswordState) {
+function getStepContent(step, isValidEmailState, isValidPasswordState, isValidRePasswordState,isEmptyAddressState, isEmptyNameState, isEmptyPhoneState) {
   switch (step) {
     case 0:
       return <AccountForm isValidEmailState={isValidEmailState} isValidPasswordState={isValidPasswordState} isValidRePasswordState={isValidRePasswordState}/>;
@@ -345,15 +378,39 @@ const LinaerStepper = () => {
     },
   });
   const [activeStep, setActiveStep] = useState(0);
-  const [skippedSteps, setSkippedSteps] = useState([]);
   const [isValidEmailState, setIsValidEmailState] = useState(null);
   const [isValidPasswordState, setIsValidPasswordState] = useState(null);
   const [isValidRePasswordState, setIsValidRePasswordState] = useState(null);
+ 
+
   const steps = getSteps();
+
+  const [showNotification, setShowNotification] = useState(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowNotification(false);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
+  
   function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+    if(emailRegex.test(email))
+    return true;
+    else 
+    return false;
   }
+
+  function validatePassword(password) {
+    if (password.length === 6) {
+      return true; // Password is valid
+    } else {
+      return false; // Password is not valid
+    }
+  }
+
 
 
   const sendData = async (data) => {
@@ -373,22 +430,36 @@ const LinaerStepper = () => {
       role: "user",
       dob: data.dob,
     };
-    if (activeStep == steps.length - 1) {
-      //sendData(_data);
-      console.log(_data);
-      setActiveStep(activeStep + 1);
-    } else {
-      if(activeStep == 0){
-        if(isValidEmail(_data.email)===true){
+    
+      if(activeStep === 2){
+        setActiveStep(activeStep + 1);
+      }
+      if(activeStep === 1)
+      {
+        setActiveStep(activeStep + 1);
+      }
+      
+      if(activeStep === 0){
+        if(isValidEmail(_data.email)===true && validatePassword(_data.password)===true && _data.password === data.re_password){
+          setIsValidPasswordState(true);
+          setIsValidRePasswordState(true);
           setIsValidEmailState(true);
           setActiveStep(activeStep + 1);
         }
         else{
+          if(isValidEmail(_data.email)===false)
           setIsValidEmailState(false);
-          return;
+          if(validatePassword(_data.password)===false)
+          setIsValidPasswordState(false);
+          if(_data.password !== data.re_password)
+          setIsValidRePasswordState(false);
+          setActiveStep(activeStep);
+          
         }
-      }
-      setActiveStep(activeStep + 1);
+      
+  
+  
+      
       
     }
   };
@@ -498,7 +569,7 @@ const LinaerStepper = () => {
             alignItems: "center",
           }}
         >
-          <Alert
+          {showNotification === true ? <Alert
             severity="success"
             style={{
               width: "400px",
@@ -507,8 +578,8 @@ const LinaerStepper = () => {
               right: "0",
             }}
           >
-            <strong>Success</strong> — check it out!
-          </Alert>
+            <strong>Created new account successfully</strong>  !
+          </Alert> : ""}
 
           <div
             style={{

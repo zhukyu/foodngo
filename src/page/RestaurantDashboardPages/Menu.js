@@ -1,15 +1,44 @@
 import React,{useState,useRef} from 'react';
-import { Button, Input, Space, Table, Tag, Modal } from "antd";
+import { Button, Input, Space, Table, Tag, Modal } from 'antd';
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 import {TextField} from "@mui/material";
 import "../../css/Menu.scss";
 
+
 const Menu = () => {
+
+  const [data, setData] = useState([
+    {
+      key: 1,
+      name: "John Brown",
+      age: 32,
+      address: "New York No. 1 Lake Park",
+      tags: ["delivering"],
+    },
+    {
+      key: 2,
+      name: "Jim Green",
+      age: 42,
+      address: "London No. 1 Lake Park",
+      tags: ["ready"],
+    },
+    {
+      key: 3,
+      name: "Joe Black",
+      age: 32,
+      address: "Sydney No. 1 Lake Park",
+      tags: ["canceled"],
+    },
+  ]); 
+  const [len, setLen] = useState(data.length);
+  let key_count = len + 1;
   const [isEditing, setIsEditing] = useState(false);
   const [editingData, setEditingData] = useState(null);
-  const [deleteData, setDeleteData] = useState(null);
+  const [addingData, setAddingData] = useState({key:key_count, name: null, age: null, adress: null, tags: null});
   const [isAdding, setIsAdding] = useState(false);
+  const [viewingData, setViewingData] = useState(null);
+  const [isViewed, setIsViewed] = useState(false);
 
   const handleMultDelete = () => {
     if(selectedRowKeys.length !== 0){
@@ -26,16 +55,9 @@ const Menu = () => {
     setSelectedRowKeys([]);
   };}
   const handleAdd = () => {
-    const newRow = {
-      key: parseInt(Math.random() * 1000),
-      name: "Jim Green",
-      age: parseInt(Math.random() * 1000),
-      address: "London No. 1 Lake Park",
-      tags: ["done"],
-    };
-    setData((pre) => {
-      return [...pre, newRow];
-    });
+    setIsAdding(true);
+
+    
   };
 
   const handleDelete = (record) => {
@@ -56,10 +78,28 @@ const Menu = () => {
     setEditingData({ ...record });
   };
 
+  const resetAdding = (type) => {
+    setIsAdding(false);
+    if(type === "cancel"){
+    setAddingData({key:key_count, name: null, age: null, address: null, tags: null});}
+    else{
+      setAddingData({key:++key_count, name: null, age: null, address: null, tags: null});
+    }
+  };
   const resetEditing = () => {
     setIsEditing(false);
     setEditingData(null);
   };
+
+  const handleView = (record) => {
+    setIsViewed(true);
+    setViewingData(record);
+  }
+
+  const resetViewing = () =>{
+    setIsViewed(false);
+    setViewingData(null);
+  }
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const onSelectChange = (newSelectedRowKeys) => {
     console.log("selectedRowKeys changed: ", newSelectedRowKeys);
@@ -254,11 +294,20 @@ const Menu = () => {
         <>
           {tags.map((tag) => {
             let color = "geekblue";
-            if (tag === "canceled") {
-              color = "volcano";
+            if (tag === "canceled" || tag === "rejected") {
+              color = "#F54E4E";
             }
-            if (tag === "done") {
-              color = "green";
+            if (tag === "ready") {
+              color = "#D95FDB"; 
+            }
+            if (tag === "pending") {
+              color = "#3B7CDB";
+            }
+            if (tag === "delivering") {
+              color = "#867CFF";
+            }
+            if (tag === "delivered") {
+              color = "#3BDB9E";
             }
             return (
               <Tag color={color} key={tag}>
@@ -294,29 +343,7 @@ const Menu = () => {
       ),
     },
   ];
-  const [data, setData] = useState([
-    {
-      key: 1,
-      name: "John Brown",
-      age: 32,
-      address: "New York No. 1 Lake Park",
-      tags: ["delivering"],
-    },
-    {
-      key: 2,
-      name: "Jim Green",
-      age: 42,
-      address: "London No. 1 Lake Park",
-      tags: ["done"],
-    },
-    {
-      key: 3,
-      name: "Joe Black",
-      age: 32,
-      address: "Sydney No. 1 Lake Park",
-      tags: ["canceled"],
-    },
-  ]);
+  
   return (
     <div className="menu_table_container">
       <div>
@@ -326,7 +353,7 @@ const Menu = () => {
         Delete&ensp;<i class="fa-solid fa-trash-can"></i>
       </button>
       <button className="add_button" onClick={handleAdd}>
-      <i class="fa-solid fa-plus"></i>
+      <i className="fa-solid fa-plus"></i>
       </button>
       <Table
         className="menu_table"
@@ -334,11 +361,18 @@ const Menu = () => {
         columns={columns}
         dataSource={data}
         pagination={{ pageSize: 8 }}
+        onRow={(record) => {
+        return {
+            onDoubleClick: () => {
+                handleView(record);
+            }
+        }}}
       />
       <Modal
         title="Edit menu item"
-        visible={isEditing}
+        open={isEditing}
         okText="Save"
+        okType='danger'
         onCancel={() => {
           resetEditing();
         }}
@@ -354,6 +388,7 @@ const Menu = () => {
           });
           resetEditing();
         }}
+        closable={false}
       >
         <TextField
           id="name"
@@ -433,6 +468,195 @@ const Menu = () => {
           onChange={(e) => {
             setEditingData((prev) => ({ ...prev, tags: [e.target.value] }));
           }}
+        />
+      </Modal>
+      <Modal
+        title="Add menu item"
+        open={isAdding}
+        okText="Add"
+        okType='danger'
+        onCancel={() => {
+         resetAdding("cancel");
+        }}
+        onOk={() => {
+          setData((prev) => {
+            return [...prev,addingData];
+            
+          });
+          resetAdding("ok");
+          setLen(len+1);
+          console.log(data);
+          console.log("len: " + len);
+          
+        }}
+        destroyOnClose={true}
+        closable={false}
+        okButtonProps={{disabled: !addingData?.name && !addingData?.age && !addingData?.address && !addingData?.tags}}
+        
+      >
+        <TextField
+          id="name_add"
+          label="Name"
+          variant="outlined"
+          value={addingData?.name}
+          fullWidth
+          margin="normal"
+          color="error"
+          style={{ width: "100%" }}
+          inputProps={{
+            style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
+          }}
+          InputLabelProps={{
+            style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
+          }}
+          onChange={(e) => {
+            setAddingData((prev) => ({...prev, name: e.target.value }));
+          }}
+        />
+
+        <TextField
+          id="age_add"
+          label="Age"
+          variant="outlined"
+          value={addingData?.age}
+          margin="normal"
+          color="error"
+          style={{ width: "100%" }}
+          inputProps={{
+            style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
+          }}
+          InputLabelProps={{
+            style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
+          }}
+          onChange={(e) => {
+            setAddingData((prev) => ({...prev, age: e.target.value }));
+          }}
+        />
+
+        <TextField
+          id="address_add"
+          label="Address"
+          variant="outlined"
+          value={addingData?.address}
+          fullWidth
+          margin="normal"
+          color="error"
+          style={{ width: "100%" }}
+          inputProps={{
+            style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
+          }}
+          InputLabelProps={{
+            style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
+          }}
+          onChange={(e) => {
+            setAddingData((prev) => ({...prev, address: e.target.value }));
+          }}
+        />
+
+        <TextField
+          id="tags_add"
+          label="Tags"
+          variant="outlined"
+          value={addingData?.tags}
+          fullWidth
+          margin="normal"
+          color="error"
+          style={{ width: "100%" }}
+          inputProps={{
+            style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
+          }}
+          InputLabelProps={{
+            style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
+          }}
+          onChange={(e) => {
+            setAddingData((prev) => ({...prev, tags: [e.target.value] }));
+          }}
+        />
+      </Modal>
+      <Modal
+        title="Menu Item Details"
+        open={isViewed}
+        onCancel={() => {
+          resetViewing();
+        }}
+        destroyOnClose={true}
+        footer={null}
+        
+      >
+        <TextField
+          id="name"
+          label="Name"
+          variant="outlined"
+          value={viewingData?.name}
+          fullWidth
+          margin="normal"
+          color="error"
+          style={{ width: "100%" }}
+          inputProps={{
+            style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
+            readOnly: true,
+          }}
+          InputLabelProps={{
+            style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
+          }}
+          
+        />
+
+        <TextField
+          id="age"
+          label="Age"
+          variant="outlined"
+          value={viewingData?.age}
+          fullWidth
+          margin="normal"
+          color="error"
+          style={{ width: "100%" }}
+          inputProps={{
+            style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
+            readOnly: true,
+          }}
+          InputLabelProps={{
+            style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
+          }}
+          
+        />
+
+        <TextField
+          id="address"
+          label="Address"
+          variant="outlined"
+          value={viewingData?.address}
+          fullWidth
+          margin="normal"
+          color="error"
+          style={{ width: "100%" }}
+          inputProps={{
+            style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
+            readOnly: true,
+          }}
+          InputLabelProps={{
+            style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
+          }}
+          
+        />
+
+        <TextField
+          id="tags"
+          label="Tags"
+          variant="outlined"
+          value={viewingData?.tags}
+          fullWidth
+          margin="normal"
+          color="error"
+          style={{ width: "100%" }}
+          inputProps={{
+            style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
+            readOnly: true,
+          }}
+          InputLabelProps={{
+            style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
+          }}
+          
         />
       </Modal>
     </div>

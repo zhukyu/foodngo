@@ -92,6 +92,8 @@ span {
 	color: var(--black-color);
 }
 
+
+
 @font-face {
 	font-family: 'TT Norms-Bold';
 	src: url('../font/TTNorms/TTNorms-Bold.otf') format('opentype');
