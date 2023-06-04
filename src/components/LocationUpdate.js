@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../utility/AxiosInstance';
 import { notification } from 'antd';
 
-function LocationUpdate() {
+function LocationUpdate(props) {
 
     const searchBarRef = useRef(null);
     const inputRef = useRef(null);
@@ -18,6 +18,8 @@ function LocationUpdate() {
     const [placeId, setPlaceId] = useState('');
     const [address, setAddress] = useState(null);
 
+    const handleSuccess = props.handleSuccess
+
     const navigate = useNavigate()
 
     const handleSearch = () => {
@@ -26,7 +28,7 @@ function LocationUpdate() {
 
         // select a suggestion
         if (coordinates && address) {
-            navigate(0)
+            handleSuccess()
         }
         // not select any suggestion
         else if (suggestions.length > 0) {

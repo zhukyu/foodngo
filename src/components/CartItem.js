@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../css/CartItem.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../utility/AxiosInstance";
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCartItems } from "../utility/action";
+
 function CartItem(props) {
   const dispatch = useDispatch()
   const [quantity, setQuantity] = useState(props.quantity);
+  const minusRef = useRef(null)
 
   const handlePlus = () => {
     setQuantity(quantity + 1);
@@ -35,10 +37,10 @@ function CartItem(props) {
       setQuantity(1);
     }
     if (quantity === 1) {
-      document.getElementsByClassName('minus')[0].classList.add('disabled');
+      minusRef?.current?.classList?.add('disabled');
     }
     else {
-      document.getElementsByClassName('minus')[0].classList.remove('disabled');
+      minusRef?.current?.classList?.remove('disabled');
     }
   }, [quantity])
 
@@ -70,7 +72,7 @@ function CartItem(props) {
         </div>
         <div className="cart_item_right_section">
           <div className="item_quantity">
-            <div className="minus" onClick={handleMinus}>
+            <div className="minus" onClick={handleMinus} ref={minusRef}>
               <i className="fa-solid fa-minus"></i>
             </div>
             <div className="quantity">
