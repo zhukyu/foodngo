@@ -12,46 +12,67 @@ import {TextField} from "@mui/material";
 import "../../css/Orders.scss";
 
 const Orders = () => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [editingData, setEditingData] = useState(null);
-  const [deleteData, setDeleteData] = useState(null);
+  
+  const [viewingData, setViewingData] = useState(null);
+  const [isViewed, setIsViewed] = useState(false);
 
-  const handleMultDelete = () => {};
-  const handleAdd = () => {
-    const newRow = {
-      key: parseInt(Math.random() * 1000),
-      name: "Jim Green",
-      age: parseInt(Math.random() * 1000),
-      address: "London No. 1 Lake Park",
-      tags: ["done"],
-    };
-    setData((pre) => {
-      return [...pre, newRow];
-    });
-  };
+  const handleMultDelete = () => {
+    if(selectedRowKeys.length !== 0){
+      Modal.confirm({
+        title: "Are you sure you want to delete these items?",
+        okText: "Yes",
+        okType: "danger",
+        onOk: () => {
+        const newData = data.filter((row) => !(selectedRowKeys.includes(row.key) && (row.status[0] === "rejected" || row.status[0] === "delivered")));
+        setData(newData);
+        setSelectedRowKeys([]);
+    }});
+  };}
+  
+  
 
-  const handleDelete = (record) => {
+  const handleReject = (record) => {
     Modal.confirm({
-      title: "Are you sure you want to delete this item?",
+      title: "Are you sure you want to reject this order?",
       okText: "Yes",
       okType: "danger",
       onOk: () => {
-        setData((pre) => {
-          return pre.filter((item) => item.key !== record.key);
+        setData((prev) => {
+          return prev.map((item) => {
+            if (item.key === record.key) {
+              return {...item, status: ["rejected"]};
+            } else {
+              return item;
+            }
+          });
         });
       },
     });
   };
 
-  const handleEdit = (record) => {
-    setIsEditing(true);
-    setEditingData({ ...record });
+  const handleAccept = (record) => {
+    setData((prev) => {
+      return prev.map((item) => {
+        if (item.key === record.key) {
+          return {...item, status: ["ready"]};
+        } else {
+          return item;
+        }
+      });
+    });
   };
 
-  const resetEditing = () => {
-    setIsEditing(false);
-    setEditingData(null);
-  };
+  const handleView = (record) => {
+    setIsViewed(true);
+    setViewingData(record);
+  }
+
+  const resetViewing = () =>{
+    setIsViewed(false);
+    setViewingData(null);
+  }
+
+  
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const onSelectChange = (newSelectedRowKeys) => {
     console.log("selectedRowKeys changed: ", newSelectedRowKeys);
@@ -238,23 +259,32 @@ const Orders = () => {
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "Tags",
-      key: "tags",
-      dataIndex: "tags",
-      ...getColumnSearchProps("tags"),
-      render: (_, { tags }) => (
+      title: "Status",
+      key: "status",
+      dataIndex: "status",
+      ...getColumnSearchProps("status"),
+      render: (_, { status }) => (
         <>
-          {tags.map((tag) => {
+          {status.map((state) => {
             let color = "geekblue";
-            if (tag === "canceled") {
-              color = "volcano";
+            if (state === "canceled" || state === "rejected") {
+              color = "#F54E4E";
             }
-            if (tag === "done") {
-              color = "green";
+            if (state === "ready") {
+              color = "#D95FDB"; 
+            }
+            if (state === "pending") {
+              color = "#3B7CDB";
+            }
+            if (state === "delivering") {
+              color = "#867CFF";
+            }
+            if (state === "delivered") {
+              color = "#3BDB9E";
             }
             return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
+              <Tag color={color} key={state}>
+                {state.toUpperCase()}
               </Tag>
             );
           })}
@@ -266,22 +296,24 @@ const Orders = () => {
       key: "action",
       render: (_, record) => (
         <Space size="middle">
+        { record.status[0] !== "pending" ? "" :
           <button
             className="edit_button_form"
             onClick={() => {
-              handleEdit(record);
+              handleAccept(record);
             }}
           >
-            <i className="fa-solid fa-pen-to-square"></i>
-          </button>
+            <i className="fa-solid fa-check"></i>
+          </button>}
+          { record.status[0] !== "pending"  ? "" :
           <button
             className="delete_button_form"
             onClick={() => {
-              handleDelete(record);
+              handleReject(record);
             }}
           >
-            <i className="fa-regular fa-trash-can"></i>
-          </button>
+            <i className="fa-solid fa-ban"></i>
+          </button>}
         </Space>
       ),
     },
@@ -292,21 +324,35 @@ const Orders = () => {
       name: "John Brown",
       age: 32,
       address: "New York No. 1 Lake Park",
-      tags: ["delivering"],
+      status: ["delivering"],
     },
     {
       key: 2,
       name: "Jim Green",
       age: 42,
       address: "London No. 1 Lake Park",
-      tags: ["done"],
+      status: ["ready"],
     },
     {
       key: 3,
       name: "Joe Black",
       age: 32,
       address: "Sydney No. 1 Lake Park",
-      tags: ["canceled"],
+      status: ["pending"],
+    },
+    {
+      key: 4,
+      name: "Joe OPsla",
+      age: 32,
+      address: "Sydney No. 1 Lake Park",
+      status: ["delivered"],
+    },
+    {
+      key: 5,
+      name: "Joe KO",
+      age: 32,
+      address: "Sydney No. 1 Lake Park",
+      status: ["rejected"],
     },
   ]);
   return (
@@ -317,114 +363,104 @@ const Orders = () => {
       <button className="delete_button" onClick={handleMultDelete}>
         Delete&ensp;<i class="fa-solid fa-trash-can"></i>
       </button>
-      <button className="add_button" onClick={handleAdd}>
-      <i class="fa-solid fa-plus"></i>
-      </button>
+      
       <Table
         className="orders_table"
         rowSelection={rowSelection}
         columns={columns}
         dataSource={data}
         pagination={{ pageSize: 8 }}
+        onRow={(record) => {
+        return {
+            onDoubleClick: () => {
+                handleView(record);
+            }
+        }}}
       />
       <Modal
-        title="Edit menu item"
-        visible={isEditing}
-        okText="Save"
+        title="Order Details"
+        open={isViewed}
         onCancel={() => {
-          resetEditing();
+          resetViewing();
         }}
-        onOk={() => {
-          setData((prev) => {
-            return prev.map((item) => {
-              if (item.key === editingData.key) {
-                return editingData;
-              } else {
-                return item;
-              }
-            });
-          });
-          resetEditing();
-        }}
+        destroyOnClose={true}
+        footer={null}
+        
       >
         <TextField
           id="name"
           label="Name"
           variant="outlined"
-          value={editingData?.name}
+          value={viewingData?.name}
           fullWidth
           margin="normal"
           color="error"
           style={{ width: "100%" }}
           inputProps={{
             style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
+            readOnly: true,
           }}
           InputLabelProps={{
             style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
           }}
-          onChange={(e) => {
-            setEditingData((prev) => ({ ...prev, name: e.target.value }));
-          }}
+          
         />
 
         <TextField
           id="age"
           label="Age"
           variant="outlined"
-          value={editingData?.age}
+          value={viewingData?.age}
           fullWidth
           margin="normal"
           color="error"
           style={{ width: "100%" }}
           inputProps={{
             style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
+            readOnly: true,
           }}
           InputLabelProps={{
             style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
           }}
-          onChange={(e) => {
-            setEditingData((prev) => ({ ...prev, age: e.target.value }));
-          }}
+          
         />
 
         <TextField
           id="address"
           label="Address"
           variant="outlined"
-          value={editingData?.address}
+          value={viewingData?.address}
           fullWidth
           margin="normal"
           color="error"
           style={{ width: "100%" }}
           inputProps={{
             style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
+            readOnly: true,
           }}
           InputLabelProps={{
             style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
           }}
-          onChange={(e) => {
-            setEditingData((prev) => ({ ...prev, address: e.target.value }));
-          }}
+          
         />
 
         <TextField
           id="tags"
           label="Tags"
           variant="outlined"
-          value={editingData?.tags}
+          value={viewingData?.status}
           fullWidth
           margin="normal"
           color="error"
           style={{ width: "100%" }}
           inputProps={{
             style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
+            readOnly: true,
           }}
           InputLabelProps={{
             style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
           }}
-          onChange={(e) => {
-            setEditingData((prev) => ({ ...prev, tags: [e.target.value] }));
-          }}
+          
         />
       </Modal>
     </div>
