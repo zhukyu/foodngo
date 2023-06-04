@@ -34,15 +34,12 @@ function RestaurantDetail() {
         .then((res) => {
           console.log(res.data.restaurant);
           setRestaurant(res.data.restaurant);
+          setMenus(res.data.restaurant.result);
         })
         .catch((err) => {
           if (err.response.status === 404) {
             navigate('/notfound404');
           }
-        })
-      await axiosInstance.get(`/restaurant/${id}/products`)
-        .then((res) => {
-          setMenus(res.data.result);
         })
     }
 

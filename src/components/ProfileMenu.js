@@ -42,6 +42,7 @@ function ProfileMenu() {
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
         localStorage.removeItem('username');
+        localStorage.removeItem('email');
         navigate(0);
         // axiosInstance.post('/auth/logout').then(res =>{
         //     if(res.status === 200)

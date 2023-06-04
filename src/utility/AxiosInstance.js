@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-	// baseURL: 'https://foodngo.vercel.app/api', // replace with your base URL
-	baseURL: 'http://127.0.0.1:3001/api', // dev env
+	baseURL: 'https://foodngo.vercel.app/api', // replace with your base URL
+	// baseURL: 'http://127.0.0.1:3001/api', // dev env
 	headers: {
 		'Content-Type': 'application/json',
 		'Authorization': `Bearer ${localStorage.getItem('access_token')}` // replace with your authorization token
@@ -18,6 +18,7 @@ const refreshAccessToken = async () => {
 			localStorage.removeItem('access_token');
 			localStorage.removeItem('refresh_token');
 			localStorage.removeItem('username');
+			localStorage.removeItem('email');
 		}
 	})
 	const newAccessToken = response.data.accessToken;

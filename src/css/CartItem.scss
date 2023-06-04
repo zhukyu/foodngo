@@ -20,6 +20,12 @@
             align-items: center;
             gap: 10px;
 
+            input[type="checkbox"] {
+                width: 15px;
+                height: 15px;
+                cursor: pointer;
+            }
+
             .cart_item_image {
                 width: 100px;
                 height: 100px;

@@ -90,7 +90,7 @@ function Home() {
         </div>
         <div className='right-section'>
           <h1>Get food delivery and more</h1>
-          <div ref={inputRef} style={{"height" : "35%"}}>
+          <div ref={inputRef} style={{ "height": "35%" }}>
             <LocationSearch />
           </div>
         </div>

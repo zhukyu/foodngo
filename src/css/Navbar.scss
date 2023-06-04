@@ -9,6 +9,8 @@
     padding: 7px 20px;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    font-size: 18px;
+    font-family: 'Poppins', sans-serif;
 
     .logo {
         display: flex;
@@ -29,7 +31,7 @@
         cursor: pointer;
 
         span {
-            font-family: 'Popins', sans-serif;
+            font-family: 'Poppins', sans-serif;
             font-weight: 600;
         }
 
@@ -50,7 +52,7 @@
 
         i {
             font-size: 20px;
-            padding: 0 5px;
+            padding: 5px;
         }
 
         .search-input {
@@ -59,7 +61,8 @@
             margin: 0 10px;
             width: 100%;
             font-family: "Poppins", sans-serif;
-            padding: 10px 0;
+            padding: 8px 0;
+			font-size: 16px;
             background-color: #F1F1F1;
             color: var(--black-color);
         }
@@ -74,7 +77,7 @@
             background-color: #CBCBCB;
 
             i {
-                padding: 0 10px;
+                padding: 3px 10px;
             }
 
             &:hover {

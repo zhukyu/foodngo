@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import "../css/AddCart.scss";
 import axiosInstance from '../utility/AxiosInstance';
 import { useDispatch } from 'react-redux';
@@ -11,6 +11,7 @@ function AddCart(props) {
     const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
     const [loading, setLoading] = useState(false);
+    const minusRef = useRef(null)
 
     const dispatch = useDispatch();
 
@@ -117,10 +118,10 @@ function AddCart(props) {
             setQuantity(1);
         }
         if (quantity === 1) {
-            document.getElementsByClassName('minus')[0].classList.add('disabled');
+            minusRef?.current?.classList?.add('disabled');
         }
         else {
-            document.getElementsByClassName('minus')[0].classList.remove('disabled');
+            minusRef?.current?.classList?.remove('disabled');
         }
     }, [quantity])
 
@@ -141,7 +142,7 @@ function AddCart(props) {
                     </div>
                     <div className="add-cart-control">
                         <div className="add-cart-control-quantity">
-                            <div className="minus" onClick={handleMinus}>
+                            <div className="minus" onClick={handleMinus} ref={minusRef}>
                                 <i className="fa-solid fa-minus"></i>
                             </div>
                             <div className="quantity">

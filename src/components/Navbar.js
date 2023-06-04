@@ -37,6 +37,10 @@ function Navbar() {
 
     }, [cartItems])
 
+    const reload = () => {
+        navigate(0)
+    }
+
     useEffect(() => {
         const address = JSON.parse(localStorage.getItem('address'));
         if (!address) {
@@ -98,7 +102,7 @@ function Navbar() {
     return (
         <div className='navbar'>
             <Modal title="Update Location" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null}>
-                <LocationUpdate />
+                <LocationUpdate handleSuccess={reload}/>
             </Modal>
             <Drawer title="Shopping Cart" placement="right" onClose={onClose} open={open} width={470}>
                 <ShoppingCart />
