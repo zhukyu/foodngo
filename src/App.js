@@ -15,6 +15,8 @@ import RestaurantDashboard from './page/RestaurantDashboard';
 import store from './utility/store';
 import { Provider } from 'react-redux';
 import SignUpRestaurant from './page/SignUpRestaurant';
+import DeliveryDriver from './page/DeliveryDriver';
+import Admin from './page/Admin';
 
 
 function App() {
@@ -34,6 +36,8 @@ function App() {
             <Route path='/account/restaurant' element={<RestaurantAccount />} />
             <Route path='/restaurant/' element={<RestaurantDashboard />} />
             <Route path='/restaurant/signup' element={<SignUpRestaurant />} />
+            <Route path='/dashboard/deliverydriver' element={<DeliveryDriver />} />
+            <Route path ='/dashboard/admin' element={<Admin />} />
           </Routes>
         </BrowserRouter>
       </Provider>

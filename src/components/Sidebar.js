@@ -3,11 +3,10 @@ import { Link, NavLink } from 'react-router-dom';
 import { SiShopware } from 'react-icons/si';
 import { MdOutlineCancel } from 'react-icons/md';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
-import { links } from '../data/dummy';
 import { useStateContext } from '../contexts/ContextProvider';
 import logo from '../image/FoodnGo_logo.png';
 
-const Sidebar = () => {
+const Sidebar = (props) => {
   const { currentColor, activeMenu, setActiveMenu, screenSize, setActiveItem, activeItem } = useStateContext();
 
   const handleCloseSideBar = () => {
@@ -45,7 +44,7 @@ const Sidebar = () => {
             </TooltipComponent>
           </div>
           <div className="mt-10 ">
-            {links.map((item) => (
+            {props.links.map((item) => (
               <div key={item.title}>
                 <p className="text-gray-400 dark:text-gray-400 m-3 mt-4 uppercase">
                   {item.title}

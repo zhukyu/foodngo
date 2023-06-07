@@ -1,9 +1,9 @@
 import React from 'react';
-import { AiOutlineShoppingCart} from 'react-icons/ai';
-import { FiShoppingBag, FiBarChart, FiCreditCard, FiStar, FiShoppingCart, FiBox } from 'react-icons/fi';
-import { BsBoxSeam, BsCurrencyDollar, BsShield, BsChatLeft,BsShieldLock, BsPersonCircle } from 'react-icons/bs';
+import { AiOutlineShoppingCart, AiOutlineFileDone} from 'react-icons/ai';
+import { FiShoppingBag, FiBarChart, FiCreditCard, FiStar, FiShoppingCart, FiBox  } from 'react-icons/fi';
+import { BsBoxSeam, BsCurrencyDollar, BsShield, BsChatLeft,BsShieldLock, BsPersonCircle, BsFillBarChartFill, BsReceipt, BsPeopleFill } from 'react-icons/bs';
 import { IoMdContacts } from 'react-icons/io';
-import { RiContactsLine} from 'react-icons/ri';
+import { RiContactsLine, RiTruckFill, RiRestaurantFill} from 'react-icons/ri';
 import { MdOutlineSupervisorAccount } from 'react-icons/md';
 import { HiOutlineRefresh } from 'react-icons/hi';
 import { TiTick } from 'react-icons/ti';
@@ -492,6 +492,96 @@ export const links = [
       {
         name: 'customers',
         icon: <RiContactsLine />,
+      },
+    ],
+  },
+  {
+    title: 'Account',
+    links: [
+      {
+        name: 'profile',
+        icon: <BsPersonCircle/>,
+      },
+      {
+        name: 'security',
+        icon: <BsShieldLock />,
+      },
+    ],
+  },
+  
+];
+export const delivery_links = [
+  {
+    title: 'Dashboard',
+    links: [
+      {
+        name: 'dashboard',
+        icon: <BsFillBarChartFill />,
+      },
+    ],
+  },
+
+  {
+    title: 'Delivery',
+    links: [
+      {
+        name: 'orders',
+        icon: <BsReceipt />,
+      },
+      
+      {
+        name: 'current order',
+        icon: <RiTruckFill/>,
+      },
+
+      {
+        name: 'delivered orders',
+        icon: <AiOutlineFileDone />,
+      },
+    ],
+  },
+  {
+    title: 'Account',
+    links: [
+      {
+        name: 'profile',
+        icon: <BsPersonCircle/>,
+      },
+      {
+        name: 'security',
+        icon: <BsShieldLock />,
+      },
+    ],
+  },
+  
+];
+export const admin_links = [
+  {
+    title: 'Dashboard',
+    links: [
+      {
+        name: 'dashboard',
+        icon: <BsFillBarChartFill />,
+      },
+    ],
+  },
+
+  {
+    title: 'Approve',
+    links: [
+      {
+        name: 'restaurants',
+        icon: <RiRestaurantFill />,
+      },
+      
+      {
+        name: 'delivery drivers',
+        icon: <RiTruckFill/>,
+      },
+
+      {
+        name: 'users',
+        icon: <BsPeopleFill />,
       },
     ],
   },

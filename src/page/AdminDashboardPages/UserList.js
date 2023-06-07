@@ -3,10 +3,11 @@ import { Button, Input, Space, Table, Tag, Modal } from 'antd';
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 import {TextField} from "@mui/material";
-import "../../css/Menu.scss";
+import "../../css/Orders.scss";
 
 
-const Menu = () => {
+
+const UserList = () => {
 
   const [data, setData] = useState([
     {
@@ -14,58 +15,41 @@ const Menu = () => {
       name: "John Brown",
       age: 32,
       address: "New York No. 1 Lake Park",
-      tags: ["delivering"],
+      status: ["normal"],
     },
     {
       key: 2,
       name: "Jim Green",
       age: 42,
       address: "London No. 1 Lake Park",
-      tags: ["ready"],
+      status: ["normal"],
     },
     {
       key: 3,
       name: "Joe Black",
       age: 32,
       address: "Sydney No. 1 Lake Park",
-      tags: ["canceled"],
+      status: ["banned"],
     },
   ]); 
 
-  const key_generator = data.reduce((acc, obj) => {
-    if (obj.key > acc) {
-      return obj.key;
-    }
-    return acc;
-  }, -Infinity);
   
-  let key_count = key_generator + 1;
-  const [isEditing, setIsEditing] = useState(false);
-  const [editingData, setEditingData] = useState(null);
-  const [addingData, setAddingData] = useState({key:key_count, name: null, age: null, address: null, tags: null});
-  const [isAdding, setIsAdding] = useState(false);
   const [viewingData, setViewingData] = useState(null);
   const [isViewed, setIsViewed] = useState(false);
 
   const handleMultDelete = () => {
     if(selectedRowKeys.length !== 0){
-    Modal.confirm({
-      title: "Are you sure you want to delete these items?",
-      okText: "Yes",
-      okType: "danger",
-      onOk: () => {
-        setData((pre) => {
-          return pre.filter((item) => !selectedRowKeys.includes(item.key));
-        });
-      },
-    });
-    setSelectedRowKeys([]);
+      Modal.confirm({
+        title: "Are you sure you want to delete these items?",
+        okText: "Yes",
+        okType: "danger",
+        onOk: () => {
+        const newData = data.filter((row) => !(selectedRowKeys.includes(row.key) && (row.status[0] === "banned")));
+        setData(newData);
+        setSelectedRowKeys([]);
+    }});
   };}
-  const handleAdd = () => {
-    setIsAdding(true);
-
-    
-  };
+  
 
   const handleDelete = (record) => {
     Modal.confirm({
@@ -79,24 +63,38 @@ const Menu = () => {
       },
     });
   };
-
-  const handleEdit = (record) => {
-    setIsEditing(true);
-    setEditingData({ ...record });
+  const handleReject = (record) => {
+    Modal.confirm({
+      title: "Are you sure you want to BAN this user ?",
+      okText: "Yes",
+      okType: "danger",
+      onOk: () => {
+        setData((prev) => {
+          return prev.map((item) => {
+            if (item.key === record.key) {
+              return {...item, status: ["banned"]};
+            } else {
+              return item;
+            }
+          });
+        });
+      },
+    });
   };
 
-  const resetAdding = (type) => {
-    setIsAdding(false);
-    if(type === "cancel"){
-    setAddingData({key:key_count, name: null, age: null, address: null, tags: null});}
-    else{
-      setAddingData({key:++key_count, name: null, age: null, address: null, tags: null});
-    }
+  const handleAccept = (record) => {
+    setData((prev) => {
+      return prev.map((item) => {
+        if (item.key === record.key) {
+          return {...item, status: ["normal"]};
+        } else {
+          return item;
+        }
+      });
+    });
   };
-  const resetEditing = () => {
-    setIsEditing(false);
-    setEditingData(null);
-  };
+
+ 
 
   const handleView = (record) => {
     setIsViewed(true);
@@ -293,32 +291,32 @@ const Menu = () => {
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "Tags",
-      key: "tags",
-      dataIndex: "tags",
-      ...getColumnSearchProps("tags"),
-      render: (_, { tags }) => (
+      title: "Status",
+      key: "status",
+      dataIndex: "status",
+      ...getColumnSearchProps("status"),
+      render: (_, { status }) => (
         <>
-          {tags.map((tag) => {
+          {status.map((state) => {
             let color = "geekblue";
-            if (tag === "canceled" || tag === "rejected") {
+            if (state === "banned" || state === "rejected") {
               color = "#F54E4E";
             }
-            if (tag === "ready") {
+            if (state === "ready") {
               color = "#D95FDB"; 
             }
-            if (tag === "pending") {
+            if (state === "pending") {
               color = "#3B7CDB";
             }
-            if (tag === "delivering") {
+            if (state === "delivering") {
               color = "#867CFF";
             }
-            if (tag === "delivered") {
+            if (state === "normal") {
               color = "#3BDB9E";
             }
             return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
+              <Tag color={color} key={state}>
+                {state.toUpperCase()}
               </Tag>
             );
           })}
@@ -330,22 +328,25 @@ const Menu = () => {
       key: "action",
       render: (_, record) => (
         <Space size="middle">
+          
+          { record.status[0] !== "banned" ? "" :
           <button
             className="edit_button_form"
             onClick={() => {
-              handleEdit(record);
+              handleAccept(record);
             }}
           >
-            <i className="fa-solid fa-pen-to-square"></i>
-          </button>
+            <i className="fa-solid fa-rotate-left"></i>
+          </button>}
+          { record.status[0] === "banned"  ? "" :
           <button
             className="delete_button_form"
             onClick={() => {
-              handleDelete(record);
+              handleReject(record);
             }}
           >
-            <i className="fa-regular fa-trash-can"></i>
-          </button>
+            <i className="fa-solid fa-ban"></i>
+          </button>}
         </Space>
       ),
     },
@@ -354,13 +355,10 @@ const Menu = () => {
   return (
     <div className="menu_table_container">
       <div>
-        <h4 className="menu_table_title">Menu</h4>
+        <h4 className="menu_table_title">Users List</h4>
       </div>
       <button className="delete_button" onClick={handleMultDelete}>
-        Delete&ensp;<i className="fa-solid fa-trash-can"></i>
-      </button>
-      <button className="add_button" onClick={handleAdd}>
-      <i className="fa-solid fa-plus"></i>
+        Delete&ensp;<i class="fa-solid fa-trash-can"></i>
       </button>
       <Table
         className="menu_table"
@@ -375,210 +373,8 @@ const Menu = () => {
             }
         }}}
       />
-      <Modal
-        title="Edit menu item"
-        open={isEditing}
-        okText="Save"
-        okType='danger'
-        onCancel={() => {
-          resetEditing();
-        }}
-        onOk={() => {
-          setData((prev) => {
-            return prev.map((item) => {
-              if (item.key === editingData.key) {
-                return editingData;
-              } else {
-                return item;
-              }
-            });
-          });
-          resetEditing();
-        }}
-        closable={false}
-      >
-        <TextField
-          id="name"
-          label="Name"
-          variant="outlined"
-          value={editingData?.name}
-          fullWidth
-          margin="normal"
-          color="error"
-          style={{ width: "100%" }}
-          inputProps={{
-            style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
-          }}
-          InputLabelProps={{
-            style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
-          }}
-          onChange={(e) => {
-            setEditingData((prev) => ({ ...prev, name: e.target.value }));
-          }}
-        />
-
-        <TextField
-          id="age"
-          label="Age"
-          variant="outlined"
-          value={editingData?.age}
-          fullWidth
-          margin="normal"
-          color="error"
-          style={{ width: "100%" }}
-          inputProps={{
-            style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
-          }}
-          InputLabelProps={{
-            style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
-          }}
-          onChange={(e) => {
-            setEditingData((prev) => ({ ...prev, age: e.target.value }));
-          }}
-        />
-
-        <TextField
-          id="address"
-          label="Address"
-          variant="outlined"
-          value={editingData?.address}
-          fullWidth
-          margin="normal"
-          color="error"
-          style={{ width: "100%" }}
-          inputProps={{
-            style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
-          }}
-          InputLabelProps={{
-            style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
-          }}
-          onChange={(e) => {
-            setEditingData((prev) => ({ ...prev, address: e.target.value }));
-          }}
-        />
-
-        <TextField
-          id="tags"
-          label="Tags"
-          variant="outlined"
-          value={editingData?.tags}
-          fullWidth
-          margin="normal"
-          color="error"
-          style={{ width: "100%" }}
-          inputProps={{
-            style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
-          }}
-          InputLabelProps={{
-            style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
-          }}
-          onChange={(e) => {
-            setEditingData((prev) => ({ ...prev, tags: [e.target.value] }));
-          }}
-        />
-      </Modal>
-      <Modal
-        title="Add menu item"
-        open={isAdding}
-        okText="Add"
-        okType='danger'
-        onCancel={() => {
-         resetAdding("cancel");
-        }}
-        onOk={() => {
-          setData((prev) => {
-            return [...prev,addingData];
-            
-          });
-          resetAdding("ok");
-          console.log(data);
-          console.log("len: " + key_generator);
-          
-        }}
-        destroyOnClose={true}
-        closable={false}
-        okButtonProps={{disabled: !addingData?.name && !addingData?.age && !addingData?.address && !addingData?.tags}}
-        
-      >
-        <TextField
-          id="name_add"
-          label="Name"
-          variant="outlined"
-          value={addingData?.name}
-          fullWidth
-          margin="normal"
-          color="error"
-          style={{ width: "100%" }}
-          inputProps={{
-            style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
-          }}
-          InputLabelProps={{
-            style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
-          }}
-          onChange={(e) => {
-            setAddingData((prev) => ({...prev, name: e.target.value }));
-          }}
-        />
-
-        <TextField
-          id="age_add"
-          label="Age"
-          variant="outlined"
-          value={addingData?.age}
-          margin="normal"
-          color="error"
-          style={{ width: "100%" }}
-          inputProps={{
-            style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
-          }}
-          InputLabelProps={{
-            style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
-          }}
-          onChange={(e) => {
-            setAddingData((prev) => ({...prev, age: e.target.value }));
-          }}
-        />
-
-        <TextField
-          id="address_add"
-          label="Address"
-          variant="outlined"
-          value={addingData?.address}
-          fullWidth
-          margin="normal"
-          color="error"
-          style={{ width: "100%" }}
-          inputProps={{
-            style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
-          }}
-          InputLabelProps={{
-            style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
-          }}
-          onChange={(e) => {
-            setAddingData((prev) => ({...prev, address: e.target.value }));
-          }}
-        />
-
-        <TextField
-          id="tags_add"
-          label="Tags"
-          variant="outlined"
-          value={addingData?.tags}
-          fullWidth
-          margin="normal"
-          color="error"
-          style={{ width: "100%" }}
-          inputProps={{
-            style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
-          }}
-          InputLabelProps={{
-            style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
-          }}
-          onChange={(e) => {
-            setAddingData((prev) => ({...prev, tags: [e.target.value] }));
-          }}
-        />
-      </Modal>
+      
+      
       <Modal
         title="Menu Item Details"
         open={isViewed}
@@ -650,7 +446,7 @@ const Menu = () => {
           id="tags"
           label="Tags"
           variant="outlined"
-          value={viewingData?.tags}
+          value={viewingData?.status}
           fullWidth
           margin="normal"
           color="error"
@@ -668,4 +464,4 @@ const Menu = () => {
     </div>
   );
 };
-export default Menu;
+export default UserList;

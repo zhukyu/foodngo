@@ -1,0 +1,58 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+.cart_item_container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 10px 0;
+    border-top: #C8C8C8 1px solid;
+
+    .cart_item {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .cart_item_left_section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 80%;
+
+            .cart_item_image {
+                width: 100px;
+                height: 100px;
+                border-radius: 10px;
+                object-fit: cover;
+            }
+
+            .item_info {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-around;
+                align-items: flex-start;
+                width: 240px;
+                margin-left: 20%;
+
+                .item_name {
+                    font-size: 23px;
+                    word-break: keep-all;
+                    word-wrap: break-word;
+                }
+
+                .item_price {
+                    font-size: 16px;
+                }
+            }
+        }
+
+        
+
+    .underline {
+        width: 100%;
+        height: 1px;
+        background-color: #C8C8C8;
+    }
+    }}

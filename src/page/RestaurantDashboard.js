@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FiSettings } from "react-icons/fi";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
 import { NavbarDash, Footer, Sidebar, ThemeSettings } from "../components";
+import { links } from '../data/dummy';
 import {
     Ecommerce,
     Orders,
