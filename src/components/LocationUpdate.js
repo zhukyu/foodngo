@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
-import "../css/LocationSearch.scss";
 import "../css/LocationUpdate.scss";
+import "../css/LocationSearch.scss";
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../utility/AxiosInstance';
 import { notification } from 'antd';

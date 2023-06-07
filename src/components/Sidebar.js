@@ -30,8 +30,8 @@ const Sidebar = () => {
       {activeMenu && (
         <>
           <div className="flex justify-between items-center">
-            <Link to="/restaurant/dashboard" onClick={handleCloseSideBar} className="items-center gap-3 ml-3 mt-4 flex text-xl font-extrabold tracking-tight dark:text-white text-slate-900">
-              <img src={logo} alt="logo" style={{width:"213px", height:"90px", objectFit:"contain" }} />
+            <Link to="/restaurant" onClick={handleCloseSideBar} className="items-center gap-3 ml-3 mt-4 flex text-xl font-extrabold tracking-tight dark:text-white text-slate-900">
+              <img src={logo} alt="logo" style={{width:"210px", objectFit:"contain" }} />
             </Link>
             <TooltipComponent content="Menu" position="BottomCenter">
               <button

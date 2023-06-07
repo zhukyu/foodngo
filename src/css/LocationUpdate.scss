@@ -4,7 +4,9 @@
     }
 }
 
-.search-bar-wrapper {
-    box-shadow: none !important;
-    border: 1px solid #C8C8C8 !important;
+.ant-modal-content {
+    .search-bar-wrapper {
+        box-shadow: none;
+        border: 1px solid #C8C8C8;
+    }
 }

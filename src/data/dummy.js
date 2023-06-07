@@ -1,6 +1,6 @@
 import React from 'react';
 import { AiOutlineShoppingCart} from 'react-icons/ai';
-import { FiShoppingBag, FiBarChart, FiCreditCard, FiStar, FiShoppingCart } from 'react-icons/fi';
+import { FiShoppingBag, FiBarChart, FiCreditCard, FiStar, FiShoppingCart, FiBox } from 'react-icons/fi';
 import { BsBoxSeam, BsCurrencyDollar, BsShield, BsChatLeft,BsShieldLock, BsPersonCircle } from 'react-icons/bs';
 import { IoMdContacts } from 'react-icons/io';
 import { RiContactsLine} from 'react-icons/ri';
@@ -486,8 +486,8 @@ export const links = [
         icon: <AiOutlineShoppingCart />,
       },
       {
-        name: 'menu',
-        icon: <IoMdContacts />,
+        name: 'products',
+        icon: <FiBox />,
       },
       {
         name: 'customers',

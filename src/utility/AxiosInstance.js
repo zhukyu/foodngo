@@ -14,6 +14,17 @@ const refreshAccessToken = async () => {
 	const response = await axiosInstance.post('/auth/token', {
 		token: localStorage.getItem('refresh_token')
 	}).catch(err => {
+		if (err.response.status === 403 && err.response.data.message === "Permission denied") {
+			const role = err.response.data.role;
+			switch (role) {
+				case 'customer':
+					window.location.href = '/';
+					break
+				case 'restaurant':
+					window.location.href = '/restaurant';
+					break
+			}
+		}
 		if (err.response.status === 400 && err.response.data.message === "Invalid refresh token") {
 			localStorage.removeItem('access_token');
 			localStorage.removeItem('refresh_token');

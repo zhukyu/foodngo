@@ -3,49 +3,41 @@ import { GridComponent, ColumnsDirective, ColumnDirective, Resize, Sort, Context
 
 import { ordersData, contextMenuItems, ordersGrid } from '../../data/dummy';
 import { Header } from '../../components';
-import { Button, Input, Space, Table, Tag, Modal, Pagination } from "antd";
+import { Button, Input, Space, Table, Tag, Modal } from "antd";
 import Highlighter from "react-highlight-words";
 import { ResponsiveLine } from "@nivo/line";
 import { ResponsivePie } from "@nivo/pie";
 import { SearchOutlined } from "@ant-design/icons";
 import { TextField } from "@mui/material";
-import "../../css/Orders.scss";
+import "../../css/Products.scss";
 import axiosInstance from '../../utility/AxiosInstance';
 import OrderDetail from '../../components/OrderDetail';
 
-const Orders = () => {
+const Products = () => {
 
     const [viewingData, setViewingData] = useState(null);
     const [isViewed, setIsViewed] = useState(false);
     const [orders, setOrders] = useState(null);
     const [data, setData] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
-    const [totalOrders, setTotalOrders] = useState(0);
-    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const fetchOrders = async () => {
-            setLoading(true)
-            await axiosInstance.get(`/orders/restaurants?page=${currentPage}`)
+            await axiosInstance.get('/orders/restaurants')
                 .then(res => {
-                    console.log(res.data);
-                    setTotalPages(res.data.pagination.totalPage)
+                    console.log(res.data.orders)
                     setOrders(res.data.orders)
-                    setTotalOrders(res.data.pagination.totalResult)
                 })
                 .catch(err => { 
                     console.log(err);
                     setOrders(null)
                 })
-            setLoading(false)
         }
         fetchOrders();
-    }, [currentPage])
+    }, [])
 
     const handleReject = (record) => {
         Modal.confirm({
-            title: "Are you sure you want to reject this order?",
+            title: "Are you sure you want to reject this products?",
             okText: "Yes",
             okType: "danger",
             onOk: () => {
@@ -329,13 +321,15 @@ const Orders = () => {
             <div>
                 <h4 className="orders_table_title">Orders</h4>
             </div>
+            {/* <button className="delete_button" onClick={handleMultDelete}>
+        Delete&ensp;<i className="fa-solid fa-trash-can"></i>
+      </button> */}
 
             <Table
                 className="orders_table"
-                loading={loading}
                 columns={columns}
                 dataSource={data}
-                pagination={{ current: currentPage, pageSize: 10, total: totalOrders, onChange: (page) => setCurrentPage(page) }}
+                pagination={{ pageSize: 10 }}
                 onRow={(record) => {
                     return {
                         onDoubleClick: () => {
@@ -362,4 +356,4 @@ const Orders = () => {
         </div>
     );
 };
-export default Orders;
+export default Products;
