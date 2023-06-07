@@ -2,20 +2,20 @@ import React, { useEffect } from "react";
 import { FiSettings } from "react-icons/fi";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
 import { NavbarDash, Footer, Sidebar, ThemeSettings } from "../components";
-import { delivery_links } from '../data/dummy';
+import { admin_links } from '../data/dummy';
 import {
-  Orders,
-  Profile,
+  AdminDashboard,
+  DeliveryDriverApproveList,
+  UserList,
+  AdminProfile,
   Security,
-  DeliveryDashboard,
-  DeliveredOrders,
-  CurrentOrder
+  RestaurantApproveList
 
-} from "./DeliveryDriverPages";
+} from "./AdminDashboardPages";
 import "../css/RestaurantDashboard.scss";
 import { useStateContext } from "../contexts/ContextProvider";
 
-const DeliveryDriver = () => {
+const Admin = () => {
   const {
     setCurrentColor,
     setCurrentMode,
@@ -38,20 +38,20 @@ const DeliveryDriver = () => {
 
   const getActiveItem = (index) => {
     switch (index) {
-      case "ecommerce":
-        return <DeliveryDashboard />;
-      case "orders":
-        return <Orders />;
-      case "current order":
-        return <CurrentOrder />;
-      case "delivered orders":
-        return <DeliveredOrders />;
+      case "dashboard":
+        return <AdminDashboard />;
+      case "restaurants":
+        return <RestaurantApproveList />;
+      case "delivery drivers":
+        return <DeliveryDriverApproveList />;
+      case "users":
+        return <UserList />;
       case "profile":
-        return <Profile />;
+        return <AdminProfile />;
       case "security":
         return <Security />;
       default:
-        return <DeliveryDashboard />;
+        return <AdminDashboard />;
     }
   };
 
@@ -72,11 +72,11 @@ const DeliveryDriver = () => {
         </div>
         {activeMenu ? (
           <div className="w-72 fixed sidebar dark:bg-secondary-dark-bg bg-white ">
-            <Sidebar links={delivery_links}/>
+            <Sidebar links={admin_links}/>
           </div>
         ) : (
           <div className="w-0 dark:bg-secondary-dark-bg">
-            <Sidebar links={delivery_links}/>
+            <Sidebar links={admin_links}/>
           </div>
         )}
         <div
@@ -100,4 +100,4 @@ const DeliveryDriver = () => {
   );
 };
 
-export default DeliveryDriver
+export default Admin;

@@ -28,11 +28,11 @@
     width: 65%;
     height: 92vh;
     overflow-x: hidden;
-    overflow-x: scroll;
 
     .highway {
       height: 20vh;
       width: 700%;
+      min-height: 150px;
       display: block;
       background-image: url("../image/road.jpg");
       background-repeat: repeat-x;
@@ -43,11 +43,13 @@
       right: 0;
       z-index: 1;
       animation: highway 5s linear infinite;
-      overflow-x: scroll;
+      overflow: none;
+      
     }
     .city {
       height: 72vh;
-      width: 500%;
+      width: 600%;
+      min-height: 600px;
       background-image: url("../image/city.jpg");
       background-size: contain;
       position: absolute;
@@ -58,10 +60,12 @@
       z-index: 1;
       background-repeat: repeat-x;
       animation: city 20s linear infinite;
-      overflow-x: scroll;
+      overflow: none;
     }
     .deliverydriver {
-      height: 270px;
+      height: 25vh;
+      min-height: 170px;
+      max-height: 270px;
       position: absolute;
       bottom: 50px;
       left: 350px;
@@ -70,13 +74,13 @@
     }
   }
   .login_form {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     right: 0;
     width: 35%;
     height: 92vh;
-    min-height: 600px;
     min-width: 430px;
+    min-height: 600px;
     background-color: rgba($color: #f5f5f7, $alpha: 1);
     z-index: 4;
     display: flex;
@@ -87,7 +91,7 @@
       width: 90%;
       height: 55%;
       //470px
-      min-height: 440px;
+      min-height: 450px;
       position: relative;
       margin-top: 5%;
       display: flex;
@@ -168,12 +172,13 @@
     }
 
     .company{
+      position: relative;
       width: 50%;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      margin-top: 18%;
+      top: 15%;
       max-height: 200px;
       .partners{
         font-size: 20px;
@@ -204,7 +209,9 @@
     }
     
     .team_copyright{
-      margin-top: 12%;
+      position: relative;
+        top: 22%;
+      min-height: 30px;
       .info{
         font-family: "Poppins", sans-serif;
         font-weight: 500;
