@@ -14,6 +14,7 @@ import PlacesAutocomplete from 'react-places-autocomplete';
 import RestaurantDashboard from './page/RestaurantDashboard';
 import store from './utility/store';
 import { Provider } from 'react-redux';
+import SignUpRestaurant from './page/SignUpRestaurant';
 
 
 function App() {
@@ -31,7 +32,8 @@ function App() {
             <Route path='/signup' element={<SignUp />} />
             <Route path='/account/user' element={<UserAccount />} />
             <Route path='/account/restaurant' element={<RestaurantAccount />} />
-            <Route path='/restaurant/dashboard' element={<RestaurantDashboard />} />
+            <Route path='/restaurant/' element={<RestaurantDashboard />} />
+            <Route path='/restaurant/signup' element={<SignUpRestaurant />} />
           </Routes>
         </BrowserRouter>
       </Provider>

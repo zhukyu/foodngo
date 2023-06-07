@@ -350,7 +350,7 @@ const Menu = () => {
         <h4 className="menu_table_title">Menu</h4>
       </div>
       <button className="delete_button" onClick={handleMultDelete}>
-        Delete&ensp;<i class="fa-solid fa-trash-can"></i>
+        Delete&ensp;<i className="fa-solid fa-trash-can"></i>
       </button>
       <button className="add_button" onClick={handleAdd}>
       <i className="fa-solid fa-plus"></i>

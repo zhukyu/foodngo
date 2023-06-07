@@ -34,7 +34,7 @@ const Security = () => {
           disabled={editButton}
           onClick={handleEdit}
         >
-          Change Password&ensp;<i class="fa-solid fa-pen-to-square"></i>
+          Change Password&ensp;<i className="fa-solid fa-pen-to-square"></i>
         </button>
         <div className="field one">
         {editable ? (
@@ -92,14 +92,14 @@ const Security = () => {
             disabled={saveButton}
             onClick={handleSave}
           >
-            Save&ensp;<i class="fa-solid fa-floppy-disk"></i>
+            Save&ensp;<i className="fa-solid fa-floppy-disk"></i>
           </button>
           <button
             className={saveButton ? "cancel_button disabled" : "cancel_button"}
             disabled={saveButton}
             onClick={handleCancel}
           >
-            Cancel&ensp;<i class="fa-solid fa-ban"></i>
+            Cancel&ensp;<i className="fa-solid fa-ban"></i>
           </button>
         </div>
       </div>

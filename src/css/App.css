@@ -98,6 +98,10 @@ span {
 	color: var(--black-color);
 }
 
+.anticon {
+	vertical-align: 0;
+}
+
 
 
 @font-face {

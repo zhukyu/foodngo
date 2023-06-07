@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../css/Login.scss";
 import { Link, useNavigate } from "react-router-dom";
 import deliverydriver from "../image/deliveryDriver.gif";
@@ -8,6 +8,24 @@ function Login() {
 
 	const [formData, setFormData] = useState()
 	const navigate = useNavigate()
+
+	const handleNavigate = (role) => {
+		if (role === 'user') {
+			navigate('/restaurants')
+		}
+		else if (role === 'admin') {
+			navigate('/admin')
+		}
+		else if (role === 'restaurant') {
+			navigate('/restaurant')
+		}
+		else if (role === 'shipper') {
+			navigate('/shipper')
+		}
+		else {
+			navigate('/login')
+		}
+	}
 
 	const handleSubmit = async (e) => {
 		e.preventDefault()
@@ -26,7 +44,7 @@ function Login() {
 						localStorage.setItem('coordinate', JSON.stringify(res.data.user.location.coordinates));
 					}
 					axiosInstance.defaults.headers['Authorization'] = `Bearer ${res.data.accessToken}`;
-					navigate('/restaurants')
+					handleNavigate(res.data.role)
 				}
 			})
 	}
@@ -62,7 +80,7 @@ function Login() {
 						</div>
 					</div>
 
-					<div className="company">
+					{/* <div className="company">
 						<h4 className="partners">Partners</h4>
 						<div className="partners_img">
 							<img src="https://developers.momo.vn/v3/assets/images/square-8c08a00f550e40a2efafea4a005b1232.png" alt="bk" className="momo" />
@@ -76,7 +94,7 @@ function Login() {
 
 					<div className="team_copyright">
 						<h4 className="info"><i className="fa-regular fa-copyright"></i>&nbsp;PBL5 - Created and designed by Group I - (Ly Van Tanh - Pham Tien Huu - Nguyen Khac Thai)</h4>
-					</div>
+					</div> */}
 
 				</div>
 			</div>
