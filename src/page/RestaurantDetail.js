@@ -48,7 +48,7 @@ function RestaurantDetail() {
 
   useEffect(() => {
     if (!menus) return;
-    const menuNames = menus.map((menu, index) => {
+    const menuNames = menus?.map((menu, index) => {
       return {
         key: `${index}`,
         label: menu.category.name,
@@ -154,9 +154,9 @@ function RestaurantDetail() {
           <div className="menu_section" key={index} ref={e => menuRef.current[index] = e}>
             <h4 className="title">{menu.category.name}</h4>
             <div className="items">
-              {menu.products.map((product, index) => (
+              {menu?.category?.product?.map((product, index) => (
                 <FoodItem
-                  img={product.media[0].url}
+                  img={product.media[0].url}  
                   key={index}
                   name={product.name}
                   price={product.price}

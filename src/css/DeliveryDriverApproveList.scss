@@ -2,9 +2,7 @@
 
         .orders_table_container{
             position: relative;
-            width: 80%;
-            height: 95vh;
-            margin-left: 10%;
+            width: 90%;
             .orders_table_title{
                 width: 99%;
                 height: 47px;
@@ -44,7 +42,7 @@
 
             .edit_button_form{
                 width: 100%;
-                height: 4vh;
+                padding: 3px 15px;
                 font-family: "Poppins", sans-serif;
                 font-size: 16px;
                 font-weight: 500;
@@ -60,7 +58,7 @@
             }
             .delete_button_form{
                 width: 100%;
-                height: 4vh;
+                padding: 3px 15px;
                 font-family: "Poppins", sans-serif;
                 font-size: 16px;
                 font-weight: 500;

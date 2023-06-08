@@ -7,12 +7,14 @@ import "../../css/Products.scss";
 import axiosInstance from '../../utility/AxiosInstance';
 import AddProduct from '../../components/AddProduct';
 import UpdateProduct from '../../components/UpdateProducts';
+import AddCategory from '../../components/AddCategory';
+import UpdateCategory from '../../components/UpdateCategory';
 
-const Products = () => {
+const Categories = () => {
 
     const [viewingData, setViewingData] = useState(null);
     const [isViewed, setIsViewed] = useState(false);
-    const [products, setProducts] = useState(null);
+    const [categories, setCategories] = useState(null);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -21,23 +23,22 @@ const Products = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalResults, setTotalResults] = useState(0);
 
-    const fetchProducts = async () => {
+    const fetchCategories = async () => {
         setLoading(true);
-        await axiosInstance.get(`/product?page=${currentPage}&limit=5`)
+        await axiosInstance.get(`category/restaurants`)
             .then(res => {
                 console.log(res.data)
-                setProducts(res.data.products)
-                setTotalResults(res.data.pagination.totalProducts)
+                setCategories(res.data.categories)
             })
             .catch(err => {
                 console.log(err);
-                setProducts(null)
+                setCategories(null)
             })
         setLoading(false);
     }
 
     useEffect(() => {
-        fetchProducts();
+        fetchCategories();
     }, [currentPage])
 
     const handleEdit = (record) => {
@@ -46,15 +47,15 @@ const Products = () => {
     }
 
     const handleDelete = (record) => {
-        const deleteProduct = async () => {
-            await axiosInstance.delete(`/product/${data[record?.key]?.id}`)
+        const deleteCategory = async () => {
+            await axiosInstance.delete(`/category/${data[record?.key]?.id}/restaurants`)
                 .then(res => {
                     console.log(res);
-                    fetchProducts();
+                    fetchCategories();
                     notification.open({
                         icon: <i className="fa-solid fa-check" style={{ color: 'green' }}></i>,
                         message: 'Success!',
-                        description: 'Product deleted successfully!',
+                        description: 'Category deleted successfully!',
                         onClick: () => {
                             console.log('Notification Clicked!');
                         },
@@ -65,7 +66,7 @@ const Products = () => {
                 })
         }
         Modal.confirm({
-            title: "Are you sure you want to delete this products?",
+            title: "Are you sure you want to delete this category?",
             okText: "Yes",
             okType: "danger",
             okButtonProps: {
@@ -75,7 +76,7 @@ const Products = () => {
                 type: "text",
             },
             onOk: () => {
-                deleteProduct();
+                deleteCategory();
             },
         });
     }
@@ -208,24 +209,20 @@ const Products = () => {
     });
 
     useEffect(() => {
-        if (products) {
+        if (categories) {
             const temp = [];
-            console.log(products);
-            products.forEach((product, index) => {
+            console.log(categories);
+            categories.forEach((category, index) => {
                 temp.push({
                     key: index,
                     index: index + 1,
-                    name: product.name,
-                    description: product.description,
-                    price: product.price,
-                    category: product.category.name,
-                    image: product.media[0].url,
-                    id: product._id,
+                    name: category.name,
+                    id: category._id,
                 });
             });
             setData(temp);
         }
-    }, [products])
+    }, [categories])
 
     useEffect(() => {
         console.log(data);
@@ -235,7 +232,7 @@ const Products = () => {
         setIsModalOpen(true);
     };
     const handleOk = () => {
-        fetchProducts();
+        fetchCategories();
         setIsModalOpen(false);
     };
     const handleCancel = () => {
@@ -246,7 +243,7 @@ const Products = () => {
         setIsUpdateModalOpen(true);
     }
     const handleUpdateOk = () => {
-        fetchProducts();
+        fetchCategories();
         setIsUpdateModalOpen(false);
     }
     const handleUpdateCancel = () => {
@@ -267,44 +264,6 @@ const Products = () => {
             key: "name",
             ...getColumnSearchProps("name"),
             width: "20%",
-        },
-        {
-            title: "Description",
-            dataIndex: "description",
-            key: "description",
-            ...getColumnSearchProps("description"),
-            width: "30%",
-        },
-        {
-            title: "Price",
-            dataIndex: "price",
-            key: "price",
-            ...getColumnSearchProps("price"),
-            render: (text) => {
-                return (
-                    `${text?.toLocaleString({ style: "currency", currency: "VND" })} VND`
-                )
-            },
-            width: "10%",
-        },
-        {
-            title: "Category",
-            dataIndex: "category",
-            key: "category",
-            ...getColumnSearchProps("category"),
-            width: "15%",
-        },
-        {
-            title: "Image",
-            dataIndex: "image",
-            key: "image",
-            ...getColumnSearchProps("image"),
-            render: (image) => {
-                return (
-                    <img src={image} alt="product_image" className="item-img" />
-                )
-            },
-            width: "10%",
         },
         {
             title: "Action",
@@ -337,12 +296,12 @@ const Products = () => {
         <div className="orders_table_container">
             <div className='flex justify-between py-4'>
                 <div className=''>
-                    <h4 className="orders_table_title">Products</h4>
+                    <h4 className="orders_table_title">Categories</h4>
                 </div>
                 <div className='flex py-1.5'>
                     <button className="add-btn py-0.5" onClick={showModal}>
                         <i className="fa-regular fa-plus mr-1"></i>
-                        Product
+                        Category
                     </button>
                 </div>
             </div>
@@ -353,41 +312,34 @@ const Products = () => {
                 columns={columns}
                 dataSource={data}
                 pagination={{ pageSize: 5, total: totalResults, onChange: (page) => { setCurrentPage(page) } }}
-                onRow={(record) => {
-                    return {
-                        onDoubleClick: () => {
-                            handleView(products[record.key]);
-                        }
-                    }
-                }}
             />
             <Modal
                 style={{
                     top: 60,
                 }}
-                title="Add Product"
+                title="Add Category"
                 open={isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}
                 footer={null}
                 destroyOnClose={true}
             >
-                <AddProduct handleOk={handleOk} />
+                <AddCategory handleOk={handleOk} />
             </Modal>
             <Modal
                 style={{
                     top: 60,
                 }}
-                title="Update Product"
+                title="Update Category"
                 open={isUpdateModalOpen}
                 onOk={handleUpdateOk}
                 onCancel={handleUpdateCancel}
                 footer={null}
                 destroyOnClose={true}
             >
-                <UpdateProduct handleOk={handleUpdateOk} productId={data[seletedRecord?.key]?.id} />
+                <UpdateCategory handleOk={handleUpdateOk} categoryId={data[seletedRecord?.key]?.id} />
             </Modal>
         </div>
     );
 };
-export default Products;
+export default Categories;
