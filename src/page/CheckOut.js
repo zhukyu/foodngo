@@ -180,7 +180,6 @@ function CheckOut() {
 		await axiosInstance.post('/user/order', order)
 			.then(res => {
 				if (res.status === 200) {
-					setLoading(false);
 					Swal.fire({
 						icon: 'success',
 						title: 'Order created successfully!',
@@ -194,7 +193,19 @@ function CheckOut() {
 			})
 			.catch(err => {
 				console.log(err);
+				if (err.response.status === 403) {
+					Swal.fire({
+						icon: 'error',
+						title: err.response.data.message,
+						confirmButtonColor: '#28A745',
+					}).then((result) => {
+						if (result.isConfirmed) {
+							navigate('/restaurants');
+						}
+					})
+				}
 			})
+		setLoading(false);
 	}
 
 	const antIcon = (

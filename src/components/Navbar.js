@@ -48,7 +48,8 @@ function Navbar() {
         }
         else {
             setAddress(address)
-            setMainAddress(address.structured_formatting.main_text)
+            console.log(address)
+            setMainAddress(address?.structured_formatting?.main_text)
             setAccessToken(localStorage.getItem('access_token'))
         }
     }, [])

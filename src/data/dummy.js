@@ -20,6 +20,7 @@ import product5 from './product5.jpg';
 import product6 from './product6.jpg';
 import product7 from './product7.jpg';
 import product8 from './product8.jpg';
+import { BsGrid } from 'react-icons/bs';
 
 export const gridOrderImage = (props) => (
   <div>
@@ -490,8 +491,8 @@ export const links = [
         icon: <FiBox />,
       },
       {
-        name: 'customers',
-        icon: <RiContactsLine />,
+        name: 'categories',
+        icon: <BsGrid />,
       },
     ],
   },

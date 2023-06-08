@@ -17,6 +17,7 @@ import { useStateContext } from "../contexts/ContextProvider";
 import axiosInstance from "../utility/AxiosInstance";
 import { useNavigate } from "react-router-dom";
 import Products from "./RestaurantDashboardPages/Products";
+import Categories from "./RestaurantDashboardPages/Categories";
 
 const RestaurantDashboard = () => {
     const {
@@ -67,8 +68,8 @@ const RestaurantDashboard = () => {
                 return <Products />;
             case "menu":
                 return <Menu />;
-            case "customers":
-                return <Customers />;
+            case "categories":
+                return <Categories />;
             case "profile":
                 return <Profile />;
             case "security":
@@ -95,11 +96,11 @@ const RestaurantDashboard = () => {
                 </div> */}
                 {activeMenu ? (
                     <div className="w-64 fixed sidebar dark:bg-secondary-dark-bg bg-white ">
-                        <Sidebar />
+                        <Sidebar links={links}/>
                     </div>
                 ) : (
                     <div className="w-0 dark:bg-secondary-dark-bg">
-                        <Sidebar />
+                        <Sidebar links={links}/>
                     </div>
                 )}
                 <div
