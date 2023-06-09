@@ -2,12 +2,12 @@ import React from 'react'
 import '../../../css/Category/Burgers.scss'
 import { Link } from 'react-router-dom'
 
-function Burgers() {
+function Burgers({ active })  {
     return (
-        <Link to='/restaurants?category=burgers' className='Burgers'>
+        <div className={active === true ? 'Burgers active' : 'Burgers'}>
             <div
-                className='Burgers'
-                style={{
+                
+                style={{ 
                     width: 60,
                     height: 60,
                     overflow: "hidden",
@@ -499,7 +499,7 @@ function Burgers() {
                 </svg>
             </div>
             <span className='title'>Burgers</span>
-        </Link>
+        </div>
     )
 }
 

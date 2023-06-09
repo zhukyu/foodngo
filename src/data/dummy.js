@@ -472,7 +472,7 @@ export const links = [
   {
     title: 'Dashboard',
     links: [
-      {
+      { key:1,
         name: 'dashboard',
         icon: <FiShoppingBag />,
       },
@@ -482,15 +482,15 @@ export const links = [
   {
     title: 'Management',
     links: [
-      {
+      { key:2,
         name: 'orders',
         icon: <AiOutlineShoppingCart />,
       },
-      {
+      { key:3,
         name: 'products',
         icon: <FiBox />,
       },
-      {
+      { key:4,
         name: 'categories',
         icon: <BsGrid />,
       },
@@ -499,11 +499,43 @@ export const links = [
   {
     title: 'Account',
     links: [
-      {
+      { key:5,
         name: 'profile',
         icon: <BsPersonCircle/>,
       },
-      {
+      { key:6,
+        name: 'security',
+        icon: <BsShieldLock />,
+      },
+    ],
+  },
+  
+];
+export const user_links = [
+
+  {
+    title: 'My Orders',
+    links: [
+
+      { key:1,
+        name: 'current order',
+        icon: <RiTruckFill/>,
+      },
+
+      { key:2,
+        name: 'order history',
+        icon: <AiOutlineFileDone />,
+      },
+    ],
+  },
+  {
+    title: 'Account',
+    links: [
+      { key:3,
+        name: 'profile',
+        icon: <BsPersonCircle/>,
+      },
+      { key:4,
         name: 'security',
         icon: <BsShieldLock />,
       },
@@ -515,7 +547,7 @@ export const delivery_links = [
   {
     title: 'Dashboard',
     links: [
-      {
+      { key:1,
         name: 'dashboard',
         icon: <BsFillBarChartFill />,
       },
@@ -525,17 +557,17 @@ export const delivery_links = [
   {
     title: 'Delivery',
     links: [
-      {
+      { key:2,
         name: 'orders',
         icon: <BsReceipt />,
       },
       
-      {
+      { key:3,
         name: 'current order',
         icon: <RiTruckFill/>,
       },
 
-      {
+      { key:4,
         name: 'delivered orders',
         icon: <AiOutlineFileDone />,
       },
@@ -544,11 +576,11 @@ export const delivery_links = [
   {
     title: 'Account',
     links: [
-      {
+      { key:5,
         name: 'profile',
         icon: <BsPersonCircle/>,
       },
-      {
+      { key:6,
         name: 'security',
         icon: <BsShieldLock />,
       },
@@ -560,7 +592,7 @@ export const admin_links = [
   {
     title: 'Dashboard',
     links: [
-      {
+      { key:1,
         name: 'dashboard',
         icon: <BsFillBarChartFill />,
       },
@@ -570,17 +602,17 @@ export const admin_links = [
   {
     title: 'Approve',
     links: [
-      {
+      { key:2,
         name: 'restaurants',
         icon: <RiRestaurantFill />,
       },
       
-      {
+      { key:3,
         name: 'delivery drivers',
         icon: <RiTruckFill/>,
       },
 
-      {
+      { key:4,
         name: 'users',
         icon: <BsPeopleFill />,
       },
@@ -589,11 +621,11 @@ export const admin_links = [
   {
     title: 'Account',
     links: [
-      {
+      { key:5,
         name: 'profile',
         icon: <BsPersonCircle/>,
       },
-      {
+      { key:6,
         name: 'security',
         icon: <BsShieldLock />,
       },

@@ -9,7 +9,6 @@ import NotFound404 from './page/NotFound404';
 import Login from './page/Login';
 import SignUp from './page/SignUp';
 import UserAccount from './page/UserAccount';
-import RestaurantAccount from './page/RestaurantAccount';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import RestaurantDashboard from './page/RestaurantDashboard';
 import store from './utility/store';
@@ -33,8 +32,7 @@ function App() {
             <Route path='/login' element={<Login />} />
             <Route path='/signup' element={<SignUp />} />
             <Route path='/account/user' element={<UserAccount />} />
-            <Route path='/account/restaurant' element={<RestaurantAccount />} />
-            <Route path='/restaurant/' element={<RestaurantDashboard />} />
+            <Route path='/restaurant' element={<RestaurantDashboard />} />
             <Route path='/restaurant/signup' element={<SignUpRestaurant />} />
             <Route path='/dashboard/deliverydriver' element={<DeliveryDriver />} />
             <Route path ='/dashboard/admin' element={<Admin />} />

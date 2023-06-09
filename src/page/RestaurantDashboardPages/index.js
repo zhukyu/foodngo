@@ -16,4 +16,5 @@ export { default as Pyramid } from './Charts/Pyramid';
 export { default as Stacked } from './Charts/Stacked';
 export { default as Profile } from './Profile';
 export { default as Security } from './Security';
+export { default as Products } from './Products';
 

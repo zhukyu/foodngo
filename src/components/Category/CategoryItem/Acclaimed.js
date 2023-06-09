@@ -2,9 +2,9 @@ import React from 'react'
 import '../../../css/Category/Acclaimed.scss'
 import { Link } from 'react-router-dom'
 
-function Acclaimed() {
+function Acclaimed({active}) {
     return (
-        <Link to='/restaurants?category=acclaimed' className='Acclaimed'>
+        <div className={active === true ? 'Acclaimed active' : 'Acclaimed'}>
             <div
                 style={{
                     width: 60,
@@ -239,7 +239,7 @@ function Acclaimed() {
                 </svg>
             </div>
             <span className='title'>Acclaimed</span>
-        </Link>
+        </div>
     )
 }
 

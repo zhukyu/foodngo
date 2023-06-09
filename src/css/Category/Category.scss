@@ -1,4 +1,5 @@
 .Category {
+    position: relative;
     display: flex;
     justify-content: space-between;
     padding: 0 5px;
@@ -6,5 +7,15 @@
     .title {
         font-size: 0.8rem;
         font-weight: 600;
+    }
+
+    .clear_button{
+        position: absolute;
+        width: 120px;
+        height: 38px;
+        top: 121%;
+        left:13%;
+        background-color:#1d1d1f ;
+        color: #f5f5f7;
     }
 }

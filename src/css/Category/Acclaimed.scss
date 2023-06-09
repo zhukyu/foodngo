@@ -35,3 +35,18 @@
         }
     }
 }
+
+.active{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 85px;
+    height: 85px;
+    color: #f5f5f7;
+    background-color: #C0EBF0;
+    border-radius: 50%;
+    .title{
+        margin-top: -10%;
+        
+    }
+}
