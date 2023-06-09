@@ -1,6 +1,5 @@
 import React from 'react'
 import '../../../css/Category/Chicken.scss'
-import { Link } from 'react-router-dom'
 
 function Chicken({active}) {
     return (
