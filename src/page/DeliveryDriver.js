@@ -38,17 +38,17 @@ const DeliveryDriver = () => {
 
   const getActiveItem = (index) => {
     switch (index) {
-      case "ecommerce":
+      case 1:
         return <DeliveryDashboard />;
-      case "orders":
+      case 2:
         return <Orders />;
-      case "current order":
+      case 3:
         return <CurrentOrder />;
-      case "delivered orders":
+      case 4:
         return <DeliveredOrders />;
-      case "profile":
+      case 5:
         return <Profile />;
-      case "security":
+      case 6:
         return <Security />;
       default:
         return <DeliveryDashboard />;

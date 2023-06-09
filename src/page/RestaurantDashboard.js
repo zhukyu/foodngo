@@ -6,7 +6,6 @@ import { links } from '../data/dummy';
 import {
     Ecommerce,
     Orders,
-    Menu,
     Customers,
     Profile,
     Security
@@ -60,19 +59,19 @@ const RestaurantDashboard = () => {
 
     const getActiveItem = (index) => {
         switch (index) {
-            case "ecommerce":
+            case 1:
                 return <Ecommerce />;
-            case "orders":
+            case 2:
                 return <Orders />;
-            case "products":
+            case 3:
                 return <Products />;
-            case "menu":
-                return <Menu />;
-            case "categories":
+            case 4:
                 return <Categories />;
-            case "profile":
+            case 5:
+                return <Customers />;
+            case 6:
                 return <Profile />;
-            case "security":
+            case 7:
                 return <Security />;
             default:
                 return <Ecommerce />;

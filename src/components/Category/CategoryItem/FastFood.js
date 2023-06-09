@@ -2,9 +2,9 @@ import React from 'react'
 import '../../../css/Category/FastFood.scss'
 import { Link } from 'react-router-dom'
 
-function FastFood() {
+function FastFood({active}) {
     return (
-        <Link to='/restaurants?category=fastfood' className='FastFood' >
+        <div className={active === true ? 'FastFood active' : 'FastFood'} >
             <div
                 style={{
                     width: 60,
@@ -733,7 +733,7 @@ function FastFood() {
                 </svg>
             </div>
             <span className='title'>Fast Food</span>
-        </Link>
+        </div>
     )
 }
 

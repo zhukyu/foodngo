@@ -2,9 +2,9 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import '../../../css/Category/Vegan.scss'
 
-function Vegan() {
+function Vegan({active}) {
     return (
-        <Link to='?category=vegan' className='Vegan'>
+        <div className={active === true ? 'Vegan active' : 'Vegan'}>
             <div
                 style={{
                     width: 60,
@@ -157,7 +157,7 @@ function Vegan() {
                 </svg>
             </div>
             <span className='title'>Vegan</span>            
-        </Link> 
+        </div> 
     )
 }
 

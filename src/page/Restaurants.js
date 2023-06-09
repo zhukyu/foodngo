@@ -4,10 +4,10 @@ import '../css/Restaurants.scss'
 import RestaurantItem from '../components/RestaurantItem';
 import Navbar from '../components/Navbar';
 import axiosInstance from '../utility/AxiosInstance';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import Footer from '../components/Footer';
 import { LoadingOutlined } from '@ant-design/icons';
-import { Spin } from 'antd';
+import { Spin,Pagination, Skeleton, Space } from 'antd';
 
 
 function Restaurants() {
@@ -16,6 +16,13 @@ function Restaurants() {
     const [restaurants, setRestaurants] = useState([]);
     const [pagination, setPagination] = useState({})
     const [loading, setLoading] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const skeleton =[1,2,3,4 ,5,6,7,8,9]
+   
+ 
+
+   
 
     const navigate = useNavigate()
 
@@ -31,20 +38,24 @@ function Restaurants() {
     useEffect(() => {
         const coordinateStr = localStorage.getItem('coordinate');
         const coordinate = JSON.parse(coordinateStr);
+        console.log(searchParams.get("category"));
         const fetchData = async () => {
+            const tmp = searchParams.get("category");
             setLoading(true);
-            await axiosInstance.get(`/restaurant?longitude=${coordinate[0]}&latitude=${coordinate[1]}`)
+            await axiosInstance.get(`/restaurant?longitude=${coordinate[0]}&latitude=${coordinate[1]}&page=${currentPage}&category=${tmp ? tmp : ''}`)
                 .then((res) => {
                     if (res.status === 200) {
                         setRestaurants(res.data.restaurants);
                         setPagination(res.data.pagination);
+                        console.log(res.data.restaurants);
                     }
                 })
             setLoading(false);
+            
         }
 
         fetchData();
-    }, [])
+    }, [currentPage, searchParams])
 
     function handleClick(index) {
         if (index === activeButtonIndex) {
@@ -60,8 +71,9 @@ function Restaurants() {
             style={{
                 fontSize: 40,
                 color: "#FF003D",
-                position: 'fixed',
-                top: '50%',
+                position: 'relative',
+                marginTop: '40%',
+                marginLeft: '60%'
             }}
             spin
         />
@@ -69,51 +81,20 @@ function Restaurants() {
 
     return (
         <div>
-            <Spin spinning={loading} indicator={antIcon} >
+            
                 <Navbar />
                 <div className='Restaurants'>
                     <Category />
-                    <div className='filter'>
-                        <div className='filter-item'>
-                            <button
-                                className='filter-btn'
-                                aria-pressed={activeButtonIndex === 0}
-                                onClick={() => handleClick(0)} >Offers</button>
-                        </div>
-                        <div className='filter-item'>
-                            <button
-                                className='filter-btn'
-                                aria-pressed={activeButtonIndex === 1}
-                                onClick={() => handleClick(1)} >
-                                <span className='filter-btn-text'>Over 4.5</span>
-                                <i className="fa-solid fa-star"></i>
-                                <div className='filter-btn-dropdown'>
-                                    <i className="fa-solid fa-chevron-down"></i>
-                                </div>
-                            </button>
-                        </div>
-                        <div className='filter-item'>
-                            <button
-                                className='filter-btn'
-                                aria-pressed={activeButtonIndex === 2}
-                                onClick={() => handleClick(2)} >Under 30 min</button>
-                        </div>
-                        <div className='filter-item'>
-                            <button
-                                className='filter-btn'
-                                aria-pressed={activeButtonIndex === 3}
-                                onClick={() => handleClick(3)} >
-                                <span className='filter-btn-text'>Price</span>
-                                <div className='filter-btn-dropdown'>
-                                    <i className="fa-solid fa-chevron-down"></i>
-                                </div>
-                            </button>
-                        </div>
-                    </div>
                     <div className='restaurants-section'>
-                        <h5>{pagination ? pagination.totalResult : 0} Results</h5>
+                        {loading === false ? <h5>{pagination ? pagination.totalResult : 0} Results</h5> :<div className='skeleton_result'><Skeleton key={69} active loading={loading} title={false} paragraph={{
+                                rows: 1,
+                                width: 250,
+                                
+                            }}/></div>}
                         <div className='restaurants-list'>
-                            {restaurants ? restaurants.map((restaurant, id) => (
+                            
+                            {loading === false ? restaurants.map((restaurant, id) => (
+                                
                                 <RestaurantItem
                                     key={id}
                                     img={restaurant.media[0].url}
@@ -126,10 +107,23 @@ function Restaurants() {
                                 />
                             )) : null}
                         </div>
+                        <div className='skeleton_list'>
+                            { loading ===true ? skeleton.map((item, index) => (<div className='skeleton_item'>
+                            <Space size={12} direction='vertical'>
+                            <Skeleton.Avatar active size={200} shape="square" loading={loading} />
+                            <Skeleton key={index} active loading={loading} title={false} paragraph={{
+                                rows: 3,
+                                width: [250, 300, 150],
+                                
+                            }}/>
+                            </Space>
+                            </div>)): ""}
+                        </div>
+                        <Pagination current={currentPage} onChange={(e)=> {setCurrentPage(e)}} total={pagination.totalResult} style={{position:"relative", right:"-90%", marginTop:"6%"}}/>
                     </div>
                 </div>
                 <Footer />
-            </Spin>
+            
         </div>
     )
 }

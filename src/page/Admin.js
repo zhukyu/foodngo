@@ -38,17 +38,17 @@ const Admin = () => {
 
   const getActiveItem = (index) => {
     switch (index) {
-      case "dashboard":
+      case 1:
         return <AdminDashboard />;
-      case "restaurants":
+      case 2:
         return <RestaurantApproveList />;
-      case "delivery drivers":
+      case 3:
         return <DeliveryDriverApproveList />;
-      case "users":
+      case 4:
         return <UserList />;
-      case "profile":
+      case 5:
         return <AdminProfile />;
-      case "security":
+      case 6:
         return <Security />;
       default:
         return <AdminDashboard />;

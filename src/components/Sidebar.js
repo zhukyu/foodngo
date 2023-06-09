@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { SiShopware } from 'react-icons/si';
 import { MdOutlineCancel } from 'react-icons/md';
@@ -8,7 +8,7 @@ import logo from '../image/FoodnGo_logo.png';
 
 const Sidebar = (props) => {
   const { currentColor, activeMenu, setActiveMenu, screenSize, setActiveItem, activeItem } = useStateContext();
-
+  
   const handleCloseSideBar = () => {
     if (activeMenu !== undefined && screenSize <= 900) {
       setActiveMenu(false);
@@ -29,7 +29,7 @@ const Sidebar = (props) => {
       {activeMenu && (
         <>
           <div className="flex justify-between items-center">
-            <Link to="/restaurant" onClick={handleCloseSideBar} className="items-center gap-3 ml-3 mt-4 flex text-xl font-extrabold tracking-tight dark:text-white text-slate-900">
+            <Link to="/" onClick={handleCloseSideBar} className="items-center gap-3 ml-3 mt-4 flex text-xl font-extrabold tracking-tight dark:text-white text-slate-900">
               <img src={logo} alt="logo" style={{width:"210px", objectFit:"contain" }} />
             </Link>
             <TooltipComponent content="Menu" position="BottomCenter">
@@ -52,14 +52,14 @@ const Sidebar = (props) => {
                 {item.links.map((link) => (
                   <NavLink
                     key={link.name}
-                    onClick={() => handleClick(link.name)}
+                    onClick={() => handleClick(link.key)}
                     style={() => ({
-                      backgroundColor: activeItem === link.name ? currentColor : '',
+                      backgroundColor: activeItem === link.key ? currentColor : '',
                     })}
-                    className={() => (activeItem === link.name ? activeLink : normalLink)}
+                    className={() => (activeItem === link.key ? activeLink : normalLink)}
                   >
                     {link.icon}
-                    <span className={activeItem === link.name ? "capitalize text-white" : "capitalize text-gray-700"}>{link.name}</span>
+                    <span className={activeItem === link.key ? "capitalize text-white" : "capitalize text-gray-700"}>{link.name}</span>
                   </NavLink>
                 ))}
               </div>

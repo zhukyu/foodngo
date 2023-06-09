@@ -1,9 +1,9 @@
 import React,{useState} from 'react'
 import { TextField } from "@mui/material";
-import axiosInstance from '../../utility/AxiosInstance';
-import "../../css/RestaurantProfile.scss"
+import "../../css/UserSecurity.scss"
 
-const Profile = () => {
+const Security = () => {
+  
     const [editable, setEditable] = useState(true);
     const [saveButton, setSaveButton] = useState(true);
     const [editButton, setEditButton] = useState(false);
@@ -24,18 +24,22 @@ const Profile = () => {
       setSaveButton(true);
       setEditButton(false);
     };
-  
     return (
-      <div className='profile_container'>
+      <div className='security_profile_container'>
         <button
-          className={editButton ? "edit_button disabled" : "edit_button"}
+          className={
+            editButton
+              ? "change_password_button disabled"
+              : "change_password_button"
+          }
           disabled={editButton}
           onClick={handleEdit}
         >
-          Edit&ensp;<i className="fa-solid fa-pen-to-square"></i>
+          Change Password&ensp;<i class="fa-solid fa-pen-to-square"></i>
         </button>
         <div className="field one">
-          <h4>Name</h4>
+        {editable ? (
+          <h4 style={{marginLeft:"22%"}}>Password</h4>):(<h4 style={{marginLeft:"20%"}}>Old Password</h4>)}
           {editable ? (
             <p>Name</p>
           ) : (
@@ -58,10 +62,11 @@ const Profile = () => {
             />
           )}
         </div>
-        <div className="field two">
-          <h4>Name</h4>
+        <div className="field two" style={{marginLeft:"-11%"}}>
+          {editable ? "": (
+          <h4 >New Password</h4>)}
           {editable ? (
-            <p>Name</p>
+            ""
           ) : (
             <TextField
               id="phone-number"
@@ -82,74 +87,24 @@ const Profile = () => {
             />
           )}
         </div>
-        <div className="field three">
-          <h4>Name</h4>
-          {editable ? (
-            <p>Name</p>
-          ) : (
-            <TextField
-              id="phone-number"
-              className="phone_number"
-              label="Phone Number"
-              variant="outlined"
-              placeholder="Enter Your Phone Number"
-              fullWidth
-              margin="normal"
-              color="error"
-              style={{ width: "40%" }}
-              inputProps={{
-                style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
-              }}
-              InputLabelProps={{
-                style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
-              }}
-            />
-          )}
-        </div>
-        <div className="field four">
-          <h4>Name</h4>
-          {editable ? (
-            <p>Name</p>
-          ) : (
-            <TextField
-              id="phone-number"
-              className="phone_number"
-              label="Phone Number"
-              variant="outlined"
-              placeholder="Enter Your Phone Number"
-              fullWidth
-              margin="normal"
-              color="error"
-              style={{ width: "40%" }}
-              inputProps={{
-                style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
-              }}
-              InputLabelProps={{
-                style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
-              }}
-            />
-          )}
-        </div>
-  
         <div className="field five">
           <button
             className={saveButton ? "save_button disabled" : "save_button"}
             disabled={saveButton}
             onClick={handleSave}
           >
-            Save&ensp;<i className="fa-solid fa-floppy-disk"></i>
+            Save&ensp;<i class="fa-solid fa-floppy-disk"></i>
           </button>
           <button
             className={saveButton ? "cancel_button disabled" : "cancel_button"}
             disabled={saveButton}
             onClick={handleCancel}
           >
-            Cancel&ensp;<i className="fa-solid fa-ban"></i>
+            Cancel&ensp;<i class="fa-solid fa-ban"></i>
           </button>
         </div>
       </div>
     );
-  }
+}
 
-
-export default Profile;
+export default Security
