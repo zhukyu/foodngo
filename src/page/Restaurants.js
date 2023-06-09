@@ -125,7 +125,6 @@ function Restaurants() {
                                     deliveryTime={restaurant.deliveryTime}
                                 />
                             )) : null}
-                            {restaurants ? (restaurants.length === 2 ? <div style={{ width: "calc(100% / 3 - 20px)" }}></div> : null) : null}
                         </div>
                     </div>
                 </div>

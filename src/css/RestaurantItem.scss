@@ -1,8 +1,22 @@
 .restaurant-item {
     display: flex;
     flex-direction: column;
-    width: calc(100% / 3 - 20px);
-    margin: 15px 0;
+    width: calc(100% / 3);
+    margin: 20px 0;
+
+    &:nth-child(3n-2) {
+        padding-right: 14px;
+    }
+
+    &:nth-child(3n-1) {
+        padding: 0 7px;
+    }
+
+    &:nth-child(3n) {
+        padding-left: 14px;
+    }
+
+
 
     .restaurant-item-img {
         width: 100%;
