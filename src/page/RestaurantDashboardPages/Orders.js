@@ -3,7 +3,7 @@ import { GridComponent, ColumnsDirective, ColumnDirective, Resize, Sort, Context
 
 import { ordersData, contextMenuItems, ordersGrid } from '../../data/dummy';
 import { Header } from '../../components';
-import { Button, Input, Space, Table, Tag, Modal, Pagination } from "antd";
+import { Button, Input, Space, Table, Tag, Modal, Pagination, Segmented, Tooltip, notification } from "antd";
 import Highlighter from "react-highlight-words";
 import { ResponsiveLine } from "@nivo/line";
 import { ResponsivePie } from "@nivo/pie";
@@ -12,6 +12,7 @@ import { TextField } from "@mui/material";
 import "../../css/Orders.scss";
 import axiosInstance from '../../utility/AxiosInstance';
 import OrderDetail from '../../components/OrderDetail';
+import RejectOrder from '../../components/RejectOrder';
 
 const Orders = () => {
 
@@ -23,55 +24,111 @@ const Orders = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [totalOrders, setTotalOrders] = useState(0);
     const [loading, setLoading] = useState(false);
+    const [status, setStatus] = useState('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [seletedRecord, setSelectedRecord] = useState(null);
+
+    const fetchOrders = async () => {
+        setLoading(true)
+        await axiosInstance.get(`/orders/restaurants?page=${currentPage}&status=${status}`)
+            .then(res => {
+                console.log(res.data);
+                setTotalPages(res.data.pagination.totalPage)
+                setOrders(res.data.orders)
+                setTotalOrders(res.data.pagination.totalResult)
+            })
+            .catch(err => {
+                console.log(err);
+                setOrders(null)
+            })
+        setLoading(false)
+    }
 
     useEffect(() => {
-        const fetchOrders = async () => {
-            setLoading(true)
-            await axiosInstance.get(`/orders/restaurants?page=${currentPage}`)
-                .then(res => {
-                    console.log(res.data);
-                    setTotalPages(res.data.pagination.totalPage)
-                    setOrders(res.data.orders)
-                    setTotalOrders(res.data.pagination.totalResult)
-                })
-                .catch(err => { 
-                    console.log(err);
-                    setOrders(null)
-                })
-            setLoading(false)
-        }
+        
         fetchOrders();
-    }, [currentPage])
+    }, [currentPage, status])
 
     const handleReject = (record) => {
+        setSelectedRecord(record);
+        setIsModalOpen(true);
+    };
+    const handleOk = () => {
+        fetchOrders();
+        setIsModalOpen(false);
+    };
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleComplete = (record) => {
+        const completeOrder = async () => {
+            await axiosInstance.patch(`/orders/${data[record?.key]?.id}?status=ready`)
+                .then(res => {
+                    console.log(res);
+                    fetchOrders();
+                    notification.open({
+                        icon: <i className="fa-solid fa-check" style={{ color: 'green' }}></i>,
+                        message: 'Success!',
+                        description: 'Order completed successfully!',
+                        onClick: () => {
+                            console.log('Notification Clicked!');
+                        },
+                    });
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
         Modal.confirm({
-            title: "Are you sure you want to reject this order?",
+            title: "Are you sure you want to complete this order?",
             okText: "Yes",
             okType: "danger",
+            okButtonProps: {
+                type: "primary",
+            },
+            cancelButtonProps: {
+                type: "text",
+            },
             onOk: () => {
-                // setData((prev) => {
-                //     return prev.map((item) => {
-                //         if (item.key === record.key) {
-                //             return { ...item, status: ["rejected"] };
-                //         } else {
-                //             return item;
-                //         }
-                //     });
-                // });
+                completeOrder();
             },
         });
     };
 
     const handleAccept = (record) => {
-        // setData((prev) => {
-        //     return prev.map((item) => {
-        //         if (item.key === record.key) {
-        //             return { ...item, status: ["ready"] };
-        //         } else {
-        //             return item;
-        //         }
-        //     });
-        // });
+        const acceptOrder = async () => {
+            await axiosInstance.patch(`/orders/${data[record?.key]?.id}?status=preparing`)
+                .then(res => {
+                    console.log(res);
+                    fetchOrders();
+                    notification.open({
+                        icon: <i className="fa-solid fa-check" style={{ color: 'green' }}></i>,
+                        message: 'Success!',
+                        description: 'Order accepted successfully!',
+                        onClick: () => {
+                            console.log('Notification Clicked!');
+                        },
+                    });
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+        Modal.confirm({
+            title: "Are you sure you want to accept this order?",
+            okText: "Yes",
+            okType: "danger",
+            okButtonProps: {
+                type: "primary",
+            },
+            cancelButtonProps: {
+                type: "text",
+            },
+            onOk: () => {
+                acceptOrder();
+            },
+        });
     };
 
     const handleView = (record) => {
@@ -218,6 +275,7 @@ const Orders = () => {
                     total: order.order.total,
                     status: order.order.status,
                     address: order.order.address,
+                    id: order.order._id,
                 });
             });
             setData(temp);
@@ -273,12 +331,15 @@ const Orders = () => {
             // sorter: (a, b) => a.address.length - b.address.length,
             ...getColumnSearchProps("status"),
             render: (_, { status }) => {
-                let color = "#F54E4E";
-                if (status === "canceled" || status === "rejected") {
-                    color = "#F54E4E";
+                let color = "#A4ABB6";
+                if (status === "canceled" || status === "refused") {
+                    color = "#A4ABB6";
                 }
                 if (status === "ready") {
                     color = "#D95FDB";
+                }
+                if (status === "preparing") {
+                    color = "#F54E4E";
                 }
                 if (status === "pending") {
                     color = "#3B7CDB";
@@ -299,37 +360,88 @@ const Orders = () => {
         {
             title: "Action",
             key: "action",
-            // render: (_, record) => (
-            //     <Space size="middle">
-            //         {record?.status[0] !== "pending" ? "" :
-            //             <button
-            //                 className="edit_button_form"
-            //                 onClick={() => {
-            //                     handleAccept(record);
-            //                 }}
-            //             >
-            //                 <i className="fa-solid fa-check"></i>
-            //             </button>}
-            //         {record?.status[0] !== "pending" ? "" :
-            //             <button
-            //                 className="delete_button_form"
-            //                 onClick={() => {
-            //                     handleReject(record);
-            //                 }}
-            //             >
-            //                 <i className="fa-solid fa-ban"></i>
-            //             </button>}
-            //     </Space>
-            // ),
+            render: (_, record) => (
+                <Space size="middle">
+                    {record.status === 'pending' ?
+                        <Space size="middle">
+                            <Tooltip title="Accept">
+                                <button
+                                    className="edit_button_form"
+                                    onClick={() => {
+                                        handleAccept(record);
+                                    }}
+                                >
+                                    <i className="fa-solid fa-check"></i>
+                                </button>
+                            </Tooltip>
+                            <Tooltip title="Refuse">
+                                <button
+                                    className="delete_button_form"
+                                    onClick={() => {
+                                        handleReject(record);
+                                    }}
+                                >
+                                    <i className="fa-solid fa-ban"></i>
+                                </button>
+                            </Tooltip>
+                        </Space>
+                    : 
+                    record.status === 'preparing' ?
+                    <Space size="middle">
+                            <Tooltip title="Complete">
+                                <button
+                                    className="edit_button_form"
+                                    onClick={() => {
+                                        handleComplete(record);
+                                    }}
+                                >
+                                    <i className="fa-solid fa-check"></i>
+                                </button>
+                            </Tooltip>
+                            <Tooltip title="Refuse">
+                                <button
+                                    className="delete_button_form"
+                                    onClick={() => {
+                                        handleReject(record);
+                                    }}
+                                >
+                                    <i className="fa-solid fa-ban"></i>
+                                </button>
+                            </Tooltip>
+                        </Space>
+                    : <></>}
+                </Space >
+            )
         },
     ];
 
+    const handleChangeStatus = (value) => {
+        switch (value) {
+            case 'Pending':
+                setStatus('pending');
+                break;
+            case 'Doing':
+                setStatus('preparing')
+                break;
+            case 'All':
+                setStatus('')
+                break;
+            default:
+                setStatus('')
+                break;
+        }
+    }
+
     return (
         <div className="orders_table_container">
-            <div>
-                <h4 className="orders_table_title">Orders</h4>
+            <div className='flex justify-between py-4'>
+                <div className=''>
+                    <h4 className="orders_table_title">Orders</h4>
+                </div>
+                <div className='flex py-2.5'>
+                    <Segmented options={['Pending', 'Doing', 'All']} onChange={handleChangeStatus} />
+                </div>
             </div>
-
             <Table
                 className="orders_table"
                 loading={loading}
@@ -358,6 +470,19 @@ const Orders = () => {
                 width={'50%'}
             >
                 <OrderDetail order={viewingData} />
+            </Modal>
+            <Modal
+                style={{
+                    top: 60,
+                }}
+                title="Refuse Order"
+                open={isModalOpen}
+                onOk={handleOk}
+                onCancel={handleCancel}
+                footer={null}
+                destroyOnClose={true}
+            >
+                <RejectOrder handleOk={handleOk} orderId={data[seletedRecord?.key]?.id} />
             </Modal>
         </div>
     );

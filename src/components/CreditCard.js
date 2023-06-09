@@ -127,7 +127,7 @@ const CreditCard = ({ setIsValidCard, handleSuccessCard }) => {
                         {validationErrors.cvc && <p className="error">{validationErrors.cvc}</p>}
                     </div>
                 </div>
-                <button type="submit">Validate</button>
+                <button className='submit-btn' type="submit">Validate</button>
             </form>
         </div>
     );

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Header } from '../../components';
-import { Button, Input, Space, Table, Tag, Modal, notification } from "antd";
+import { Button, Input, Space, Table, Tag, Modal, notification, Tooltip } from "antd";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 import "../../css/Products.scss";
@@ -65,7 +65,7 @@ const Products = () => {
                 })
         }
         Modal.confirm({
-            title: "Are you sure you want to delete this products?",
+            title: "Are you sure you want to delete this product?",
             okText: "Yes",
             okType: "danger",
             okButtonProps: {
@@ -311,22 +311,26 @@ const Products = () => {
             key: "action",
             render: (_, record) => (
                 <Space size="middle">
-                    <button
-                        className="edit_button_form"
-                        onClick={() => {
-                            handleEdit(record);
-                        }}
-                    >
-                        <i className="fa-solid fa-pen-to-square"></i>
-                    </button>
-                    <button
-                        className="delete_button_form"
-                        onClick={() => {
-                            handleDelete(record);
-                        }}
-                    >
-                        <i className="fa-regular fa-trash-can"></i>
-                    </button>
+                    <Tooltip title="Edit">
+                        <button
+                            className="edit_button_form"
+                            onClick={() => {
+                                handleEdit(record);
+                            }}
+                        >
+                            <i className="fa-solid fa-pen-to-square"></i>
+                        </button>
+                    </Tooltip>
+                    <Tooltip title="Delete">
+                        <button
+                            className="delete_button_form"
+                            onClick={() => {
+                                handleDelete(record);
+                            }}
+                        >
+                            <i className="fa-regular fa-trash-can"></i>
+                        </button>
+                    </Tooltip>
                 </Space>
             ),
             width: "10%",
