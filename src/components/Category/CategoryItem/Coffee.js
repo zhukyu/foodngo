@@ -1,6 +1,5 @@
 import React from 'react'
 import '../../../css/Category/Coffee.scss'
-import { Link } from 'react-router-dom'
 
 function Coffee({active}) {
     return (

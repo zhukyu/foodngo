@@ -1,6 +1,5 @@
 import React from 'react'
 import '../../../css/Category/Acclaimed.scss'
-import { Link } from 'react-router-dom'
 
 function Acclaimed({active}) {
     return (

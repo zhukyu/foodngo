@@ -1,6 +1,5 @@
 import React from 'react'
 import '../../../css/Category/FastFood.scss'
-import { Link } from 'react-router-dom'
 
 function FastFood({active}) {
     return (

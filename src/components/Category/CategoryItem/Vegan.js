@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import '../../../css/Category/Vegan.scss'
 
 function Vegan({active}) {

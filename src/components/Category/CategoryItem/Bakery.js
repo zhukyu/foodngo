@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import '../../../css/Category/Bakery.scss'
 
 function Bakery({active}) {

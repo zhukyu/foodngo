@@ -1,6 +1,5 @@
 import React from 'react'
 import '../../../css/Category/Desserts.scss'
-import { Link } from 'react-router-dom'
 
 function Desserts({active}) {
     return (

@@ -67,11 +67,11 @@ const RestaurantDashboard = () => {
                 return <Products />;
             case 4:
                 return <Categories />;
+            // case 5:
+            //     return <Customers />;
             case 5:
-                return <Customers />;
-            case 6:
                 return <Profile />;
-            case 7:
+            case 6:
                 return <Security />;
             default:
                 return <Ecommerce />;
