@@ -6,8 +6,12 @@
         transition: all 0.2s ease;
     }
 
-    &:hover {
+    &:hover, &.active {
         cursor: pointer;
+
+        span {
+            color: var(--main-color);
+        }
 
         .g-1 {
             transform: matrix(0.9999980926513672,0,0,0.9999980926513672,262.000244140625,327);

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import "../css/OrderDetail.scss";
-import { Table } from 'antd';
+import { Table, Tag } from 'antd';
 
 function OrderDetail({ order }) {
     console.log(order);
@@ -71,6 +71,33 @@ function OrderDetail({ order }) {
         },
     ]
 
+    const renderStatus = (status) => {
+        let color = "#A4ABB6";
+        if (status === "canceled" || status === "refused") {
+            color = "#A4ABB6";
+        }
+        if (status === "ready") {
+            color = "#D95FDB";
+        }
+        if (status === "preparing") {
+            color = "#F54E4E";
+        }
+        if (status === "pending") {
+            color = "#3B7CDB";
+        }
+        if (status === "delivering") {
+            color = "#867CFF";
+        }
+        if (status === "delivered") {
+            color = "#3BDB9E";
+        }
+        return (
+            <Tag color={color} key={status}>
+                {status?.toUpperCase()}
+            </Tag>
+        );
+    }
+
     return (
         <div className='OrderDetail'>
             <div className="order-info">
@@ -103,7 +130,7 @@ function OrderDetail({ order }) {
                         <h6>Status</h6>
                     </div>
                     <div className='order-info-content'>
-                        <p>{order?.order?.status}</p>
+                        {renderStatus(order?.order?.status)}
                     </div>
                 </div>
                 <div className="order-info-row">

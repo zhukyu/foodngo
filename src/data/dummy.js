@@ -3,7 +3,7 @@ import { AiOutlineShoppingCart, AiOutlineFileDone} from 'react-icons/ai';
 import { FiShoppingBag, FiBarChart, FiCreditCard, FiStar, FiShoppingCart, FiBox  } from 'react-icons/fi';
 import { BsBoxSeam, BsCurrencyDollar, BsShield, BsChatLeft,BsShieldLock, BsPersonCircle, BsFillBarChartFill, BsReceipt, BsPeopleFill } from 'react-icons/bs';
 import { IoMdContacts } from 'react-icons/io';
-import { RiContactsLine, RiTruckFill, RiRestaurantFill} from 'react-icons/ri';
+import { RiContactsLine, RiTruckFill, RiRestaurantFill, RiEBike2Fill} from 'react-icons/ri';
 import { MdOutlineSupervisorAccount } from 'react-icons/md';
 import { HiOutlineRefresh } from 'react-icons/hi';
 import { TiTick } from 'react-icons/ti';
@@ -558,12 +558,12 @@ export const delivery_links = [
     title: 'Delivery',
     links: [
       { key:2,
-        name: 'orders',
+        name: 'nearby orders',
         icon: <BsReceipt />,
       },
       
       { key:3,
-        name: 'current order',
+        name: 'current orders',
         icon: <RiTruckFill/>,
       },
 
@@ -600,7 +600,7 @@ export const admin_links = [
   },
 
   {
-    title: 'Approve',
+    title: 'Management',
     links: [
       { key:2,
         name: 'restaurants',
@@ -609,7 +609,7 @@ export const admin_links = [
       
       { key:3,
         name: 'delivery drivers',
-        icon: <RiTruckFill/>,
+        icon: <RiEBike2Fill/>,
       },
 
       { key:4,

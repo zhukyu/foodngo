@@ -37,11 +37,13 @@ function Login() {
 					localStorage.setItem('refresh_token', res.data.refreshToken);
 					localStorage.setItem('username', JSON.stringify(res.data.user.name));
 					localStorage.setItem('email', JSON.stringify(res.data.email));
-					if (!localStorage.getItem('address')) {
-						localStorage.setItem('address', JSON.stringify(res.data.user.address));
-					}
-					if (!localStorage.getItem('coordinate')) {
-						localStorage.setItem('coordinate', JSON.stringify(res.data.user.location.coordinates));
+					if (res.data.role === 'user') {
+						if (!localStorage.getItem('address')) {
+							localStorage.setItem('address', JSON.stringify(res.data.user.address));
+						}
+						if (!localStorage.getItem('coordinate')) {
+							localStorage.setItem('coordinate', JSON.stringify(res.data.user.location.coordinates));
+						}
 					}
 					axiosInstance.defaults.headers['Authorization'] = `Bearer ${res.data.accessToken}`;
 					handleNavigate(res.data.role)

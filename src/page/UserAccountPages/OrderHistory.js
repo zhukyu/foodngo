@@ -323,7 +323,7 @@ const OrderHistory = () => {
         <h4 className="menu_table_title">Order History</h4>
       </div>
       <button className="delete_button" onClick={handleMultDelete}>
-        Delete&ensp;<i class="fa-solid fa-trash-can"></i>
+        Delete&ensp;<i className="fa-solid fa-trash-can"></i>
       </button>
       <Table
         className="menu_table"

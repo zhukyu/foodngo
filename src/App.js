@@ -17,6 +17,7 @@ import SignUpRestaurant from './page/SignUpRestaurant';
 import DeliveryDriver from './page/DeliveryDriver';
 import Admin from './page/Admin';
 import "react-datepicker/dist/react-datepicker.css";
+import SignUpShipper from './page/SignUpShipper';
 
 
 function App() {
@@ -35,8 +36,9 @@ function App() {
             <Route path='/account/user' element={<UserAccount />} />
             <Route path='/restaurant' element={<RestaurantDashboard />} />
             <Route path='/restaurant/signup' element={<SignUpRestaurant />} />
-            <Route path='/dashboard/deliverydriver' element={<DeliveryDriver />} />
-            <Route path ='/dashboard/admin' element={<Admin />} />
+            <Route path='/shipper' element={<DeliveryDriver />} />
+            <Route path ='/admin' element={<Admin />} />
+            <Route path='/shipper/signup' element={<SignUpShipper />} />
           </Routes>
         </BrowserRouter>
       </Provider>

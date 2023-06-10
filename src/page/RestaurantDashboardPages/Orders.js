@@ -24,7 +24,7 @@ const Orders = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [totalOrders, setTotalOrders] = useState(0);
     const [loading, setLoading] = useState(false);
-    const [status, setStatus] = useState('');
+    const [status, setStatus] = useState('pending');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [seletedRecord, setSelectedRecord] = useState(null);
 
@@ -63,7 +63,7 @@ const Orders = () => {
 
     const handleComplete = (record) => {
         const completeOrder = async () => {
-            await axiosInstance.patch(`/orders/${data[record?.key]?.id}?status=ready`)
+            await axiosInstance.patch(`/orders/${data[record?.key]?.id}/restaurant?status=ready`)
                 .then(res => {
                     console.log(res);
                     fetchOrders();
@@ -98,7 +98,7 @@ const Orders = () => {
 
     const handleAccept = (record) => {
         const acceptOrder = async () => {
-            await axiosInstance.patch(`/orders/${data[record?.key]?.id}?status=preparing`)
+            await axiosInstance.patch(`/orders/${data[record?.key]?.id}/restaurant?status=preparing`)
                 .then(res => {
                     console.log(res);
                     fetchOrders();

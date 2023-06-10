@@ -153,7 +153,7 @@ const AccountForm = (props) => {
             />
             {props.isValidPasswordState === false ? (
               <FormHelperText error id="accountId-error">
-                Password must be at least 8 characters long
+                Password must be at least 6 characters long
               </FormHelperText>
             ) : (
               ""
@@ -549,7 +549,7 @@ const LinaerStepper = () => {
   }
 
   function validatePassword(password) {
-    if (password.length === 6) {
+    if (password.length >= 6) {
       return true; // Password is valid
     } else {
       return false; // Password is not valid
