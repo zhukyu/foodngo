@@ -16,6 +16,7 @@ import { Provider } from 'react-redux';
 import SignUpRestaurant from './page/SignUpRestaurant';
 import DeliveryDriver from './page/DeliveryDriver';
 import Admin from './page/Admin';
+import "react-datepicker/dist/react-datepicker.css";
 
 
 function App() {

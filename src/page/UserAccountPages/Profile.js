@@ -2,6 +2,8 @@ import React, { useEffect, useState, useRef } from "react";
 import { TextField } from "@mui/material";
 import axiosInstance, { AxiosInstance } from "../../utility/AxiosInstance";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import { connect, useDispatch } from "react-redux";
+import { getAvatar, updateAvatar } from "../../utility/action";
 import moment from "moment";
 import {
   Input,
@@ -11,14 +13,14 @@ import {
   message,
   notification,
   Modal,
-  DatePicker,
   AutoComplete,
 } from "antd";
 import "../../css/UserProfile.scss";
 import { data } from "../../data/dummy";
+import DatePicker from "react-datepicker";
 
-const Profile = () => {
-  const dateFormat = 'YYYY-MM-DD';
+const Profile = ({getUser}) => {
+  const dateFormat = "YYYY-MM-DD";
   let prevAddress = null;
   let currentAddress = "";
   let prevPlaceId = null;
@@ -28,15 +30,20 @@ const Profile = () => {
   const [editable, setEditable] = useState(true);
   const [saveButton, setSaveButton] = useState(true);
   const [editButton, setEditButton] = useState(false);
+  const [addressMap, setAddressMap] = useState([]);
   const [userData, setUserData] = useState({});
   const [updated, setUpdated] = useState(false);
   const [updateData, setUpdateData] = useState({
     name: "",
     dob: null,
-    address: "",
+    address: {},
     phone: "",
     gender: "",
     avatar: "",
+    location: {
+      type: "Point",
+      coordinates: [0, 0],
+    },
   });
   const [addressInput, setAddressInput] = useState("");
   const [placeId, setPlaceId] = useState("");
@@ -52,24 +59,6 @@ const Profile = () => {
     phone: "",
     gender: "",
     avatar: "",
-  });
-
-  const [formData, setFormData] = useState({
-    name: "",
-    dob: null,
-    address: {},
-    avatar: [
-      {
-        type: "imgae",
-        url: "",
-      },
-    ],
-    phone: "",
-    
-    location: {
-      type: "Point",
-      coordinates: [0, 0],
-    }
   });
 
   const antIcon = (
@@ -92,8 +81,8 @@ const Profile = () => {
     if (!isFormValid()) {
       setErrors({
         name: updateData.name.trim() === "" ? "Please enter a name" : "",
-        dob: updateData.dob.trim() === "" ? "Please enter a dob" : "",
-        address: updateData.address.trim() === "" ? "Please enter a address" : "",
+        dob: updateData.dob === "" ? "Please enter a dob" : "",
+        address: updateData.address === "" ? "Please enter a address" : "",
         gender: updateData.gender.trim() === "" ? "Please select a gender" : "",
         phone: updateData.phone.trim() === "" ? "Please enter a phone number" : "",
         image: image === null ? "Please upload an image" : "",
@@ -104,19 +93,13 @@ const Profile = () => {
     setLoading(true);
     const imageUrl = await handleImageSubmit();
     const formData = {
-      ...data,
-      avatar: [
-        {
-          type: "image",
-          url: imageUrl,
-        },
-      ],
+      ...updateData,
+      avatar: imageUrl,
     };
 
     try {
       const res = await axiosInstance.put("/user", formData);
       if (res.status === 200) {
-        props.handleOk();
         notification.open({
           icon: (
             <i className="fa-solid fa-check" style={{ color: "green" }}></i>
@@ -127,7 +110,15 @@ const Profile = () => {
             console.log("Notification Clicked!");
           },
         });
+        window.location.reload();
       }
+      // console.log("formData name: " + formData.name);
+      // console.log("formData dob: " + formData.dob);
+      // console.log(formData.address);
+      // console.log("formData phone: " + formData.phone);
+      // console.log("formData gender: "+ formData.gender);
+      // console.log("formData avatar: "+ formData.avatar);
+      // console.log(formData.location);
     } catch (err) {
       console.log(err);
       if (err.response && err.response.status === 400) {
@@ -149,13 +140,17 @@ const Profile = () => {
     setEditable(true);
     setSaveButton(true);
     setEditButton(false);
-    setUpdateData(...userData);
-
+    setUpdateData({ ...userData });
   };
 
   function formatDate(dateString) {
-    const formattedDate = moment(dateString).format('YYYY-MM-DD');
-  return formattedDate;
+    const formattedDate = moment(dateString).format("YYYY-MM-DD");
+    return formattedDate;
+  }
+
+  function formatDateV2(dateString) {
+    const formattedDate = moment(dateString).toISOString();
+    return formattedDate;
   }
 
   const fetchUserData = async () => {
@@ -163,8 +158,14 @@ const Profile = () => {
       .get("/user")
       .then((res) => {
         console.log(res.data.user);
-         setUserData({...res.data.user, dob:moment(formatDate(res.data.user.dob), dateFormat)})
-         setUpdateData({...res.data.user, dob:moment(formatDate(res.data.user.dob), dateFormat)});
+        setUserData({
+          ...res.data.user,
+          dob: moment(formatDate(res.data.user.dob), dateFormat),
+        });
+        setUpdateData({
+          ...res.data.user,
+          dob: moment(formatDate(res.data.user.dob), dateFormat),
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -201,7 +202,7 @@ const Profile = () => {
       setImageUrl(url);
     });
     setImage(info.file.originFileObj);
-    setErrors({ ...errors, image: "" });
+    setErrors({ ...errors, avatar: "" });
   };
 
   const uploadButton = (
@@ -226,7 +227,7 @@ const Profile = () => {
   const handleImageSubmit = async () => {
     let imageUrl = undefined;
     const formData = new FormData();
-    formData.append("avatar", image);
+    formData.append("image", image);
     try {
       const res = await axiosInstance.post("/upload", formData, {
         headers: {
@@ -245,9 +246,9 @@ const Profile = () => {
   const isFormValid = () => {
     return (
       updateData.name.trim() !== "" &&
-      updateData.dob.trim() !== "" &&
+      updateData.dob !== "" &&
       updateData.gender.trim() !== "" &&
-      updateData.address.trim() !== "" &&
+      updateData.address !== "" &&
       updateData.phone.trim() !== "" &&
       image !== null
     );
@@ -255,31 +256,26 @@ const Profile = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setUpdateData({ ...data, [name]: value });
+    setUpdateData({ ...updateData, [name]: value });
     setErrors({ ...errors, [name]: "" });
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
   };
 
   const onLocationSelect = (value) => {
-    
-    const suggestion = suggestions.find(
-      (suggestion) => suggestion.value === value
+    const suggestion = addressMap.find(
+      (suggestion) => suggestion.description === value
     );
-    setFormData((prevData) => ({
+    setUpdateData((prevData) => ({
       ...prevData,
       address: suggestion,
     }));
-    if(suggestion.id !== prevPlaceId) {
-    setPlaceId(suggestion.id);
-    prevPlaceId = suggestion.id;
-    currentPlaceId = suggestion.id
-    prevAddress = suggestion.value;
-    currentAddress = suggestion.value;
-  }
-    address_antd.current.blur();
+    console.log(suggestion);
+    if (suggestion.place_id !== prevPlaceId) {
+      setPlaceId(suggestion.place_id);
+      prevPlaceId = suggestion.place_id;
+      currentPlaceId = suggestion.place_id;
+      prevAddress = suggestion.description;
+      currentAddress = suggestion.description;
+    }
   };
 
   useEffect(() => {
@@ -289,7 +285,7 @@ const Profile = () => {
           const location = res.data.geoCode.results[0].geometry.location;
           console.log(location);
           const coordinate = [location.lng, location.lat];
-          setFormData((prevData) => ({
+          setUpdateData((prevData) => ({
             ...prevData,
             location: {
               type: "Point",
@@ -318,10 +314,11 @@ const Profile = () => {
         .then((res) => {
           if (res.status === 200) {
             const addressList = res.data.predictions.predictions;
-
+            setAddressMap(addressList);
             const suggestions = addressList.map((suggestion, index) => ({
               value: suggestion.description,
               id: suggestion.place_id,
+              index: index,
             }));
             console.log(suggestions);
             setSuggestions(suggestions);
@@ -339,209 +336,217 @@ const Profile = () => {
   }, [addressInput]);
 
   return (
-    <div className="user_profile_container">
-      <div className="paper">
-        <button
-          className={editButton ? "edit_button disabled" : "edit_button"}
-          disabled={editButton}
-          onClick={handleEdit}
-        >
-          Edit&ensp;<i class="fa-solid fa-pen-to-square"></i>
-        </button>
-        <div className="one">
-          {editable ? (
-            <img
-              src=""
-              alt="avatar"
-              style={{
-                border: "1px solid black",
-                borderRadius: "50%",
-                width: "150px",
-                height: "150px",
-                marginLeft: "1.5%",
-              }}
-            ></img>
-          ) : (
-            <div className="upload_div">
-              <Upload
-                name="image"
-                listType="picture-circle"
-                className="avatar-uploader"
-                showUploadList={false}
-                beforeUpload={beforeUpload}
-                onChange={handleFileChange}
-                customRequest={dummyRequest}
-              >
-                {imageUrl ? (
-                  <img
-                    src={imageUrl}
-                    alt="image"
-                    style={{
-                      width: "100%",
-                    }}
-                  />
-                ) : (
-                  uploadButton
+    <Spin spinning={loading} indicator={antIcon}>
+      <div className="user_profile_container">
+        <div className="paper">
+          <button
+            className={editButton ? "edit_button disabled" : "edit_button"}
+            disabled={editButton}
+            onClick={handleEdit}
+          >
+            Edit&ensp;<i class="fa-solid fa-pen-to-square"></i>
+          </button>
+          <div className="one">
+            {editable ? (
+              <img
+                src={userData?.avatar}
+                alt="avatar"
+                style={{
+                  border: "1px solid black",
+                  borderRadius: "50%",
+                  width: "150px",
+                  height: "150px",
+                  marginLeft: "1.5%",
+                }}
+              ></img>
+            ) : (
+              <div className="upload_div">
+                <Upload
+                  name="image"
+                  listType="picture-circle"
+                  className="avatar-uploader"
+                  showUploadList={false}
+                  beforeUpload={beforeUpload}
+                  onChange={handleFileChange}
+                  customRequest={dummyRequest}
+                >
+                  {imageUrl ? (
+                    <img
+                      src={imageUrl}
+                      alt="image"
+                      style={{
+                        width: "100%",
+                      }}
+                    />
+                  ) : (
+                    uploadButton
+                  )}
+                </Upload>
+                {errors.image && (
+                  <span className="error-message">{errors.image}</span>
                 )}
-              </Upload>
-              {errors.image && (
-                <span className="error-message">{errors.image}</span>
-              )}
-            </div>
-          )}
-          <h4>Avatar</h4>
-        </div>
-        <div className="field two">
-          <h4>Name</h4>
-          {editable ? (
-            <p>{userData.name}</p>
-          ) : (
-            <>
-              <Input
-                size="large"
-                className="user_input"
-                type="text"
-                name="name"
-                id="name"
-                placeholder="Name"
-                value={updateData.name}
-                onChange={handleInputChange}
-              />
+              </div>
+            )}
+            <h4>Avatar</h4>
+          </div>
+          <div className="field two">
+            <h4>Name</h4>
+            {editable ? (
+              <p>{userData.name}</p>
+            ) : (
+              <>
+                <Input
+                  size="large"
+                  className="user_input"
+                  type="text"
+                  name="name"
+                  id="name"
+                  placeholder="Name"
+                  value={updateData.name}
+                  onChange={handleInputChange}
+                />
 
-              {errors.name && (
-                <span className="error-message">{errors.name}</span>
-              )}
-            </>
-          )}
-        </div>
-        <div className="field three">
-          <h4>Date Of Birth</h4>
-          {editable ? (
-            <p>{moment(userData.dob).format('YYYY-MM-DD')}</p>
-          ) : (
-            <>
-              <DatePicker
-                id="dob"
-                name="dob"
-                size="large"
-                status={errors.date_of_birth ? "error" : undefined}
-                
-                defaultValue={updateData.dob}
-                style={{
-                  width: "45%",
-                  height: "40px",
-                }}
-                onChange={(e) => {setUpdateData({ ...data, dob: e.target.value }); setErrors({ ...errors, dob: "" }); setFormData((prevData) => ({ ...prevData, dob: e.target.value }));}}
-              />
-
-              {errors.date_of_birth && (
-                <span className="error-message">{errors.date_of_birth}</span>
-              )}
-            </>
-          )}
-        </div>
-        <div className="field four">
-          <h4>Gender</h4>
-          {editable ? (
-            <p>{userData.gender}</p>
-          ) : (
-            <>
-              <Select
-                id="gender"
-                name="gender"
-                value={updateData.gender}
-                size="large"
-                style={{
-                  width: 120,
-                  
-                }}
-                options={[
-                  {
-                    value: "male",
-                    label: "Male",
-                  },
-                  {
-                    value: "female",
-                    label: "Female",
-                  },
-                ]}
-                onChange={(e) => {setUpdateData({ ...data, gender: e.target.value });
-    setErrors({ ...errors, gender: "" });
-    setFormData((prevData) => ({
-      ...prevData,
-      gender: e.target.value,
-    }));}}
-              />
-              {errors.gender && (
-                <span className="error-message">{errors.gender}</span>
-              )}
-            </>
-          )}
-        </div>
-        <div className="field five">
-          <h4>Address</h4>
-          {editable ? (
-            <p>{userData?.address?.description}</p>
-          ) : (
-            <>
-            <AutoComplete
-                  
+                {errors.name && (
+                  <span className="error-message">{errors.name}</span>
+                )}
+              </>
+            )}
+          </div>
+          <div className="field three">
+            <h4>Date Of Birth</h4>
+            {editable ? (
+              <p>{moment(userData.dob).format("YYYY-MM-DD")}</p>
+            ) : (
+              <>
+                <DatePicker
+                  selected={new Date(updateData.dob)}
+                  onChange={(date) => {
+                    console.log(formatDateV2(date));
+                    setUpdateData({ ...updateData, dob: formatDateV2(date) });
+                    setErrors({ ...errors, dob: "" });
+                  }}
+                  className="user_dob"
+                />
+                {errors.date_of_birth && (
+                  <span className="error-message">{errors.date_of_birth}</span>
+                )}
+              </>
+            )}
+          </div>
+          <div className="field four">
+            <h4>Gender</h4>
+            {editable ? (
+              <p>{userData.gender}</p>
+            ) : (
+              <>
+                <Select
+                  id="gender"
+                  name="gender"
+                  size="large"
+                  value={updateData.gender}
+                  style={{
+                    width: 120,
+                  }}
+                  options={[
+                    {
+                      value: "male",
+                      label: "male",
+                    },
+                    {
+                      value: "female",
+                      label: "female",
+                    },
+                  ]}
+                  onChange={(e) => {
+                    setUpdateData({ ...updateData, gender: e });
+                    setErrors({ ...errors, gender: "" });
+                  }}
+                />
+                {errors.gender && (
+                  <span className="error-message">{errors.gender}</span>
+                )}
+              </>
+            )}
+          </div>
+          <div className="field five">
+            <h4>Address</h4>
+            {editable ? (
+              <p>{userData?.address?.description}</p>
+            ) : (
+              <>
+                <AutoComplete
                   className="user_input"
                   options={suggestions}
                   onSelect={onLocationSelect}
-                  onChange={(value) => {setAddressInput(value); currentAddress = value;}}
-                  onBlur={() => {if(currentAddress !== prevAddress && (currentPlaceId === prevPlaceId || prevPlaceId === null))flag = false; }}
+                  onChange={(value) => {
+                    setAddressInput(value);
+                    currentAddress = value;
+                  }}
+                  onBlur={() => {
+                    if (
+                      currentAddress !== prevAddress &&
+                      (currentPlaceId === prevPlaceId || prevPlaceId === null)
+                    )
+                      flag = false;
+                  }}
                   ref={address_antd}
                   size="large"
                 />
-              {errors.address && (
-                <span className="error-message">{errors.address}</span>
-              )}
-            </>
-          )}
-        </div>
-        <div className="field seven">
-          <h4>Phone</h4>
-          {editable ? (
-            <p>{userData.phone}</p>
-          ) : (
-            <>
-              <Input
-                id="phone"
-                name="phone"
-                placeholder="Phone"
-                size="large"
-                className="user_input"
-                type="number"
-                value={updateData.phone}
-                onChange={(e) => {setUpdateData({ ...data, phone: e.target.value })}}
-              />
-              {errors.phone && (
-                <span className="error-message">{errors.phone}</span>
-              )}
-            </>
-          )}
-        </div>
+                {errors.address && (
+                  <span className="error-message">{errors.address}</span>
+                )}
+              </>
+            )}
+          </div>
+          <div className="field seven">
+            <h4>Phone</h4>
+            {editable ? (
+              <p>{userData.phone}</p>
+            ) : (
+              <>
+                <Input
+                  id="phone"
+                  name="phone"
+                  placeholder="Phone"
+                  size="large"
+                  className="user_input"
+                  type="number"
+                  value={updateData.phone}
+                  onChange={(e) => {
+                    setUpdateData({ ...updateData, phone: e.target.value });
+                  }}
+                />
+                {errors.phone && (
+                  <span className="error-message">{errors.phone}</span>
+                )}
+              </>
+            )}
+          </div>
 
-        <div className="field six">
-          <button
-            className={saveButton ? "save_button disabled" : "save_button"}
-            disabled={saveButton}
-            onClick={handleSave}
-          >
-            Save&ensp;<i className="fa-solid fa-floppy-disk"></i>
-          </button>
-          <button
-            className={saveButton ? "cancel_button disabled" : "cancel_button"}
-            disabled={saveButton}
-            onClick={handleCancel}
-          >
-            Cancel&ensp;<i className="fa-solid fa-ban"></i>
-          </button>
+          <div className="field six">
+            <button
+              className={saveButton ? "save_button disabled" : "save_button"}
+              disabled={saveButton}
+              onClick={handleSave}
+            >
+              Save&ensp;<i className="fa-solid fa-floppy-disk"></i>
+            </button>
+            <button
+              className={
+                saveButton ? "cancel_button disabled" : "cancel_button"
+              }
+              disabled={saveButton}
+              onClick={handleCancel}
+            >
+              Cancel&ensp;<i className="fa-solid fa-ban"></i>
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </Spin>
   );
 };
+
+
 
 export default Profile;
