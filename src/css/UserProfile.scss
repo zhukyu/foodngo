@@ -44,6 +44,20 @@
         color: #989898;
         margin-left: 3%;
       }
+
+      .user_dob{
+        width: 45%;
+        margin-left: 5.5%;
+        height: 38px;
+        border: 1px solid #DADADA;
+        border-radius: 8px;
+      
+      }
+
+      .user_dob:focus{
+        outline: none;
+        border: 1px solid #3CA6FF;
+      }
     }
     .field:nth-child(1) {
       margin-top: 5%;
@@ -59,7 +73,7 @@
       align-items: center;
       position: absolute;
       top: 14%;
-      left: 25%;
+      left: 10%;
 
       h4 {
         font-family: "Poppins", sans-serif;

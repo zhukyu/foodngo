@@ -100,7 +100,7 @@ function Home() {
           <img src={delivery_man} alt='introduce-item' />
           <h5>Become a Delivery Driver</h5>
           <p>As a delivery driver, you'll make reliable money—working anytime, anywhere.</p>
-          <Link to='#'>
+          <Link to='/shipper/signup'>
             Start earning
             <i className="fa-solid fa-arrow-right"></i>
           </Link>
@@ -109,7 +109,7 @@ function Home() {
           <img src={store} alt='introduce-item' />
           <h5>Become a Partner</h5>
           <p>Grow your business and reach new customers by partnering with us.</p>
-          <Link to='#'>
+          <Link to='/restaurant/signup'>
             Sign up your store
             <i className="fa-solid fa-arrow-right"></i>
           </Link>
@@ -118,7 +118,7 @@ function Home() {
           <img src={phone} alt='introduce-item' />
           <h5>Get the App</h5>
           <p>Experience the best your neighborhood has to offer, all in one app.</p>
-          <Link to='#'>
+          <Link to='/notfound404'>
             Get the app
             <i className="fa-solid fa-arrow-right"></i>
           </Link>

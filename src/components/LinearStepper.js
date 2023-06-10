@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Typography,
@@ -7,7 +7,7 @@ import {
   Stepper,
   Step,
   StepLabel,
-  FormHelperText
+  FormHelperText,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { styled } from "@mui/material/styles";
@@ -21,7 +21,8 @@ import InputAdornment from "@mui/material/InputAdornment";
 import FormControl from "@mui/material/FormControl";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
-import { DatePicker, message } from "antd";
+import { DatePicker, message, AutoComplete, Select,Spin, notification } from "antd";
+import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import PhoneIcon from "@mui/icons-material/Phone";
@@ -38,27 +39,25 @@ import {
   set,
 } from "react-hook-form";
 import "../css/LinearStepper.scss";
-import zIndex from "@mui/material/styles/zIndex";
 import congratulaion from "../image/congratulation.gif";
 import axiosInstance from "../utility/AxiosInstance";
+import Swal from "sweetalert2";
 const useStyles = makeStyles(() => ({
   button: {},
   input: {
-    '& input[type=number]': {
-        '-moz-appearance': 'textfield'
+    "& input[type=number]": {
+      "-moz-appearance": "textfield",
     },
-    '& input[type=number]::-webkit-outer-spin-button': {
-        '-webkit-appearance': 'none',
-        margin: 0
+    "& input[type=number]::-webkit-outer-spin-button": {
+      "-webkit-appearance": "none",
+      margin: 0,
     },
-    '& input[type=number]::-webkit-inner-spin-button': {
-        '-webkit-appearance': 'none',
-        margin: 0
-    }
+    "& input[type=number]::-webkit-inner-spin-button": {
+      "-webkit-appearance": "none",
+      margin: 0,
+    },
   },
 }));
-
-
 
 function getSteps() {
   return [
@@ -73,7 +72,6 @@ const AccountForm = (props) => {
   const [showRePassword, setShowRePassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleClickShowRePassword = () => setShowRePassword((show) => !show);
-  
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
@@ -92,7 +90,9 @@ const AccountForm = (props) => {
             label="Email"
             variant="outlined"
             error={props.isValidEmailState === false ? true : false}
-            helperText={props.isValidEmailState === false ? "Invalid Email" : ""}
+            helperText={
+              props.isValidEmailState === false ? "Invalid Email" : ""
+            }
             placeholder="Enter Your Email"
             margin="normal"
             className="email_input"
@@ -115,7 +115,7 @@ const AccountForm = (props) => {
           <FormControl
             sx={{ m: 1 }}
             variant="outlined"
-            style={{ width: "70%", marginLeft: "15%"}}
+            style={{ width: "70%", marginLeft: "15%" }}
           >
             <InputLabel
               htmlFor="password"
@@ -153,9 +153,11 @@ const AccountForm = (props) => {
             />
             {props.isValidPasswordState === false ? (
               <FormHelperText error id="accountId-error">
-                    Password must be at least 8 characters long
-                </FormHelperText>
-            ) : ""}
+                Password must be at least 8 characters long
+              </FormHelperText>
+            ) : (
+              ""
+            )}
           </FormControl>
         )}
       />
@@ -167,7 +169,7 @@ const AccountForm = (props) => {
           <FormControl
             sx={{ m: 1 }}
             variant="outlined"
-            style={{ width: "70%", marginLeft: "15%"}}
+            style={{ width: "70%", marginLeft: "15%" }}
           >
             <InputLabel
               htmlFor="re_password"
@@ -205,44 +207,150 @@ const AccountForm = (props) => {
             />
             {props.isValidRePasswordState === false ? (
               <FormHelperText error id="accountId-error">
-                    Re-Password doesn't match
-                </FormHelperText>
-            ) :""}
+                Re-Password doesn't match
+              </FormHelperText>
+            ) : (
+              ""
+            )}
           </FormControl>
-          
         )}
       />
-      
     </>
   );
 };
 const AddressForm = () => {
   const { control } = useFormContext();
+  const [addressInput, setAddressInput] = useState({});
+  const [placeId, setPlaceId] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [addressMap, setAddressMap] = useState([]);
+  let prevAddress = null;
+  let currentAddress = "";
+  let prevPlaceId = null;
+  let currentPlaceId = "";
+  let flag = null;
+
+  const address_antd = useRef(null);
+  const handleChange = (value) => {
+    localStorage.setItem("genderValue", JSON.stringify(value));
+  };
+
+  const onLocationSelect = (value) => {
+    const suggestion = addressMap.find(
+      (suggestion) => suggestion.description === value
+    );
+    localStorage.setItem("addressObject", JSON.stringify(suggestion));
+    console.log(suggestion);
+    if (suggestion.place_id !== prevPlaceId) {
+      setPlaceId(suggestion.place_id);
+      prevPlaceId = suggestion.place_id;
+      currentPlaceId = suggestion.place_id;
+      prevAddress = suggestion.description;
+      currentAddress = suggestion.description;
+    }
+  };
+
+  useEffect(() => {
+    const fetchCoordinates = async () => {
+      await axiosInstance.get(`/map/geocode?placeId=${placeId}`).then((res) => {
+        if (res.status === 200) {
+          const location = res.data.geoCode.results[0].geometry.location;
+          console.log(location);
+          const coordinate = [location.lng, location.lat];
+          const tmplocation = { coordinates: coordinate };
+          localStorage.setItem("locationObject", JSON.stringify(tmplocation));
+        }
+      });
+    };
+    if (placeId !== "") {
+      fetchCoordinates();
+    }
+  }, [placeId]);
+
+  useEffect(() => {
+    setPlaceId("");
+    setSuggestions([]);
+
+    if (addressInput.length === 0) {
+      setSuggestions([]);
+    }
+
+    const fetchSuggestions = async () => {
+      await axiosInstance
+        .get(`/map/search?address=${addressInput}`)
+        .then((res) => {
+          if (res.status === 200) {
+            const addressList = res.data.predictions.predictions;
+            setAddressMap(addressList);
+            const suggestions = addressList.map((suggestion, index) => ({
+              value: suggestion.description,
+              id: suggestion.place_id,
+              index: index,
+            }));
+            console.log(suggestions);
+            setSuggestions(suggestions);
+          }
+        });
+    };
+
+    const timer = setTimeout(() => {
+      if (addressInput.length > 0) {
+        fetchSuggestions();
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [addressInput]);
   return (
     <>
       <Controller
         control={control}
+        name="gender"
+        render={({ field, fieldState }) => (
+          <Select
+            style={{
+              width: 120,
+            }}
+            className="gender_picker"
+            onChange={handleChange}
+            placeholder="Gender"
+            size="large"
+            options={[
+              {
+                value: "male",
+                label: "male",
+              },
+              {
+                value: "female",
+                label: "female",
+              },
+            ]}
+          />
+        )}
+      />
+      <Controller
+        control={control}
         name="address"
         rules={{ required: "Address is required" }}
-        render={({ field,fieldState }) => (
-          <TextField
-            id="address"
-            label="Address"
-            variant="outlined"
+        render={({ field, fieldState }) => (
+          <AutoComplete
+            className="user_input"
             placeholder="Enter Your Address"
-            fullWidth
-            margin="normal"
-            color="error"
-            error={fieldState.error ? true : false}
-            helperText={fieldState.error ? "Address is required" : ""}
-            style={{ width: "70%", marginLeft: "15%" }}
-            inputProps={{
-              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
+            options={suggestions}
+            onSelect={onLocationSelect}
+            onChange={(value) => {
+              setAddressInput(value);
+              currentAddress = value;
             }}
-            InputLabelProps={{
-              style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
+            onBlur={() => {
+              if (
+                currentAddress !== prevAddress &&
+                (currentPlaceId === prevPlaceId || prevPlaceId === null)
+              )
+                flag = false;
             }}
-            {...field}
+            ref={address_antd}
+            size="large"
           />
         )}
       />
@@ -259,7 +367,7 @@ const PersonalForm = () => {
         control={control}
         name="name"
         rules={{ required: "Name is required" }}
-        render={({ field,fieldState }) => (
+        render={({ field, fieldState }) => (
           <TextField
             id="name"
             label="Name"
@@ -270,7 +378,9 @@ const PersonalForm = () => {
             color="error"
             error={fieldState.error ? true : false}
             helperText={fieldState.error ? "Name is required" : ""}
-            onClick={() => {setIsFocused(false)}}
+            onClick={() => {
+              setIsFocused(false);
+            }}
             style={{ width: "70%", marginLeft: "15%" }}
             inputProps={{
               style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
@@ -286,39 +396,42 @@ const PersonalForm = () => {
         control={control}
         name="dob"
         rules={{ required: "Date of birth is required" }}
-        render={({ field, fieldState}) => (
+        render={({ field, fieldState }) => (
           <>
-      <DatePicker
-        id="dob"
-        size="large"
-        status={fieldState.error ? "error" : undefined}
-        className= {isFocused === true ? "focused" : "date_picker"}
-        style={{
-          width: "70%",
-          height: "56px",
-          marginLeft: "15%",
-          marginTop: "1%",
-          borderRadius: "15px",
-          backgroundColor: "#f5f5f7",
-          fontFamily: "Poppins,sans-serif",
-          fontWeight: "500",
-        }}
-        onFocus={() => {
-          setIsFocused(true);
-        }}
-        {...field}
-      />
-      <br/>
-      {fieldState.error ? (<span style={{fontSize:"12.25px"}} className="dob_msg">{fieldState.error?.message}</span>) : null}
-      </>
-      )
-      }
+            <DatePicker
+              id="dob"
+              size="large"
+              status={fieldState.error ? "error" : undefined}
+              className={isFocused === true ? "focused" : "date_picker"}
+              style={{
+                width: "70%",
+                height: "56px",
+                marginLeft: "15%",
+                marginTop: "1%",
+                borderRadius: "15px",
+                backgroundColor: "#f5f5f7",
+                fontFamily: "Poppins,sans-serif",
+                fontWeight: "500",
+              }}
+              onFocus={() => {
+                setIsFocused(true);
+              }}
+              {...field}
+            />
+            <br />
+            {fieldState.error ? (
+              <span style={{ fontSize: "12.25px" }} className="dob_msg">
+                {fieldState.error?.message}
+              </span>
+            ) : null}
+          </>
+        )}
       />
       <Controller
         control={control}
         name="phoneNumber"
         rules={{ required: "Phone number is required" }}
-        render={({ field,fieldState }) => (
+        render={({ field, fieldState }) => (
           <TextField
             id="phone-number"
             className={classes.input}
@@ -332,7 +445,9 @@ const PersonalForm = () => {
             error={fieldState.error ? true : false}
             helperText={fieldState.error ? "Phone number is required" : ""}
             style={{ width: "70%", marginLeft: "15%" }}
-            onClick={() => {setIsFocused(false)}}
+            onClick={() => {
+              setIsFocused(false);
+            }}
             inputProps={{
               style: { fontFamily: "Poppins, sans-serif", fontWeight: "500" },
             }}
@@ -347,10 +462,24 @@ const PersonalForm = () => {
   );
 };
 
-function getStepContent(step, isValidEmailState, isValidPasswordState, isValidRePasswordState,isEmptyAddressState, isEmptyNameState, isEmptyPhoneState) {
+function getStepContent(
+  step,
+  isValidEmailState,
+  isValidPasswordState,
+  isValidRePasswordState,
+  isEmptyAddressState,
+  isEmptyNameState,
+  isEmptyPhoneState
+) {
   switch (step) {
     case 0:
-      return <AccountForm isValidEmailState={isValidEmailState} isValidPasswordState={isValidPasswordState} isValidRePasswordState={isValidRePasswordState}/>;
+      return (
+        <AccountForm
+          isValidEmailState={isValidEmailState}
+          isValidPasswordState={isValidPasswordState}
+          isValidRePasswordState={isValidRePasswordState}
+        />
+      );
 
     case 1:
       return <PersonalForm />;
@@ -372,20 +501,38 @@ const LinaerStepper = () => {
       email: "",
       password: "",
       phoneNumber: "",
+      gender: "",
       name: "",
-      address: "",
+      address: {},
       dob: "",
+      location: {
+        coordinates: [0, 0],
+      },
     },
   });
   const [activeStep, setActiveStep] = useState(0);
   const [isValidEmailState, setIsValidEmailState] = useState(null);
   const [isValidPasswordState, setIsValidPasswordState] = useState(null);
   const [isValidRePasswordState, setIsValidRePasswordState] = useState(null);
- 
+  const [addressObject, setAddressObject] = useState({});
+  const [genderObject, setGenderObject] = useState("");
+  const [locationObject, setLocationObject] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const steps = getSteps();
 
   const [showNotification, setShowNotification] = useState(null);
+
+  const antIcon = (
+    <LoadingOutlined
+      style={{
+        fontSize: 40,
+        color: "#FF003D",
+        marginTop:"12%"
+      }}
+      spin
+    />
+  );
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -394,13 +541,11 @@ const LinaerStepper = () => {
 
     return () => clearTimeout(timer);
   }, []);
-  
+
   function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if(emailRegex.test(email))
-    return true;
-    else 
-    return false;
+    if (emailRegex.test(email)) return true;
+    else return false;
   }
 
   function validatePassword(password) {
@@ -411,63 +556,104 @@ const LinaerStepper = () => {
     }
   }
 
-
-
   const sendData = async (data) => {
-    await axiosInstance.post("/auth/register", data).then((res) => {
-      console.log(res);
-    });
+    await axiosInstance
+      .post("/auth/register/user", data)
+      .then((res) => {
+        localStorage.removeItem("addressObject");
+        localStorage.removeItem("genderValue");
+        localStorage.removeItem("locationObject");
+        setLoading(false);
+        setActiveStep(activeStep + 1);
+
+        notification.open({
+          icon: <i className="fa-solid fa-check" style={{ color: 'green' }}></i>,
+          message: 'Success!',
+          description: 'Account created successfully!',
+          onClick: () => {
+              console.log('Notification Clicked!');
+          },
+      });
+        
+      })
+      .catch((err) => {
+        console.log(err);
+
+        Swal.fire({
+          title: "Error!",
+          text:
+            err.response.data.message == `"location.coordinates" is required`
+              ? "Address Invalid"
+              : err.response.data.message == `"gender" must be a string`
+              ? "Please select gender"
+              : err.response.data.message,
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+        return;
+      });
+    
   };
 
   const handleNext = (data) => {
-    
     let _data = {
       email: data.email,
       name: data.name,
       password: data.password,
       phone: data.phoneNumber,
-      address: data.address,
-      role: "user",
+      address: addressObject,
+      gender: genderObject,
       dob: data.dob,
+      location: locationObject,
     };
-    
-      if(activeStep === 2){
-        setActiveStep(activeStep + 1);
-      }
-      if(activeStep === 1)
-      {
-        setActiveStep(activeStep + 1);
-      }
+
+    if (activeStep === 2) {
+      const storedObject = localStorage.getItem("addressObject");
+      const tmp = storedObject ? JSON.parse(storedObject) : {};
+      _data.address = tmp;
+      _data.dob = data.dob.toISOString();
+      const storedGender = localStorage.getItem("genderValue");
+      const tmpGender = storedGender ? JSON.parse(storedGender) : {};
+      _data.gender = tmpGender;
+      const storedLocation = localStorage.getItem("locationObject");
+      const tmpLocation = storedLocation ? JSON.parse(storedLocation) : {};
+      _data.location = tmpLocation;
+      //console.log(_data);
+      setLoading(true);
+      sendData(_data) 
+       
       
-      if(activeStep === 0){
-        if(isValidEmail(_data.email)===true && validatePassword(_data.password)===true && _data.password === data.re_password){
-          setIsValidPasswordState(true);
-          setIsValidRePasswordState(true);
-          setIsValidEmailState(true);
-          setActiveStep(activeStep + 1);
-        }
-        else{
-          if(isValidEmail(_data.email)===false)
-          setIsValidEmailState(false);
-          if(validatePassword(_data.password)===false)
+      // console.log("this is the data");
+      // console.log(_data);
+    }
+    if (activeStep === 1) {
+      setActiveStep(activeStep + 1);
+    }
+
+    if (activeStep === 0) {
+      if (
+        isValidEmail(_data.email) === true &&
+        validatePassword(_data.password) === true &&
+        _data.password === data.re_password
+      ) {
+        setIsValidPasswordState(true);
+        setIsValidRePasswordState(true);
+        setIsValidEmailState(true);
+        setActiveStep(activeStep + 1);
+      } else {
+        if (isValidEmail(_data.email) === false) setIsValidEmailState(false);
+        if (validatePassword(_data.password) === false)
           setIsValidPasswordState(false);
-          if(_data.password !== data.re_password)
+        if (_data.password !== data.re_password)
           setIsValidRePasswordState(false);
-          setActiveStep(activeStep);
-          
-        }
-      
-  
-  
-      
-      
+        setActiveStep(activeStep);
+      }
     }
   };
 
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
-
 
   // const onSubmit = (data) => {
   //   console.log(data);
@@ -541,7 +727,9 @@ const LinaerStepper = () => {
   }
 
   return (
+    <Spin spinning={loading} indicator={antIcon}>
     <div className="form_main">
+    
       <h4 className="form_title">Sign Up</h4>
       <Stepper
         alternativeLabel
@@ -569,17 +757,6 @@ const LinaerStepper = () => {
             alignItems: "center",
           }}
         >
-          {showNotification === true ? <Alert
-            severity="success"
-            style={{
-              width: "400px",
-              position: "absolute",
-              top: "0",
-              right: "0",
-            }}
-          >
-            <strong>Created new account successfully</strong>  !
-          </Alert> : ""}
 
           <div
             style={{
@@ -611,38 +788,53 @@ const LinaerStepper = () => {
               onSubmit={methods.handleSubmit(handleNext)}
               style={{ position: "relative", width: "100%" }}
             >
-              {getStepContent(activeStep, isValidEmailState, isValidPasswordState, isValidRePasswordState)}
-              <div className="button_container">
-              <input
-                type="button"
-                value="Back"
-                onClick={handleBack}
-                className="back_button"
-                disabled={activeStep === 0 ? true : false}
+              {getStepContent(
+                activeStep,
+                isValidEmailState,
+                isValidPasswordState,
+                isValidRePasswordState,
+                addressObject,
+                setAddressObject
+              )}
+              <div
+                className="button_container"
                 style={{
-                  boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
-                  opacity: activeStep === 0 ? "0" : "1",
-                  zIndex: activeStep === 0 ? "-1" : "1",
-                  cursor: activeStep === 0 ? "default" : "pointer",
-                  marginRight: activeStep === 0 ? "0" : "3%",
+                  marginTop: activeStep === 2 ? "29.25%" : "3%",
+                  position: activeStep === 2 ? "absolute" : "relative",
                 }}
-              />
-              <input
-                type="submit"
-                value={activeStep === steps.length - 1 ? "Finish" : "Next"}
-                className="next_button"
-                style={{
-                  backgroundColor: "#FF003D",
-                  color: "#f5f5f7",
-                  marginLeft: activeStep === 0 ? "-13%" : "3%",
-                }}
-              />
+              >
+                <input
+                  type="button"
+                  value="Back"
+                  onClick={handleBack}
+                  className="back_button"
+                  disabled={activeStep === 0 ? true : false}
+                  style={{
+                    boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
+                    opacity: activeStep === 0 ? "0" : "1",
+                    zIndex: activeStep === 0 ? "-1" : "1",
+                    cursor: activeStep === 0 ? "default" : "pointer",
+                    marginRight: activeStep === 0 ? "0" : "3%",
+                  }}
+                />
+                <input
+                  type="submit"
+                  value={activeStep === steps.length - 1 ? "Finish" : "Next"}
+                  className="next_button"
+                  style={{
+                    backgroundColor: "#FF003D",
+                    color: "#f5f5f7",
+                    marginLeft: activeStep === 0 ? "-13%" : "3%",
+                  }}
+                />
               </div>
             </form>
           </FormProvider>
         </>
       )}
+      
     </div>
+    </Spin>
   );
 };
 

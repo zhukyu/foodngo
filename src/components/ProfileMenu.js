@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+
 import '../css/ProfileMenu.scss'
 import axiosInstance from '../utility/AxiosInstance';
+
 
 function useOutsideAlerter(ref, setDropdown) {
     useEffect(() => {
@@ -21,7 +23,8 @@ function useOutsideAlerter(ref, setDropdown) {
     }, [ref, setDropdown]);
 }
 
-function ProfileMenu() {
+function ProfileMenu({user}) {
+    
     const navigate = useNavigate();
     const [dropdown, setDropdown] = useState(false);
     const wrapperRef = useRef(null);
@@ -36,6 +39,8 @@ function ProfileMenu() {
             item.classList.remove('is-active');
         }
     }
+
+    
 
     const onLogOut = (e) => {
         e.preventDefault();
@@ -53,14 +58,17 @@ function ProfileMenu() {
         //     }
         // });
     }
+const handleProfile = (e) => {
+        navigate('/account/user');
 
+}
     return (
         <div className="wrap-profile-menu" ref={wrapperRef}>
             <div className="avatar" onClick={dropDownHandle}>
-                <img src="https://www.w3schools.com/css/lights600x400.jpg" alt="avatar" />
+                <img src={user ? user.avatar : "https://static.wikia.nocookie.net/gensin-impact/images/8/88/Hu_Tao_Card.png/revision/latest?cb=20220725204937"} alt="avatar" />
             </div>
             <ul className="dropdown">
-                <li className="dropdown-item">Profile</li>
+                <li className="dropdown-item" onClick={handleProfile}>Profile</li>
                 <li role="separator" className="divider"></li>
                 <li className="dropdown-item" onClick={onLogOut}>Log Out</li>
             </ul>
@@ -68,4 +76,7 @@ function ProfileMenu() {
     )
 }
 
-export default ProfileMenu
+
+
+export default ProfileMenu;
+
