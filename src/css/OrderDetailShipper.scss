@@ -1,0 +1,109 @@
+.OrderDetailShipper-wrapper {
+    height: 82vh;
+
+    .OrderDetailShipper {
+        display: flex;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+        height: 100%;
+
+        .order-info-row {
+            width: 100%;
+            display: flex;
+
+            .order-info-header {
+                width: 30%;
+                font-size: 15px;
+                font-weight: 500;
+                color: #000000;
+
+                h6 {}
+            }
+
+            .order-info-content {
+                width: 70%;
+                font-size: 15px;
+            }
+        }
+
+        .order-left-side {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            justify-content: space-between;
+
+            .user-info {
+                padding: 10px;
+                border: 1px solid #C8C8C8;
+                border-radius: 10px;
+            }
+
+            .order-map {
+                padding: 0 10px;
+                position: relative;
+                flex: 1;
+            }
+
+        }
+
+        .order-right-side {
+            width: 50%;
+            padding: 0 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 10px;
+
+            .order-detail-item {
+                display: flex;
+                align-items: center;
+
+                img {
+                    width: 50%;
+                    height: 50%;
+                    margin-right: 20px;
+                    object-fit: cover;
+                }
+
+                h6 {}
+            }
+
+            .order-detail-table {
+                border: 1px solid #C8C8C8;
+                border-radius: 10px;
+                flex: 1;
+            }
+
+            .restaurant-info {
+                padding: 10px;
+                border: 1px solid #C8C8C8;
+                border-radius: 10px;
+
+            }
+
+            .order-total {
+                padding: 10px;
+                border: 1px solid #C8C8C8;
+                border-radius: 10px;
+
+                .order-total-row {
+                    width: 100%;
+                    display: flex;
+                    justify-content: space-between;
+
+                    .order-total-header {
+                        font-size: 15px;
+                        font-weight: 500;
+                        color: #000000;
+                    }
+
+                    .order-total-content {
+                        font-size: 15px;
+                        font-weight: 500;
+                        color: #000000;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -18,6 +18,7 @@ import {
 import "../../css/UserProfile.scss";
 import { data } from "../../data/dummy";
 import DatePicker from "react-datepicker";
+import Swal from "sweetalert2";
 
 const Profile = ({getUser}) => {
   const dateFormat = "YYYY-MM-DD";

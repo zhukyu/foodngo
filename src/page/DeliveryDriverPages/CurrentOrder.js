@@ -1,92 +1,439 @@
-import React from 'react'
-import "../../css/CurrentOrder.scss";
-import {ItemView} from '../../components'
+import React, { useState, useRef, useEffect } from 'react';
+import { GridComponent, ColumnsDirective, ColumnDirective, Resize, Sort, ContextMenu, Filter, Page, ExcelExport, PdfExport, Edit, Inject } from '@syncfusion/ej2-react-grids';
 
-function CurrentOrder() {
-  return (
-    <div className="current_container">
-      <div className='page_title'>
-        <h4 className="menu_table_title">Current Order</h4>
-      </div>
-      <div className="current_shipping_detail">
-          <h3>1.Shipping Detail</h3>
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3833.4851032053593!2d108.14196761536107!3d16.092187443095504!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31421991a401ca65%3A0xae18cd4b35f842b5!2sMIKAZUKI%20WATER%20PARK%20365!5e0!3m2!1scs!2s!4v1664208754573!5m2!1scs!2s"
-          ></iframe>
-        <div className="delivery_details">
-        <div className="delivery_customer">
-            <div className="delivery_customer_header">
-            <i className="fa-solid fa-address-card">&emsp;</i>
-              <h4>Customer</h4>
-            </div>
-            <h4>Ly Van Tanh</h4>
-          </div>
+import { Button, Input, Space, Table, Tag, Modal, Pagination, Segmented, Tooltip, notification } from "antd";
+import Highlighter from "react-highlight-words";
+import { SearchOutlined } from "@ant-design/icons";
+import "../../css/Orders.scss";
+import axiosInstance from '../../utility/AxiosInstance';
+import RejectOrder from '../../components/RejectOrder';
+import OrderDetailShipper from '../../components/OrderDetailShipper';
 
-          <div className="delivery_time">
-            <div className="delivery_time_header">
-              <i className="fa-regular fa-clock">&emsp;</i>
-              <h4>Delivery Time</h4>
-            </div>
-            <h4>25min (10km)</h4>
-          </div>
-          <div className="delivery_fee">
-            <div className="delivery_fee_header">
-              <i className="fa-solid fa-truck">&emsp;</i>
-              <h4>Delivery Fee</h4>
-            </div>
-            <h4>36.000 VND</h4>
-          </div>
-          <div className="delivery_address">
-            <div className="delivery_address_header">
-              <i className="fa-solid fa-house-chimney">&emsp;</i>
-              <h4>22 Le Van Hien, Ngu Hanh Son, Da Nang</h4>
-            </div>
-            <i className="fa-solid fa-right-long"></i>
-          </div>
-          <div className="delivery_phone">
-            <div className="delivery_phone_header">
-              <i className="fa-solid fa-phone">&emsp;</i>
-              <h4>0935126212</h4>
-            </div>
-            <i className="fa-solid fa-right-long"></i>
-          </div>
-          </div>
-        </div>
+const CurrentOrder = ({ coordinate }) => {
+    const [viewingData, setViewingData] = useState(null);
+    const [isViewed, setIsViewed] = useState(false);
+    const [orders, setOrders] = useState(null);
+    const [data, setData] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalOrders, setTotalOrders] = useState(0);
+    const [loading, setLoading] = useState(false);
+    const [status, setStatus] = useState('pending');
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [seletedRecord, setSelectedRecord] = useState(null);
 
-
-        <div className="current_order_detail_container">
-        <div className="current_order_detail">
-          <h3>2.Order Detail</h3>
-        </div>
-        <div className="cart_detail">
-          <div className="cart_detail_header">
-              <h3>Order from</h3>
-              <h1>Little Vietnam</h1>
-          </div>
-          <div className="cart_detail_payment">
-            <h2  style={{ fontWeight: "600", fontSize: "16px"}}>Payment method</h2>
-            <h2 style={{ fontWeight: "500", fontSize: "16px", marginRight:"2%"}}>Cash on delivery</h2>
-          </div>
-          <div className="cart_detail_summary">
-            <h2>Order Summary + Delivery Fee</h2>
-            <h2 style={{backgroundColor:"#F61D58", color:"#f5f5f7", borderRadius:'15px', width:"200px", height:"40px", display:"flex", justifyContent:"center", alignItems:"center"}}>Total: 200.000 VND</h2>
-          </div>
-          
-        </div>
-        <div className="cart_item_list">
-          <ItemView img="https://navicdn.com/nakk/images_article//2017/09/06/bsJEBBaVAPgh9K9TOHqQiWEJgXmmoLAbSbV6mH6m.jpeg" />
-          <ItemView img="https://navicdn.com/nakk/images_article//2017/09/06/bsJEBBaVAPgh9K9TOHqQiWEJgXmmoLAbSbV6mH6m.jpeg" />
-          <ItemView img="https://navicdn.com/nakk/images_article//2017/09/06/bsJEBBaVAPgh9K9TOHqQiWEJgXmmoLAbSbV6mH6m.jpeg" />
-          <ItemView img="https://navicdn.com/nakk/images_article//2017/09/06/bsJEBBaVAPgh9K9TOHqQiWEJgXmmoLAbSbV6mH6m.jpeg" />
-          <ItemView img="https://navicdn.com/nakk/images_article//2017/09/06/bsJEBBaVAPgh9K9TOHqQiWEJgXmmoLAbSbV6mH6m.jpeg" />
-        </div>
-        </div>
+    const fetchOrders = async () => {
+        setLoading(true)
         
-        
-        
-      
-      
-    </div>
-  );
-}
+        await axiosInstance.get(`/orders/current?status=current&longitude=${coordinate[0]}&latitude=${coordinate[1]}&page=${currentPage}`)
+            .then(res => {
+                console.log(res.data);
+                setTotalPages(res.data.pagination.totalPage)
+                setOrders(res.data.orders)
+                setTotalOrders(res.data.pagination.totalResult)
+            })
+            .catch(err => {
+                console.log(err);
+                setOrders(null)
+            })
+        setLoading(false)
+    }
 
+    useEffect(() => {
+
+        fetchOrders();
+    }, [currentPage, coordinate])
+
+    const handleReject = (record) => {
+        setSelectedRecord(record);
+        setIsModalOpen(true);
+    };
+    const handleOk = () => {
+        fetchOrders();
+        setIsModalOpen(false);
+    };
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleSign = (record) => {
+        const signOder = async () => {
+            await axiosInstance.post(`/orders/${data[record?.key]?.id}/shipper`)
+                .then(res => {
+                    console.log(res);
+                    fetchOrders();
+                    notification.open({
+                        icon: <i className="fa-solid fa-check" style={{ color: 'green' }}></i>,
+                        message: 'Success!',
+                        description: 'Order signed successfully!',
+                        onClick: () => {
+                            console.log('Notification Clicked!');
+                        },
+                    });
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+        Modal.confirm({
+            title: "Are you sure you want to sign to this order?",
+            okText: "Yes",
+            okType: "danger",
+            okButtonProps: {
+                type: "primary",
+            },
+            cancelButtonProps: {
+                type: "text",
+            },
+            onOk: () => {
+                signOder();
+            },
+        });
+    };
+
+    const handleAccept = (record) => {
+        const acceptOrder = async () => {
+            await axiosInstance.patch(`/orders/${data[record?.key]?.id}/restaurant?status=preparing`)
+                .then(res => {
+                    console.log(res);
+                    fetchOrders();
+                    notification.open({
+                        icon: <i className="fa-solid fa-check" style={{ color: 'green' }}></i>,
+                        message: 'Success!',
+                        description: 'Order accepted successfully!',
+                        onClick: () => {
+                            console.log('Notification Clicked!');
+                        },
+                    });
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+        Modal.confirm({
+            title: "Are you sure you want to accept this order?",
+            okText: "Yes",
+            okType: "danger",
+            okButtonProps: {
+                type: "primary",
+            },
+            cancelButtonProps: {
+                type: "text",
+            },
+            onOk: () => {
+                acceptOrder();
+            },
+        });
+    };
+
+    const handleView = (record) => {
+        setIsViewed(true);
+        setViewingData(record);
+    }
+
+    const resetViewing = () => {
+        setIsViewed(false);
+        setViewingData(null);
+    }
+
+    const [searchText, setSearchText] = useState("");
+    const [searchedColumn, setSearchedColumn] = useState("");
+    const searchInput = useRef(null);
+    const handleSearch = (selectedKeys, confirm, dataIndex) => {
+        confirm();
+        setSearchText(selectedKeys[0]);
+        setSearchedColumn(dataIndex);
+    };
+    const handleReset = (clearFilters) => {
+        clearFilters();
+        setSearchText("");
+    };
+    const getColumnSearchProps = (dataIndex) => ({
+        filterDropdown: ({
+            setSelectedKeys,
+            selectedKeys,
+            confirm,
+            clearFilters,
+            close,
+        }) => (
+            <div
+                style={{
+                    padding: 8,
+                }}
+                onKeyDown={(e) => e.stopPropagation()}
+            >
+                <Input
+                    ref={searchInput}
+                    placeholder={`Search ${dataIndex}`}
+                    value={selectedKeys[0]}
+                    onChange={(e) =>
+                        setSelectedKeys(e.target.value ? [e.target.value] : [])
+                    }
+                    onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+                    style={{
+                        marginBottom: 8,
+                        display: "block",
+                    }}
+                />
+                <Space>
+                    <Button
+                        type="primary"
+                        onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+                        icon={<SearchOutlined />}
+                        size="small"
+                        style={{
+                            width: 90,
+                            backgroundColor: "#F61D58",
+                        }}
+                    >
+                        Search
+                    </Button>
+                    <Button
+                        onClick={() => clearFilters && handleReset(clearFilters)}
+                        size="small"
+                        style={{
+                            width: 90,
+                        }}
+                    >
+                        Reset
+                    </Button>
+                    <Button
+                        type="link"
+                        size="small"
+                        onClick={() => {
+                            confirm({
+                                closeDropdown: false,
+                            });
+                            setSearchText(selectedKeys[0]);
+                            setSearchedColumn(dataIndex);
+                        }}
+                        style={{
+                            color: "#F61D58",
+                        }}
+                    >
+                        Filter
+                    </Button>
+                    <Button
+                        type="link"
+                        size="small"
+                        onClick={() => {
+                            close();
+                        }}
+                        style={{
+                            color: "#F61D58",
+                        }}
+                    >
+                        close
+                    </Button>
+                </Space>
+            </div>
+        ),
+        filterIcon: (filtered) => (
+            <SearchOutlined
+                style={{
+                    color: filtered ? "#1890ff" : undefined,
+                }}
+            />
+        ),
+        onFilter: (value, record) =>
+            record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+        onFilterDropdownOpenChange: (visible) => {
+            if (visible) {
+                setTimeout(() => searchInput.current?.select(), 100);
+            }
+        },
+        render: (text) =>
+            searchedColumn === dataIndex ? (
+                <Highlighter
+                    highlightStyle={{
+                        backgroundColor: "#ffc069",
+                        padding: 0,
+                    }}
+                    searchWords={[searchText]}
+                    autoEscape
+                    textToHighlight={text ? text.toString() : ""}
+                />
+            ) : (
+                text
+            ),
+    });
+
+    useEffect(() => {
+        if (orders) {
+            const temp = [];
+            orders.forEach((order, index) => {
+                temp.push({
+                    key: index,
+                    date: order.createdAt,
+                    name: order.restaurant.name,
+                    deliveryFee: order.deliveryFee,
+                    total: order.total,
+                    status: order.status,
+                    address: order.address,
+                    id: order._id,
+                });
+            });
+            setData(temp);
+        }
+    }, [orders])
+
+    useEffect(() => {
+        console.log(data);
+    }, [data])
+
+    const columns = [
+        {
+            title: "Date",
+            dataIndex: "date",
+            key: "date",
+            ...getColumnSearchProps("date"),
+            render: (obj) => {
+                const date = new Date(obj);
+                const options = { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false };
+                const formattedDateTime = date.toLocaleString('en-GB', options);
+                return formattedDateTime
+            },
+            width: '12%',
+        },
+        {
+            title: "Restaurant Name",
+            dataIndex: "name",
+            key: "name",
+            ...getColumnSearchProps("name"),
+            width: '20%',
+        },
+        {
+            title: "Delivery Fee",
+            dataIndex: "deliveryFee",
+            key: "deliveryFee",
+            ...getColumnSearchProps("deliveryFee"),
+            render: (text) => {
+                return (
+                    `${text.toLocaleString({ style: "currency", currency: "VND" })} VND`
+                )
+            },
+            width: '10%',
+        },
+        {
+            title: "Total",
+            dataIndex: "total",
+            key: "total",
+            ...getColumnSearchProps("total"),
+            render: (text) => {
+                return (
+                    `${text.toLocaleString({ style: "currency", currency: "VND" })} VND`
+                )
+            },
+            width: '10%',
+        },
+        {
+            title: "Status",
+            key: "status",
+            dataIndex: "status",
+            // sortDirections: ["descend", "ascend"],
+            // sorter: (a, b) => a.address.length - b.address.length,
+            ...getColumnSearchProps("status"),
+            render: (_, { status }) => {
+                let color = "#A4ABB6";
+                if (status === "canceled" || status === "refused") {
+                    color = "#A4ABB6";
+                }
+                if (status === "ready") {
+                    color = "#D95FDB";
+                }
+                if (status === "preparing") {
+                    color = "#F54E4E";
+                }
+                if (status === "pending") {
+                    color = "#3B7CDB";
+                }
+                if (status === "delivering") {
+                    color = "#867CFF";
+                }
+                if (status === "delivered") {
+                    color = "#3BDB9E";
+                }
+                return (
+                    <Tag color={color} key={status}>
+                        {status?.toUpperCase()}
+                    </Tag>
+                );
+            },
+            width: '5%',
+        },
+        {
+            title: "Action",
+            key: "action",
+            render: (_, record) => (
+                <Space size="middle">
+                    { record.status === 'preparing' || record.status === 'ready' ?
+                        <Space size="middle">
+                            <Tooltip title="Sign">
+                                <button
+                                    className="edit_button_form"
+                                    onClick={() => {
+                                        handleSign(record);
+                                    }}
+                                >
+                                    <i className="fa-solid fa-check"></i>
+                                </button>
+                            </Tooltip>
+                        </Space>
+                        : <></>}
+                </Space >
+            ),
+            width: '10%',
+        },
+    ];
+
+    return (
+        <div className="orders_table_container">
+            <div className='flex justify-between py-4'>
+                <h4 className="orders_table_title" style={{ margin: "10px 0" }}>Current Orders</h4>
+            </div>
+            <Table
+                className="orders_table"
+                loading={loading}
+                columns={columns}
+                dataSource={data}
+                pagination={{ current: currentPage, pageSize: 10, total: totalOrders, onChange: (page) => setCurrentPage(page) }}
+                onRow={(record) => {
+                    return {
+                        onDoubleClick: () => {
+                            handleView(orders[record.key]);
+                        }
+                    }
+                }}
+            />
+            <Modal
+                title="Order Details"
+                style={{
+                    top: 30,
+                }}
+                open={isViewed}
+                onCancel={() => {
+                    resetViewing();
+                }}
+                destroyOnClose={true}
+                footer={null}
+                width={'90%'}
+            >
+                <OrderDetailShipper id={viewingData?._id} currentLocation={coordinate} />
+            </Modal>
+            <Modal
+                style={{
+                    top: 50,
+                }}
+                title="Refuse Order"
+                open={isModalOpen}
+                onOk={handleOk}
+                onCancel={handleCancel}
+                footer={null}
+                destroyOnClose={true}
+            >
+                <RejectOrder handleOk={handleOk} orderId={data[seletedRecord?.key]?.id} />
+            </Modal>
+        </div>
+    );
+};
 export default CurrentOrder;

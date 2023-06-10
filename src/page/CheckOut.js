@@ -172,7 +172,7 @@ function CheckOut() {
 			paymentMethod: selectedPayment,
 			restaurantId: restaurant._id,
 			items: items,
-			location: {
+			userLocation: {
 				coordinates: coordinate
 			},
 			note: note,

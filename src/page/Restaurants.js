@@ -42,7 +42,7 @@ function Restaurants() {
         const fetchData = async () => {
             const tmp = searchParams.get("category");
             setLoading(true);
-            await axiosInstance.get(`/restaurant?longitude=${coordinate[0]}&latitude=${coordinate[1]}&page=${currentPage}&category=${tmp ? tmp : ''}`)
+            await axiosInstance.get(`/restaurant?longitude=${coordinate[0]}&latitude=${coordinate[1]}&page=${currentPage}&limit=9&category=${tmp ? tmp : ''}`)
                 .then((res) => {
                     if (res.status === 200) {
                         setRestaurants(res.data.restaurants);

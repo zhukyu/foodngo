@@ -50,7 +50,7 @@ function RejectOrder(props) {
         setLoading(true);
 
         try {
-            const res = await axiosInstance.patch(`/orders/${props?.orderId}?status=refused`, reason);
+            const res = await axiosInstance.patch(`/orders/${props?.orderId}/restaurant?status=refused`, reason);
             if (res.status === 200) {
                 props.handleOk();
                 notification.open({
