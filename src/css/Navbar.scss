@@ -44,15 +44,29 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background-color: #F1F1F1;
         border-radius: 30px;
         padding: 0 10px;
-        margin: 10px 0;
         width: 30%;
 
         i {
             font-size: 20px;
             padding: 5px;
+        }
+
+        input {
+            height: 40px;
+            &:hover, &:focus {
+                border-color: #FF003D;
+                box-shadow: none;
+            }
+        }
+
+        button {
+            height: 40px;
+            color: #fff;
+            background-color: #FF003D;
+            box-shadow: none;
+
         }
 
         .search-input {
@@ -62,8 +76,7 @@
             width: 100%;
             font-family: "Poppins", sans-serif;
             padding: 8px 0;
-			font-size: 16px;
-            background-color: #F1F1F1;
+            font-size: 16px;
             color: var(--black-color);
         }
     }

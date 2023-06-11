@@ -8,6 +8,7 @@ import "../../css/Orders.scss";
 import axiosInstance from '../../utility/AxiosInstance';
 import RejectOrder from '../../components/RejectOrder';
 import OrderDetailShipper from '../../components/OrderDetailShipper';
+import RejectOrderShipper from '../../components/RejectOrderShipper';
 
 const DeliveredOrders = ({ coordinate }) => {
     const [viewingData, setViewingData] = useState(null);
@@ -24,6 +25,7 @@ const DeliveredOrders = ({ coordinate }) => {
 
     const fetchOrders = async () => {
         setLoading(true)
+
         await axiosInstance.get(`/orders/current?status=completed&longitude=${coordinate[0]}&latitude=${coordinate[1]}&page=${currentPage}`)
             .then(res => {
                 console.log(res.data);
@@ -90,16 +92,16 @@ const DeliveredOrders = ({ coordinate }) => {
         });
     };
 
-    const handleAccept = (record) => {
-        const acceptOrder = async () => {
-            await axiosInstance.patch(`/orders/${data[record?.key]?.id}/restaurant?status=preparing`)
+    const handleDelivering = (record) => {
+        const delivering = async () => {
+            await axiosInstance.patch(`/orders/${data[record?.key]?.id}/shipper?status=delivering`)
                 .then(res => {
                     console.log(res);
                     fetchOrders();
                     notification.open({
                         icon: <i className="fa-solid fa-check" style={{ color: 'green' }}></i>,
                         message: 'Success!',
-                        description: 'Order accepted successfully!',
+                        description: 'Order status updated successfully!',
                         onClick: () => {
                             console.log('Notification Clicked!');
                         },
@@ -120,7 +122,42 @@ const DeliveredOrders = ({ coordinate }) => {
                 type: "text",
             },
             onOk: () => {
-                acceptOrder();
+                delivering();
+            },
+        });
+    };
+
+    const handleDelivered = (record) => {
+        const delivered = async () => {
+            await axiosInstance.patch(`/orders/${data[record?.key]?.id}/shipper?status=delivered`)
+                .then(res => {
+                    console.log(res);
+                    fetchOrders();
+                    notification.open({
+                        icon: <i className="fa-solid fa-check" style={{ color: 'green' }}></i>,
+                        message: 'Success!',
+                        description: 'Order status updated successfully!',
+                        onClick: () => {
+                            console.log('Notification Clicked!');
+                        },
+                    });
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+        Modal.confirm({
+            title: "Are you sure you want to complete this order?",
+            okText: "Yes",
+            okType: "danger",
+            okButtonProps: {
+                type: "primary",
+            },
+            cancelButtonProps: {
+                type: "text",
+            },
+            onOk: () => {
+                delivered();
             },
         });
     };
@@ -265,7 +302,6 @@ const DeliveredOrders = ({ coordinate }) => {
                     key: index,
                     date: order.createdAt,
                     name: order.restaurant.name,
-                    distance: order.distance,
                     deliveryFee: order.deliveryFee,
                     total: order.total,
                     status: order.status,
@@ -301,18 +337,6 @@ const DeliveredOrders = ({ coordinate }) => {
             key: "name",
             ...getColumnSearchProps("name"),
             width: '20%',
-        },
-        {
-            title: "Distance",
-            dataIndex: "distance",
-            key: "distance",
-            ...getColumnSearchProps("distance"),
-            render: (text) => {
-                return (
-                    `${(text / 1000).toFixed(2)} km`
-                )
-            },
-            width: '10%',
         },
         {
             title: "Delivery Fee",
@@ -378,20 +402,43 @@ const DeliveredOrders = ({ coordinate }) => {
             key: "action",
             render: (_, record) => (
                 <Space size="middle">
-                    { record.status === 'preparing' || record.status === 'ready' ?
+                    {record.status === 'ready' ?
                         <Space size="middle">
-                            <Tooltip title="Sign">
+                            <Tooltip title="Update">
                                 <button
                                     className="edit_button_form"
                                     onClick={() => {
-                                        handleSign(record);
+                                        handleDelivering(record);
                                     }}
                                 >
-                                    <i className="fa-solid fa-check"></i>
+                                    <i className="fa-solid fa-pen-to-square"></i>
                                 </button>
                             </Tooltip>
                         </Space>
-                        : <></>}
+                        : record.status === 'delivering' ?
+                            <Space size="middle">
+                                <Tooltip title="Update">
+                                    <button
+                                        className="edit_button_form"
+                                        onClick={() => {
+                                            handleDelivered(record);
+                                        }}
+                                    >
+                                        <i className="fa-solid fa-pen-to-square"></i>
+                                    </button>
+                                </Tooltip>
+                                <Tooltip title="Refuse">
+                                    <button
+                                        className="delete_button_form"
+                                        onClick={() => {
+                                            handleReject(record);
+                                        }}
+                                    >
+                                        <i className="fa-solid fa-ban"></i>
+                                    </button>
+                                </Tooltip>
+                            </Space>
+                            : <></>}
                 </Space >
             ),
             width: '10%',
@@ -401,7 +448,7 @@ const DeliveredOrders = ({ coordinate }) => {
     return (
         <div className="orders_table_container">
             <div className='flex justify-between py-4'>
-                <h4 className="orders_table_title" style={{ margin: "10px 0" }}>Delivered Orders</h4>
+                <h4 className="orders_table_title" style={{ margin: "10px 0" }}>Current Orders</h4>
             </div>
             <Table
                 className="orders_table"
@@ -443,7 +490,7 @@ const DeliveredOrders = ({ coordinate }) => {
                 footer={null}
                 destroyOnClose={true}
             >
-                <RejectOrder handleOk={handleOk} orderId={data[seletedRecord?.key]?.id} />
+                <RejectOrderShipper handleOk={handleOk} orderId={data[seletedRecord?.key]?.id} />
             </Modal>
         </div>
     );
