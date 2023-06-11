@@ -47,7 +47,7 @@ function Restaurants() {
                     if (res.status === 200) {
                         setRestaurants(res.data.restaurants);
                         setPagination(res.data.pagination);
-                        console.log(res.data.restaurants);
+                        console.log(res.data);
                     }
                 })
             setLoading(false);
@@ -119,7 +119,7 @@ function Restaurants() {
                             </Space>
                             </div>)): ""}
                         </div>
-                        <Pagination current={currentPage} onChange={(e)=> {setCurrentPage(e)}} total={pagination.totalResult} style={{position:"relative", right:"-90%", marginTop:"6%"}}/>
+                        <Pagination  pageSize={9} current={currentPage} onChange={(e)=> {setCurrentPage(e)}} total={pagination.totalResult} style={{position:"relative", right:"-90%", marginTop:"6%"}}/>
                     </div>
                 </div>
                 <Footer />
