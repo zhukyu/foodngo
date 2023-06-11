@@ -8,6 +8,7 @@ import "../../css/Orders.scss";
 import axiosInstance from '../../utility/AxiosInstance';
 import RejectOrder from '../../components/RejectOrder';
 import OrderDetailShipper from '../../components/OrderDetailShipper';
+import AccountDetail from '../../components/AccountDetail';
 
 const RestaurantApproveList = ({ coordinate }) => {
   const [viewingData, setViewingData] = useState(null);
@@ -467,7 +468,7 @@ const RestaurantApproveList = ({ coordinate }) => {
         }}
       />
       <Modal
-        title="Order Details"
+        title="Restaurant Details"
         style={{
           top: 30,
         }}
@@ -477,9 +478,9 @@ const RestaurantApproveList = ({ coordinate }) => {
         }}
         destroyOnClose={true}
         footer={null}
-        width={'90%'}
+        width={'50%'}
       >
-        <OrderDetailShipper id={viewingData?._id} currentLocation={coordinate} />
+        <AccountDetail id={viewingData?.restaurant._id} currentLocation={coordinate} role={"Restaurant"} />
       </Modal>
       <Modal
         style={{

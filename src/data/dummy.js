@@ -517,12 +517,8 @@ export const user_links = [
     title: 'My Orders',
     links: [
 
-      { key:1,
-        name: 'current order',
-        icon: <RiTruckFill/>,
-      },
 
-      { key:2,
+      { key:1,
         name: 'order history',
         icon: <AiOutlineFileDone />,
       },
@@ -531,11 +527,11 @@ export const user_links = [
   {
     title: 'Account',
     links: [
-      { key:3,
+      { key:2,
         name: 'profile',
         icon: <BsPersonCircle/>,
       },
-      { key:4,
+      { key:3,
         name: 'security',
         icon: <BsShieldLock />,
       },

@@ -283,7 +283,7 @@ function SignUpShipper() {
                 </div>
             </div>
             <div className="form">
-                <Spin spinning={true} indicator={antIcon} >
+                <Spin spinning={loading} indicator={antIcon} >
 
                     <form
                         className="w-full bg-white rounded-lg shadow-md p-6"

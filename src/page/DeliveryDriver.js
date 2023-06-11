@@ -98,7 +98,7 @@ const DeliveryDriver = () => {
                     }
                 >
                     <div className="fixed md:static bg-main-bg dark:bg-main-dark-bg navbar_dash w-full ">
-                        <NavbarDash />
+                        <NavbarDash role={"Shipper"}/>
                     </div>
                     <div>
                         {themeSettings && <ThemeSettings />}
