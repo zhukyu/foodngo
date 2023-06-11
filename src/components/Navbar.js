@@ -3,9 +3,9 @@ import "../css/Navbar.scss";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../image/FoodnGo_logo.png";
 import ProfileMenu from "./ProfileMenu";
-import { Badge, Drawer, Modal, Popconfirm, AutoComplete} from "antd";
+import { Badge, Drawer, Modal, Popconfirm, AutoComplete, Input } from "antd";
 import ShoppingCart from "./ShoppingCart";
-import { useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchCartItems } from "../utility/action";
 import axiosInstance from "../utility/AxiosInstance";
 import LocationUpdate from "./LocationUpdate";
@@ -35,7 +35,7 @@ function Navbar() {
     setOpen(false);
   };
 
-  useEffect(() => {}, [cartItems]);
+  useEffect(() => { }, [cartItems]);
 
   const reload = () => {
     navigate(0);
@@ -66,10 +66,10 @@ function Navbar() {
   useEffect(() => {
     const storeCoordinate = JSON.parse(localStorage.getItem("coordinate"));
     if (storeCoordinate) {
-        setCoordinate(storeCoordinate);
+      setCoordinate(storeCoordinate);
     }
-    },[]);
-  
+  }, []);
+
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -101,27 +101,27 @@ function Navbar() {
   };
 
   const onRestaurantSelect = (value, instance) => {
-    
-    console.log("restaurantSuggestions : " +  restaurantSuggestions);
+
+    console.log("restaurantSuggestions : " + restaurantSuggestions);
     const restaurantMatch = restaurantSuggestions.map(
-      (suggestion) =>  {if(suggestion.value === instance.value) return instance.id}
+      (suggestion) => { if (suggestion.value === instance.value) return instance.id }
     );
-    
-    if(restaurantMatch.length === 0) return;
+
+    if (restaurantMatch.length === 0) return;
     let restaurantId = restaurantMatch.filter((item) => item !== undefined);
     setPlaceId(restaurantId);
     navigate(`/restaurant/${restaurantId}`, { replace: true });
-      
+
     //console.log("restaurantMatch : " +  restaurantMatch[0]);
-    
-    
-  
-    
+
+
+
+
   };
 
-  
 
-  
+
+
   useEffect(() => {
     setPlaceId("");
     setRestaurantSuggestions([]);
@@ -156,6 +156,10 @@ function Navbar() {
     return () => clearTimeout(timer);
   }, [restaurantInput]);
 
+  const handleSearch = (value) => {
+
+  }
+
   return (
     <div className="navbar">
       <Modal
@@ -187,14 +191,16 @@ function Navbar() {
       </div>
 
       <div className="search-bar">
-        <i className="fa-solid fa-search"></i>
         <AutoComplete
           className="search-input"
           id="search-input"
           options={restaurantSuggestions}
           onSelect={onRestaurantSelect}
-          onChange={(value) => {setRestaurantInput(value)}}
-        />
+          onSearch={(value) => handleSearch(value)}
+          onChange={(value) => { setRestaurantInput(value) }}
+        >
+          <Input.Search size="large" placeholder="input here" enterButton />
+        </AutoComplete>
       </div>
       <Badge count={cartItems?.result?.length} offset={[-3, 20]}>
         <div className="cart">
