@@ -270,7 +270,6 @@ const UserList = ({ coordinate }) => {
           key: index,
           index: index,
           id: item.user._id,
-          idNumber: item.user.idNumber,
           name: item.user.name,
           email: item.account.email,
           phone: item.user.phone,
@@ -313,13 +312,6 @@ const UserList = ({ coordinate }) => {
       dataIndex: "phone",
       key: "phone",
       ...getColumnSearchProps("phone"),
-      width: '15%',
-    },
-    {
-      title: "ID Number",
-      dataIndex: "idNumber",
-      key: "idNumber",
-      ...getColumnSearchProps("idNumber"),
       width: '15%',
     },
     {
@@ -431,7 +423,7 @@ const UserList = ({ coordinate }) => {
     <div className="orders_table_container">
       <div className='flex justify-between py-4'>
         <div className=''>
-          <h4 className="orders_table_title">Orders</h4>
+          <h4 className="orders_table_title">Users List</h4>
         </div>
         <div className='flex py-2.5'>
           <Segmented options={['Active', 'Deleted', 'All']} onChange={handleChangeStatus} />

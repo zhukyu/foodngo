@@ -447,7 +447,7 @@ const RestaurantApproveList = ({ coordinate }) => {
     <div className="orders_table_container">
       <div className='flex justify-between py-4'>
         <div className=''>
-          <h4 className="orders_table_title">Orders</h4>
+          <h4 className="orders_table_title">Restaurants List</h4>
         </div>
         <div className='flex py-2.5'>
           <Segmented options={['Pending', 'Active', 'Deleted', 'All']} onChange={handleChangeStatus} />
