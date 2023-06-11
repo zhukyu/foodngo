@@ -110,7 +110,7 @@ const RestaurantDashboard = () => {
                     }
                 >
                     <div className="fixed md:static bg-main-bg dark:bg-main-dark-bg navbar_dash w-full ">
-                        <NavbarDash />
+                        <NavbarDash role={"Restaurant"}/>
                     </div>
                     <div>
                         {themeSettings && <ThemeSettings />}

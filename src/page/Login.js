@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import deliverydriver from "../image/deliveryDriver.gif";
 import logo from "../image/FoodnGo_logo.png"
 import axiosInstance from "../utility/AxiosInstance";
+import { notification } from "antd";
 function Login() {
 
 	const [formData, setFormData] = useState()
@@ -48,6 +49,15 @@ function Login() {
 					axiosInstance.defaults.headers['Authorization'] = `Bearer ${res.data.accessToken}`;
 					handleNavigate(res.data.role)
 				}
+			}).catch((err) =>{
+				notification.open({
+					icon: <i className="fa-regular fa-circle-xmark" style={{ color: 'red' }}></i>,
+					message: 'Error!',
+					description: err.response.data.message,
+					onClick: () => {
+						console.log('Notification Clicked!');
+					},
+				});
 			})
 	}
 

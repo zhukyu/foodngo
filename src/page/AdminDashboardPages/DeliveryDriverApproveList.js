@@ -8,6 +8,7 @@ import "../../css/Orders.scss";
 import axiosInstance from '../../utility/AxiosInstance';
 import RejectOrder from '../../components/RejectOrder';
 import OrderDetailShipper from '../../components/OrderDetailShipper';
+import AccountDetail from '../../components/AccountDetail';
 
 const DeliveryDriverApproveList = ({ coordinate }) => {
   const [viewingData, setViewingData] = useState(null);
@@ -475,7 +476,7 @@ const DeliveryDriverApproveList = ({ coordinate }) => {
         }}
       />
       <Modal
-        title="Order Details"
+        title="Shipper Details"
         style={{
           top: 30,
         }}
@@ -485,9 +486,9 @@ const DeliveryDriverApproveList = ({ coordinate }) => {
         }}
         destroyOnClose={true}
         footer={null}
-        width={'90%'}
+        width={'50%'}
       >
-        <OrderDetailShipper id={viewingData?._id} currentLocation={coordinate} />
+        <AccountDetail id={viewingData?.shipper._id} currentLocation={coordinate} role={"Shipper"}/>
       </Modal>
       <Modal
         style={{

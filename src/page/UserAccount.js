@@ -30,15 +30,13 @@ const UserAccount = () => {
   const getActiveItem = (index) => {
     switch (index) {
       case 1:
-        return <CurrentOrder />;
-      case 2:
         return <OrderHistory />;
-      case 3:
+      case 2:
         return <Profile />;
-      case 4:
+      case 3:
         return <Security />;
       default:
-        return <CurrentOrder />;
+        return <OrderHistory />;
     }
   };
 
@@ -80,7 +78,6 @@ const UserAccount = () => {
             {themeSettings && <ThemeSettings />}
             {getActiveItem(activeItem)}
           </div>
-          <Footer />
         </div>
       </div>
     </div>
