@@ -158,23 +158,21 @@ function SignUpRestaurant() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(placeId);
-        if (!isFormValid()) {
-            setErrors({
-                name: formData.name.trim() === '' ? 'Please enter a name' : '',
-                email: !isValidEmail(formData.email) ? 'Please enter a email' : '',
-                password: !validatePassword(formData.password) ? 'Password length under 6 characters' : '',
-                password_confirm: formData.password !== confirmPassword ? 'Confirm password not match' : '',
-                phone: formData.phone.trim() === '' ? 'Please enter a phone' : '',
-                open: formData.openingHours.open.trim() === '' ? 'Please enter open hour' : '',
-                close: formData.openingHours.close.trim() === '' ? 'Please enter close hour' : '',
-                description: formData.description.trim() === '' ? 'Please enter a description' : '',
-                address: formData.address.trim() === '' ? 'Please enter a address' : '',
-                categories: formData.categories.length === 0 ? 'Please select a category' : '',
-                close: formData.openingHours.open > formData.openingHours.close ? 'Invalid close hour' : '',
-                address: placeId.trim() === '' ? 'Please select a address' : '',
-            })
-            return
-        }
+        // if (!isFormValid()) {
+        //     setErrors({
+        //         name: formData.name.trim() === '' ? 'Please enter a name' : '',
+        //         email: !isValidEmail(formData.email) ? 'Please enter a email' : '',
+        //         password: !validatePassword(formData.password) ? 'Password length under 6 characters' : '',
+        //         password_confirm: formData.password !== confirmPassword ? 'Confirm password not match' : '',
+        //         phone: formData.phone.trim() === '' ? 'Please enter a phone' : '',
+        //         open: formData.openingHours.open.trim() === '' ? 'Please enter open hour' : '',
+        //         close: formData.openingHours.close.trim() === '' ? 'Please enter close hour' : '',
+        //         description: formData.description.trim() === '' ? 'Please enter a description' : '',
+        //         address: formData.address.trim() === '' ? 'Please enter a address' : '',
+               
+        //     })
+        //     return
+        // }
         const imageUrl = await handleImageSubmit();
         const _formData = {
             ...formData,
@@ -194,7 +192,7 @@ function SignUpRestaurant() {
                         confirmButtonColor: '#28A745',
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            navigate('/restaurant');
+                            navigate('/login');
                         }
                     })
                 }
