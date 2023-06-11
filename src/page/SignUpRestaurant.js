@@ -175,30 +175,30 @@ function SignUpRestaurant() {
             })
             return
         }
-        // const imageUrl = await handleImageSubmit();
-        // const _formData = {
-        //     ...formData,
-        //     media: [
-        //         {
-        //             type: 'image',
-        //             url: imageUrl,
-        //         }],
-        // }
-        // await axiosInstance.post('/auth/register/restaurant', _formData)
-        //     .then((res) => {
-        //         if (res.status === 201) {
-        //             console.log(res.data);
-        //             Swal.fire({
-        //                 icon: 'success',
-        //                 title: 'Register Restaurant successfully!',
-        //                 confirmButtonColor: '#28A745',
-        //             }).then((result) => {
-        //                 if (result.isConfirmed) {
-        //                     navigate('/restaurant');
-        //                 }
-        //             })
-        //         }
-        //     })
+        const imageUrl = await handleImageSubmit();
+        const _formData = {
+            ...formData,
+            media: [
+                {
+                    type: 'image',
+                    url: imageUrl,
+                }],
+        }
+        await axiosInstance.post('/auth/register/restaurant', _formData)
+            .then((res) => {
+                if (res.status === 201) {
+                    console.log(res.data);
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Register Restaurant successfully!',
+                        confirmButtonColor: '#28A745',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            navigate('/restaurant');
+                        }
+                    })
+                }
+            })
     };
     function isValidEmail(email) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
